@@ -8,13 +8,6 @@
 
    ========================================================================== */
 
-// EmailJS Configuration Keys (Built-in default fallback)
-const EMAILJS_CONFIG = (typeof window !== 'undefined' && window.EMAILJS_CONFIG) ? window.EMAILJS_CONFIG : {
-    PUBLIC_KEY: "B05y6CTcLvojnMeB-",
-    SERVICE_ID: "service_9rn9xvv",
-    TEMPLATE_ID: "template_ybsw8ls"
-};
-
 const PORTFOLIO_STATE = {
 
     currentPage: 'intro',
