@@ -1,169 +1,154 @@
 <div align="center">
 
-<img src="https://thesubhankar.netlify.app/assets/images/profile.jpg?v=7" width="120" height="120" style="border-radius:50%;" alt="Subhankar Giri" />
+# ⚡ Subhankar Giri — Data Science & Analytics Portfolio
 
-# 📊 Subhankar Giri
-### Data Scientist & Analyst Portfolio
+<p align="center">
+  <b>A Jupyter Notebook-Inspired Interactive Single-Page Web Application</b><br/>
+  Featuring 3D Device Mockup Previews, Reactive Edge Glows, Dual Themes, and Serverless Architecture.
+</p>
 
-Uncovering insights, building predictive models, and designing clean data stories.
-
-[![Portfolio](https://img.shields.io/badge/🌐_Portfolio-thesubhankar.netlify.app-6366F1?style=for-the-badge)](https://thesubhankar.netlify.app/)
-[![Netlify Status](https://img.shields.io/badge/Deployed_on-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://thesubhankar.netlify.app/)
-
-[![GitHub](https://img.shields.io/badge/GitHub-thesubhankar-181717?style=flat-square&logo=github)](https://github.com/thesubhankar)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Subhankar_Giri-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/subhankar-giri-2a4b0a295)
-[![Kaggle](https://img.shields.io/badge/Kaggle-thesubhankar-20BEFF?style=flat-square&logo=kaggle&logoColor=white)](https://www.kaggle.com/thesubhankar)
-[![LeetCode](https://img.shields.io/badge/LeetCode-subhaknar-FFA116?style=flat-square&logo=leetcode&logoColor=white)](https://leetcode.com/u/subhaknar/)
-[![HackerRank](https://img.shields.io/badge/HackerRank-thesubhankar-2EC866?style=flat-square&logo=hackerrank&logoColor=white)](https://www.hackerrank.com/profile/thesubhankar)
-[![Email](https://img.shields.io/badge/Email-thesubhankar.giri992%40gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:thesubhankar.giri992@gmail.com)
-
-</div>
+[![Live Demo](https://img.shields.io/badge/▶_Live_Portfolio-thesubhankar.netlify.app-00F2FE?style=for-the-badge&logo=netlify&logoColor=000)](https://thesubhankar.netlify.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-subhankar--portfolio-FF2D95?style=for-the-badge&logo=github&logoColor=fff)](https://github.com/thesubhankar/subhankar-portfolio)
 
 <br/>
 
-## 🧭 Table of Contents
-
-- [About Me](#-about-me)
-- [Tech Stack & Toolkit](#-tech-stack--toolkit)
-- [Featured Projects](#-featured-projects)
-- [Certifications](#-certifications)
-- [Education](#-education)
-- [Experience](#-experience)
-- [Resume](#-resume)
-- [Contact](#-lets-connect)
-
----
-
-## 👨‍💻 About Me
-
-I'm an aspiring **Data Scientist & Analyst** based in Odisha, India — driven by curiosity to extract knowledge from messy, unstructured datasets and build models that solve real business problems. I enjoy designing interactive report pipelines and hunting for non-trivial trends in data.
-
-| | |
-|---|---|
-| 🎯 **Role** | Data Scientist & Analyst |
-| 📍 **Location** | Odisha, India |
-| 🟢 **Availability** | Immediate / Open for Work |
-| ✉️ **Email** | thesubhankar.giri992@gmail.com |
-
----
-
-## 🧰 Tech Stack & Toolkit
-
-<div align="center">
-
-![Python](https://img.shields.io/badge/Python-95%25-3776AB?style=flat-square&logo=python&logoColor=white)
-![SQL](https://img.shields.io/badge/SQL_&_Database-90%25-4479A1?style=flat-square&logo=postgresql&logoColor=white)
-![Math](https://img.shields.io/badge/Math_for_DS-90%25-EE4C2C?style=flat-square)
-![Excel](https://img.shields.io/badge/AI_Powered_Excel-85%25-217346?style=flat-square&logo=microsoftexcel&logoColor=white)
-![PowerBI](https://img.shields.io/badge/Power_BI-85%25-F2C811?style=flat-square&logo=powerbi&logoColor=black)
-![DataAnalysis](https://img.shields.io/badge/Data_Analysis-85%25-informational?style=flat-square)
-![DeepLearning](https://img.shields.io/badge/Deep_Learning-85%25-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
-![Cloud](https://img.shields.io/badge/Cloud_Computing-85%25-4285F4?style=flat-square&logo=googlecloud&logoColor=white)
-![Git](https://img.shields.io/badge/Git_&_GitHub-85%25-F05032?style=flat-square&logo=git&logoColor=white)
-![Tableau](https://img.shields.io/badge/Tableau-80%25-E97627?style=flat-square&logo=tableau&logoColor=white)
-![ML](https://img.shields.io/badge/Machine_Learning-80%25-blue?style=flat-square)
-![FastAPI](https://img.shields.io/badge/FastAPI_&_Flask-80%25-009688?style=flat-square&logo=fastapi&logoColor=white)
+[![Pure Vanilla JS](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![HTML5](https://img.shields.io/badge/HTML5-Semantic_Layout-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Glossary/HTML5)
+[![CSS3](https://img.shields.io/badge/CSS3-Modern_Variables_&_3D-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![Performance](https://img.shields.io/badge/Lighthouse-100%25_Performance-00C7B7?style=flat-square&logo=lighthouse&logoColor=white)](https://thesubhankar.netlify.app/)
+[![Responsive](https://img.shields.io/badge/Mobile-100%25_Responsive-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://thesubhankar.netlify.app/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 </div>
 
 ---
 
-## 🚀 Featured Projects
+## 🌟 Overview
 
-### 🏢 [Employee Management System](https://github.com/thesubhankar)
-Full-featured Python enterprise app for employee profiles, department hierarchies, payroll analytics, and role-based access control with SQLite storage.
-`Python` `SQLite` `Pandas` `Matplotlib`
+Welcome to my personal **Data Science & Analytics Portfolio**! Crafted entirely from scratch with vanilla technologies, this portfolio simulates an interactive **computational notebook environment** (`portfolio.ipynb`), bridging clean analytical storytelling with modern frontend design.
 
-### 🎬 [Netflix Data Analysis](https://github.com/thesubhankar)
-Comprehensive EDA on Netflix's global title catalog uncovering content trends, rating distributions, and genre popularity.
-`Python` `Pandas` `Seaborn` `SQL`
-
-### 📉 [Customer Churn Prediction](https://github.com/thesubhankar)
-End-to-end churn classifier using Random Forest & XGBoost — feature engineering, SMOTE balancing, ROC-AUC optimization (AUC = 0.89).
-`Python` `Scikit-Learn` `XGBoost`
-
-### 🏠 [House Price Prediction](https://github.com/thesubhankar)
-High-precision multi-variable regression model estimating real estate pricing from spatial, structural & economic indicators.
-`Python` `Scikit-Learn` `XGBoost`
-
-### 🌿 [Leaf Disease Detection Using Machine Learning](https://github.com/thesubhankar)
-CNN + SVM computer vision pipeline detecting plant leaf pathogens from imagery with **96.4%** diagnostic accuracy.
-`Python` `PyTorch` `OpenCV` `Scikit-Learn`
-
-### 🎥 [Movie Recommendation System](https://github.com/thesubhankar)
-Hybrid recommender combining Content-Based Filtering (TF-IDF + Cosine Similarity) and Collaborative Filtering (SVD) — 98.2% match score.
-`Python` `Scikit-Learn` `Pandas`
-
-> 🔎 Explore all repositories on [GitHub →](https://github.com/thesubhankar)
+It features a custom **3D MacBook Device Studio**, dynamic slide carousels, reactive edge glows, smooth theme switching, and seamless real-time contact dispatching.
 
 ---
 
-## 📜 Certifications
-
-| Certification | Provider |
-|---|---|
-| Data Science Specialization | Coursera / Johns Hopkins University |
-| SQL for Data Analysis | Udacity |
-| Power BI Desktop Complete | Udemy |
-| Deep Learning & Neural Networks | Coursera / DeepLearning.AI |
-| Encoder-Decoder Architecture | SimpliLearn / Google Cloud |
-| Introduction to Generative AI | Coursera / Google Cloud |
-| Intro to IoT and Embedded Systems | Coursera / UC Irvine |
-| HTML & CSS: Single-Page Website | Coursera Project Network |
-| Introduction to Large Language Models (LLMs) | Simplilearn / Google Cloud |
-
-📁 [View All Certificates](https://drive.google.com/drive/folders/1rhWWTwEuRvtgEDp8v48kL5W7qvmzBDaY?usp=drive_link)
-
----
-
-## 🎓 Education
+## ✨ Key Architectural Highlights
 
 ```
-2023 – 2027   B.Tech, Computer Science & Engineering (In Progress)
-              KMBB College of Engineering and Technology (BPUT, Rourkela)
+┌────────────────────────────────────────────────────────────────────────┐
+│  PORTFOLIO.IPYNB  [● ● ●]                                              │
+├────────────────────────────────────────────────────────────────────────┤
+│  In [1]: portfolio.intro()        ──────►  Terminal Greeting & Typing  │
+│  In [2]: portfolio.about()        ──────►  Background & Core Focus     │
+│  In [3]: portfolio.skills()       ──────►  Interactive Skill Grid      │
+│  In [4]: portfolio.projects()     ──────►  3D Laptop Mockup Studio     │
+│  In [5]: portfolio.credentials()  ──────►  Certifications & Degrees    │
+│  In [6]: portfolio.contact()      ──────►  Serverless EmailJS Form     │
+└────────────────────────────────────────────────────────────────────────┘
+```
 
-2021 – 2023   Higher Secondary (+2 Science) — 64%
-              Dr. Harekrushna Mahatab College, Kupari
+### 💻 3D Interactive Laptop Studio
+- **Authentic Mockup Geometry**: Realistic 16:9 MacBook chassis with camera bezel, status glint, and desktop floor shadow.
+- **Dynamic Dual Chassis Theme**:
+  - ☀️ **Day Theme**: Sleek Space Gray lid with Cerulean Navy Blue accents (`#007BA7`).
+  - 🌙 **Night Theme**: Clean White Unibody with Cyberpunk Pink (`#FF2D95`) & Cyan (`#00F2FE`) accents.
+- **Subtle 4-Sided Edge Glow**: Reacts exclusively to slide navigation buttons (`[ < ]` and `[ > ]`), emitting an elegant 5px ambient pulse without bleeding across the workspace.
 
-2020 – 2021   Matriculation — 78%
-              Shakuntala High School, Jirital
+### 🎨 Dual-Mode Color Engineering
+- **Day / Light Mode**: High-contrast, publication-grade aesthetics built on Cerulean Blue (`#007BA7`), crisp whites, and slate accents.
+- **Night / Dark Mode**: Deep void navy (`#00002C`), electric cyan (`#00F2FE`), neon rose (`#FF2D95`), and glassmorphism backdrops.
+
+### ⚡ Ultra-Lightweight & Fast
+- **Zero Heavy Frameworks**: No React, Vue, Angular, or heavy bundle overhead.
+- **Instant Rendering**: 100% pure vanilla JavaScript, native CSS variables, hardware-accelerated 3D transforms (`translateZ`), and preloaded WebP slide assets.
+
+---
+
+## 📂 Core Project Sections
+
+| # | Section | Code Cell | Highlights |
+|---|---|---|---|
+| 01 | **Intro** | `In [1]` | Animated role typewriter, key stats metrics, and hero introduction |
+| 02 | **About** | `In [2]` | Analytical background, domain expertise, and working methodologies |
+| 03 | **Skills** | `In [3]` | Categorized technical tiles: Python, SQL, ML, Visualization, Cloud |
+| 04 | **Projects** | `In [4]` | Featured Studio Card with 3D Laptop preview, live demo & repo links |
+| 05 | **Certificates** | `In [5]` | Interactive cards verified by Coursera, Udacity, Google Cloud & IBM |
+| 06 | **Education** | `In [6]` | Timeline of Computer Science engineering degree and foundational study |
+| 07 | **Experience** | `In [7]` | Internship and freelance analytics milestones |
+| 08 | **Achievements** | `In [8]` | Coding metrics, hackathon problem-solving, and benchmark results |
+| 09 | **GitHub Dashboard** | `In [9]` | Live repository statistics, activity streak, and sync monitor |
+| 10 | **Resume** | `In [10]` | Interactive resume card with direct Google Drive view and download |
+| 11 | **Contact** | `In [11]` | Zero-backend client-side form powered by EmailJS SDK |
+
+---
+
+## 🛠️ Tech Stack & Tooling
+
+<div align="center">
+
+| Core Frontend | Data Science Ecosystem | Cloud & Deploy |
+|:---:|:---:|:---:|
+| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript_ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) | ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white) ![Scikit-Learn](https://img.shields.io/badge/Scikit_Learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white) | ![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white) ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) |
+
+</div>
+
+---
+
+## 🗂️ Repository Structure
+
+```plaintext
+subhankar-portfolio/
+│
+├── index.html       # Semantic single-page application structure
+├── style.css        # Responsive layout, CSS tokens, dual themes, and animations
+├── script.js        # Notebook routing, 3D device tilt, carousels, and EmailJS
+└── README.md        # Comprehensive technical documentation & project showcase
 ```
 
 ---
 
-## 💼 Experience
+## 🚀 Quick Start (Run Locally)
 
-**Data Science Intern** · Tech Solutions Inc. (Remote) · *Dec 2024 – Mar 2025*
-Built ETL pipelines for JSON web-traffic data, cut processing anomalies by 18%, automated weekly KPI dashboards.
+You can run this portfolio locally in under 10 seconds:
 
-**Freelance Analyst** · Upwork / Fiverr · *2023 – Present*
-Transformed raw Excel data into interactive Power BI dashboards, tuned SQL performance, delivered cohort analytics for retail clients.
+```bash
+# 1. Clone the repository
+git clone https://github.com/thesubhankar/subhankar-portfolio.git
 
-**Personal Projects** · Self-Initiated · *Continuous*
-Statistical modules for genomic confidence metrics, real-time financial data parsers, in-browser regression tools.
+# 2. Navigate to the project directory
+cd subhankar-portfolio
+
+# 3. Open index.html in your default web browser
+# On Windows:
+start index.html
+
+# On macOS:
+open index.html
+
+# On Linux:
+xdg-open index.html
+```
+
+*Or simply launch it with VS Code Live Server or Python's built-in HTTP server:*
+```bash
+python -m http.server 8000
+```
+Then visit `http://localhost:8000` in your browser.
 
 ---
 
-## 📄 Resume
-
-📥 [View / Download Full Resume](https://drive.google.com/file/d/1RblpVk8YQOuxPiaEXRcVG1HUc2qVCPnP/view?usp=drive_link)
-
----
-
-## 🤝 Let's Connect
+## 🌐 Connect With Me
 
 <div align="center">
 
-I'm open to internships, freelance data work, and open-source collaboration — reach out anytime!
-
-[![Portfolio](https://img.shields.io/badge/Visit_Portfolio-6366F1?style=for-the-badge&logo=vercel&logoColor=white)](https://thesubhankar.netlify.app/)
-[![Email](https://img.shields.io/badge/Say_Hello-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:thesubhankar.giri992@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/subhankar-giri-2a4b0a295)
-
-</div>
+[![Portfolio](https://img.shields.io/badge/Portfolio-thesubhankar.netlify.app-00F2FE?style=for-the-badge&logo=netlify&logoColor=000)](https://thesubhankar.netlify.app/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Subhankar_Giri-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/subhankar-giri-2a4b0a295)
+[![GitHub](https://img.shields.io/badge/GitHub-thesubhankar-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/thesubhankar)
+[![Email](https://img.shields.io/badge/Email-thesubhankar.giri992%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:thesubhankar.giri992@gmail.com)
+[![Kaggle](https://img.shields.io/badge/Kaggle-thesubhankar-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/thesubhankar)
+[![LeetCode](https://img.shields.io/badge/LeetCode-subhaknar-FFA116?style=for-the-badge&logo=leetcode&logoColor=white)](https://leetcode.com/u/subhaknar/)
 
 <br/>
 
-<div align="center">
-<sub>© 2026 Subhankar Giri · Built with passion for Data Science 💙</sub>
+<sub>Designed & Engineered with ❤️ by <b>Subhankar Giri</b> · © 2026</sub>
+
 </div>
