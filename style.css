@@ -10985,6 +10985,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 }
 
+.laptop-screen .laptop-img-crossfade-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+    display: block;
+    animation: none !important;
+    user-select: none;
+    pointer-events: none;
+    z-index: 3;
+}
+
 /* Controls Bar Below Laptop Base: ([ < ] ∙ ∙ ∙ ∙ ∙ [ > ]) */
 
 .laptop-carousel-bar {
@@ -11993,7 +12006,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     display: grid;
 
-    grid-template-columns: repeat(auto-fill, minmax(175px, 205px));
+    grid-template-columns: repeat(auto-fit, minmax(175px, 205px));
 
     gap: 0.85rem;
 
@@ -12001,7 +12014,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     box-sizing: border-box;
 
-    justify-content: start;
+    justify-content: center;
+
+    justify-items: center;
 
 }
 
@@ -12029,7 +12044,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     box-sizing: border-box;
 
+    width: 100%;
+
     max-width: 215px;
+
+    margin: 0 auto;
 
     transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 
@@ -12039,6 +12058,54 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     outline: none;
 
+}
+
+/* Responsive Centering for Small Compact Project Cards */
+
+@media (max-width: 768px) {
+    .compact-cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 200px));
+        gap: 0.75rem;
+        justify-content: center;
+        justify-items: center;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .compact-project-card {
+        width: 100%;
+        max-width: 215px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .compact-cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+        gap: 0.65rem;
+        justify-content: center;
+        justify-items: center;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .compact-project-card {
+        width: 100%;
+        max-width: 260px;
+        margin: 0 auto;
+    }
+
+    .compact-tray-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .compact-tray-title-wrap {
+        justify-content: center;
+        text-align: center;
+    }
 }
 
 /* Pointer Hover on Unselected Card - Distinct Electric Cyan Glow */

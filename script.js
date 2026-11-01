@@ -1615,6 +1615,9 @@ function initProjectNav() {
 
     }
 
+    let currentCrossfadeOverlay = null;
+    let crossfadeTimer = null;
+
     function showSlide(index, withFade = true) {
         const proj = STUDIO_PROJECTS[currentProjectId];
         if (!proj || !proj.slides || !proj.slides.length) return;
@@ -1633,42 +1636,103 @@ function initProjectNav() {
         const targetSrc = slide.webp;
         const targetAlt = slide.alt;
 
-        // If the image is already showing this source, just ensure alt is synced
+        // If identical image is already active, just sync alt
         if (dynamicImg.getAttribute('src') === targetSrc || dynamicImg.src.endsWith(targetSrc)) {
             dynamicImg.alt = targetAlt;
             return;
         }
 
-        if (withFade) {
-            // Preload new image before swapping so screen never shows empty black background
-            const imgLoader = new Image();
-            imgLoader.src = targetSrc;
-
-            const applySwap = () => {
-                // Subtle gentle crossfade (keep 75% opacity so old image remains visible, no black screen)
-                dynamicImg.style.transition = 'opacity 0.16s ease-in-out';
-                dynamicImg.style.opacity = '0.75';
-                setTimeout(() => {
-                    dynamicImg.src = targetSrc;
-                    dynamicImg.alt = targetAlt;
-                    dynamicImg.style.opacity = '1';
-                }, 60);
-            };
-
-            if (imgLoader.complete) {
-                applySwap();
-            } else {
-                imgLoader.onload = applySwap;
-                imgLoader.onerror = () => {
-                    dynamicImg.src = targetSrc;
-                    dynamicImg.alt = targetAlt;
-                    dynamicImg.style.opacity = '1';
-                };
+        const screen = dynamicImg.parentElement;
+        if (!withFade || !screen) {
+            if (currentCrossfadeOverlay) {
+                currentCrossfadeOverlay.remove();
+                currentCrossfadeOverlay = null;
             }
-        } else {
+            if (crossfadeTimer) {
+                clearTimeout(crossfadeTimer);
+                crossfadeTimer = null;
+            }
             dynamicImg.src = targetSrc;
             dynamicImg.alt = targetAlt;
             dynamicImg.style.opacity = '1';
+            return;
+        }
+
+        // If an overlay was already animating (e.g. fast clicks), commit it to dynamicImg immediately
+        if (currentCrossfadeOverlay) {
+            if (crossfadeTimer) {
+                clearTimeout(crossfadeTimer);
+                crossfadeTimer = null;
+            }
+            dynamicImg.src = currentCrossfadeOverlay.src;
+            dynamicImg.alt = currentCrossfadeOverlay.alt;
+            currentCrossfadeOverlay.remove();
+            currentCrossfadeOverlay = null;
+        }
+
+        // Create overlay element sitting directly on top of dynamicImg with ZERO background exposure
+        const overlay = document.createElement('img');
+        overlay.className = 'inline-illustration-img laptop-img-crossfade-overlay';
+        overlay.alt = targetAlt;
+        overlay.decoding = 'async';
+        overlay.style.position = 'absolute';
+        overlay.style.inset = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.objectFit = 'cover';
+        overlay.style.opacity = '0';
+        overlay.style.zIndex = '3';
+        overlay.style.transition = 'opacity 0.22s ease-in-out';
+        overlay.style.pointerEvents = 'none';
+
+        currentCrossfadeOverlay = overlay;
+
+        let hasFaded = false;
+        const triggerCrossfade = () => {
+            if (hasFaded || currentCrossfadeOverlay !== overlay) return;
+            hasFaded = true;
+            requestAnimationFrame(() => {
+                if (currentCrossfadeOverlay !== overlay) return;
+                overlay.style.opacity = '1';
+            });
+
+            crossfadeTimer = setTimeout(() => {
+                if (currentCrossfadeOverlay === overlay) {
+                    dynamicImg.src = targetSrc;
+                    dynamicImg.alt = targetAlt;
+                    overlay.remove();
+                    currentCrossfadeOverlay = null;
+                    crossfadeTimer = null;
+                }
+            }, 240);
+        };
+
+        overlay.onload = () => {
+            if (typeof overlay.decode === 'function') {
+                overlay.decode().then(triggerCrossfade).catch(triggerCrossfade);
+            } else {
+                triggerCrossfade();
+            }
+        };
+
+        overlay.onerror = () => {
+            if (currentCrossfadeOverlay === overlay) {
+                dynamicImg.src = targetSrc;
+                dynamicImg.alt = targetAlt;
+                overlay.remove();
+                currentCrossfadeOverlay = null;
+            }
+        };
+
+        screen.appendChild(overlay);
+        overlay.src = targetSrc;
+
+        if (overlay.complete && overlay.naturalWidth > 0) {
+            if (typeof overlay.decode === 'function') {
+                overlay.decode().then(triggerCrossfade).catch(triggerCrossfade);
+            } else {
+                triggerCrossfade();
+            }
         }
     }
 
