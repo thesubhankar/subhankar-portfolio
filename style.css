@@ -10563,9 +10563,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* The card surface stays 100% solid, glowing ONLY in the outer background behind the card */
 
 .project-featured-card.card-bg-light-flash {
-
-    animation: mainCardBgFlash 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    border-color: #00F2FE !important;
+    box-shadow: 0 18px 45px rgba(0, 0, 44, 0.8), 0 0 32px rgba(0, 242, 254, 0.35) !important;
 }
 
 @keyframes mainCardBgFlash {
@@ -10613,9 +10613,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 [data-theme="light"] .project-featured-card.card-bg-light-flash {
-
-    animation: mainCardBgFlashLight 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    border-color: #007BA7 !important;
+    box-shadow: 0 14px 36px rgba(10, 10, 10, 0.08), 0 0 28px rgba(0, 123, 167, 0.28) !important;
 }
 
 @keyframes mainCardBgFlashLight {
@@ -10930,7 +10930,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     aspect-ratio: 16 / 9;
 
-    background: #000000;
+    background: #0D0429;
 
     border-radius: 6px 6px 0 0;
 
@@ -10947,6 +10947,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* Realistic Diagonal Glass Gloss Reflection */
+
+[data-theme="light"] .laptop-screen {
+    background: #F8FAFC;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
 
 .laptop-screen::after {
 
@@ -12101,15 +12106,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Day Theme Pointer Hover on Unselected Card - Distinct Electric Sky Cyan */
 
 [data-theme="light"] .compact-project-card:hover:not(.active-preview) {
-
     transform: translateY(-4px);
-
-    border-color: #0DA3DF !important;
-
-    box-shadow: 0 8px 24px rgba(13, 163, 223, 0.28), 0 0 20px rgba(13, 163, 223, 0.35) !important;
-
-    background: #E0F2FE !important;
-
+    border-color: #E11D48 !important;
+    box-shadow: 0 8px 24px rgba(225, 29, 72, 0.22), 0 0 18px rgba(225, 29, 72, 0.3) !important;
+    background: #FFF1F2 !important;
 }
 
 /* Day Theme Active Preview State - Selected Card in Navy Blue */
@@ -12319,9 +12319,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 [data-theme="light"] .compact-project-card:hover:not(.active-preview) .compact-title {
-
-    color: #0284C7;
-
+    color: #E11D48 !important;
 }
 
 .compact-action-row {
@@ -12371,9 +12369,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 [data-theme="light"] .compact-project-card:hover:not(.active-preview) .compact-open-text {
-
-    color: #0284C7 !important;
-
+    color: #E11D48 !important;
 }
 
 [data-theme="light"] .compact-project-card.active-preview .compact-open-text {
@@ -12579,23 +12575,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 @keyframes infoFadeSlideUp {
-
     0% {
-
-        opacity: 0;
-
-        transform: translateY(12px);
-
+        opacity: 0.7;
     }
-
     100% {
-
         opacity: 1;
-
-        transform: translateY(0);
-
     }
-
 }
 
 .featured-card-info.info-fade-pulse {
@@ -12965,13 +12950,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 [data-theme="light"] .compact-project-card:hover:not(.active-preview) {
-
-    border-color: #0DA3DF !important;
-
-    box-shadow: 0 8px 24px rgba(13, 163, 223, 0.28), 0 0 20px rgba(13, 163, 223, 0.35) !important;
-
-    background: #E0F2FE !important;
-
+    transform: translateY(-4px);
+    border-color: #E11D48 !important;
+    box-shadow: 0 8px 24px rgba(225, 29, 72, 0.22), 0 0 18px rgba(225, 29, 72, 0.3) !important;
+    background: #FFF1F2 !important;
 }
 
 [data-theme="light"] .compact-project-card.active-preview {
@@ -13001,9 +12983,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 [data-theme="light"] .compact-project-card:hover:not(.active-preview) .compact-title {
-
-    color: #0284C7 !important;
-
+    color: #E11D48 !important;
 }
 
 [data-theme="light"] .compact-project-card.active-preview .compact-title {
@@ -13019,9 +12999,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 [data-theme="light"] .compact-project-card:hover:not(.active-preview) .compact-open-text {
-
-    color: #0284C7 !important;
-
+    color: #E11D48 !important;
 }
 
 [data-theme="light"] .compact-project-card.active-preview .compact-open-text {
@@ -13039,13 +13017,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 [data-theme="light"] .compact-project-card:hover:not(.active-preview) .compact-arrow-icon {
-
-    background: #0DA3DF !important;
-
+    background: #E11D48 !important;
     color: #FFFFFF !important;
-
-    box-shadow: 0 2px 10px rgba(13, 163, 223, 0.5) !important;
-
+    box-shadow: 0 2px 10px rgba(225, 29, 72, 0.5) !important;
 }
 
 [data-theme="light"] .compact-project-card.active-preview .compact-arrow-icon {
@@ -13225,15 +13199,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 #page-projects .compact-project-card:hover:not(.active-preview) {
-    border-color: #FF2D95 !important;
-    box-shadow: 0 12px 28px rgba(0, 0, 44, 0.75), 0 0 22px rgba(255, 45, 149, 0.6) !important;
-    background: rgba(255, 45, 149, 0.1) !important;
+    border-color: #00F2FE !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 44, 0.8), 0 0 22px rgba(0, 242, 254, 0.6) !important;
+    background: rgba(0, 242, 254, 0.1) !important;
 }
 
 [data-theme="light"] #page-projects .compact-project-card:hover:not(.active-preview) {
-    border-color: #007BA7 !important;
-    box-shadow: 0 8px 24px rgba(0, 123, 167, 0.28), 0 0 20px rgba(0, 123, 167, 0.35) !important;
-    background: #E0F2FE !important;
+    border-color: #E11D48 !important;
+    box-shadow: 0 8px 24px rgba(225, 29, 72, 0.22), 0 0 18px rgba(225, 29, 72, 0.3) !important;
+    background: #FFF1F2 !important;
 }
 
 /* --------------------------------------------------------------------------

@@ -1398,6 +1398,21 @@ function initProjectNav() {
 
     };
 
+    
+    // Preload all project images into memory to eliminate loading delay and prevent black screens
+    try {
+        Object.values(STUDIO_PROJECTS).forEach(proj => {
+            if (proj.slides && Array.isArray(proj.slides)) {
+                proj.slides.forEach(s => {
+                    if (s.webp) {
+                        const pre = new Image();
+                        pre.src = s.webp;
+                    }
+                });
+            }
+        });
+    } catch (e) {}
+
     let currentProjectId = 'thiranex';
 
     let currentSlideIndex = 0;
@@ -1433,21 +1448,13 @@ function initProjectNav() {
         // Helper: Trigger momentary background illumination on main card (category or project change)
 
     function triggerCardBgLight() {
-
+        // Calm subtle background pulse without forced synchronous reflows
         if (!featuredCard) return;
-
         featuredCard.classList.remove('card-bg-light-flash');
-
-        void featuredCard.offsetWidth;
-
         featuredCard.classList.add('card-bg-light-flash');
-
         setTimeout(() => {
-
             if (featuredCard) featuredCard.classList.remove('card-bg-light-flash');
-
-        }, 800);
-
+        }, 500);
     }
 
     // Helper: Trigger soft 4-sided edge glow around laptop on image slide change
@@ -1609,59 +1616,60 @@ function initProjectNav() {
     }
 
     function showSlide(index, withFade = true) {
-
         const proj = STUDIO_PROJECTS[currentProjectId];
-
         if (!proj || !proj.slides || !proj.slides.length) return;
-
         currentSlideIndex = (index + proj.slides.length) % proj.slides.length;
-
         const slide = proj.slides[currentSlideIndex];
+        if (!dynamicImg) return;
 
-        if (dynamicImg) {
-
-            if (withFade) {
-
-                dynamicImg.style.transition = 'opacity 0.14s ease';
-
-                dynamicImg.style.opacity = '0.25';
-
-                setTimeout(() => {
-
-                    dynamicImg.src = slide.webp;
-
-                    dynamicImg.alt = slide.alt;
-
-                    dynamicImg.style.opacity = '1';
-
-                }, 80);
-
-            } else {
-
-                dynamicImg.src = slide.webp;
-
-                dynamicImg.alt = slide.alt;
-
-                dynamicImg.style.opacity = '1';
-
-            }
-
-        }
-
-        // update dots active state
-
+        // Update dots active state smoothly
         if (dotsRow) {
-
             const dots = dotsRow.querySelectorAll('.carousel-dot');
-
             dots.forEach((d, i) => {
-
                 d.classList.toggle('active', i === currentSlideIndex);
-
             });
-
         }
 
+        const targetSrc = slide.webp;
+        const targetAlt = slide.alt;
+
+        // If the image is already showing this source, just ensure alt is synced
+        if (dynamicImg.getAttribute('src') === targetSrc || dynamicImg.src.endsWith(targetSrc)) {
+            dynamicImg.alt = targetAlt;
+            return;
+        }
+
+        if (withFade) {
+            // Preload new image before swapping so screen never shows empty black background
+            const imgLoader = new Image();
+            imgLoader.src = targetSrc;
+
+            const applySwap = () => {
+                // Subtle gentle crossfade (keep 75% opacity so old image remains visible, no black screen)
+                dynamicImg.style.transition = 'opacity 0.16s ease-in-out';
+                dynamicImg.style.opacity = '0.75';
+                setTimeout(() => {
+                    dynamicImg.src = targetSrc;
+                    dynamicImg.alt = targetAlt;
+                    dynamicImg.style.opacity = '1';
+                }, 60);
+            };
+
+            if (imgLoader.complete) {
+                applySwap();
+            } else {
+                imgLoader.onload = applySwap;
+                imgLoader.onerror = () => {
+                    dynamicImg.src = targetSrc;
+                    dynamicImg.alt = targetAlt;
+                    dynamicImg.style.opacity = '1';
+                };
+            }
+        } else {
+            dynamicImg.src = targetSrc;
+            dynamicImg.alt = targetAlt;
+            dynamicImg.style.opacity = '1';
+        }
     }
 
     // Previous and Next buttons with robust click & touch support
