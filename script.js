@@ -640,6 +640,16 @@ function navigateToPage(pageId, updateHistory = true) {
 
         updateNavLinks(pageId);
 
+        // Low-device & power-saving: manage background CPU tasks based on active section
+        if (pageId === 'intro') {
+            restartTypingEffect();
+        } else {
+            if (typingTimeoutId) {
+                clearTimeout(typingTimeoutId);
+                typingTimeoutId = null;
+            }
+        }
+
         // Power-saving & low-device smoothness: pause snake engine when not viewing GitHub
 
         if (typeof snakeEngine !== 'undefined' && snakeEngine) {

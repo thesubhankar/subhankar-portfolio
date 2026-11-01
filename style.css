@@ -250,6 +250,24 @@ html, body {
 
 }
 
+/* Native-app responsiveness: eliminate 300ms tap delay and optimize tap physics */
+button,
+a,
+input,
+textarea,
+select,
+.btn,
+.filter-chip,
+.sidebar-nav-item,
+.compact-project-card,
+.cell-run-btn,
+.project-carousel-btn,
+.social-icon-btn,
+.carousel-dot {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
 /* Smooth notebook page rendering without height-clamping bugs */
 
 .notebook-page {
@@ -8564,6 +8582,90 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 @media (max-width: 480px) {
 
+    /* Fluid typography and mobile sizing */
+    .hero-title {
+        font-size: clamp(1.4rem, 6vw, 2rem) !important;
+        line-height: 1.25 !important;
+    }
+
+    .hero-dynamic-subtitle {
+        font-size: clamp(0.95rem, 4.2vw, 1.25rem) !important;
+        line-height: 1.3 !important;
+    }
+
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-actions .btn {
+        flex: 1 1 calc(50% - 0.35rem);
+        min-width: 115px;
+        justify-content: center;
+        padding: 0.6rem 0.85rem;
+        font-size: 0.85rem;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
+    .about-cards-4grid {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
+    .about-info-card {
+        width: 100%;
+        min-width: 0;
+        padding: 0.85rem 1rem;
+    }
+
+    .edu-header-row {
+        flex-wrap: wrap;
+        gap: 0.45rem;
+    }
+
+    .edu-action-box .btn {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .featured-actions-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        width: 100%;
+    }
+
+    .featured-actions-row .btn {
+        flex: 1 1 calc(50% - 0.35rem);
+        min-width: 100px;
+        justify-content: center;
+        padding: 0.55rem 0.75rem;
+    }
+
+    .filter-chip {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .mobile-sidebar-toggle-btn {
+        min-width: 40px;
+        min-height: 40px;
+        width: 40px;
+        height: 40px;
+    }
+
     .notebook-main {
 
         padding: calc(4.6rem + var(--safe-top)) clamp(10px, 3vw, 16px) calc(2rem + var(--safe-bottom));
@@ -8870,6 +8972,33 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 @media (max-width: 379px) {
 
+    .hero-actions .btn {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .featured-actions-row .btn {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .contact-method-card {
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        padding: 0.75rem 0.85rem;
+    }
+
+    .contact-method-card .btn-copy {
+        margin-left: auto;
+    }
+
+    .edu-card-interactive {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.95rem 0.8rem;
+    }
+
     .notebook-main {
 
         padding: calc(4.4rem + var(--safe-top)) 8px calc(1.75rem + var(--safe-bottom));
@@ -9084,6 +9213,31 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     }
 
+}
+
+/* Touch Device Scroll Smoothness: Prevent Hover Jumping and Sticky Stutter */
+@media (hover: none) and (pointer: coarse) {
+    .cell-output-row:hover,
+    .cell-input-row:hover,
+    .hero-box:hover,
+    .summary-item:hover,
+    .about-info-card:hover,
+    .objective-card-styled:hover,
+    .skill-category-card:hover,
+    .compact-project-card:hover:not(.active-preview),
+    .project-featured-card:hover,
+    .edu-card-interactive:hover,
+    .cert-card-interactive:hover,
+    .exp-item-card:hover,
+    .achievement-metric-card:hover,
+    .github-dashboard-card:hover,
+    .resume-sheet-preview:hover,
+    .contact-method-card:hover,
+    .footer-copyright-card:hover,
+    .btn:hover,
+    .social-icon-btn:hover {
+        transform: none !important;
+    }
 }
 
 /* Reduced Motion Mode */
