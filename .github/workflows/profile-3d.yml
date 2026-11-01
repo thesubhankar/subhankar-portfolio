@@ -20,6 +20,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
+      - name: Sync 3D files to github-profile folder
+        run: |
+          mkdir -p github-profile/profile-3d-contrib
+          cp -r profile-3d-contrib/* github-profile/profile-3d-contrib/ 2>/dev/null || true
       - name: Commit & push
         run: |
           git config user.name github-actions

@@ -1,22 +1,26 @@
 <div align="center">
 
 <!-- 🎬 HERO — Animated Terminal & Bio-Optic Viewfinder -->
-<img src="./hero.svg?v=1" alt="Hi, I'm Subhankar Giri — Data Scientist &amp; Analytics Engineer" width="100%"/>
+<img src="./github-profile/hero.svg?v=1" alt="Hi, I'm Subhankar Giri — Data Scientist &amp; Analytics Engineer" width="100%"/>
 
 <br/><br/>
 
+<img src="./github-profile/team7-dance.gif" alt="Chibi animation" width="260"/>
+
+<br/>
+
 <!-- ⚡ WHAT I BUILD & ANALYTICS PHILOSOPHY -->
-<img src="./about-life.svg?v=1" alt="What I Build — Core Engineering Pillars &amp; Performance Rings" width="100%"/>
+<img src="./github-profile/about-life.svg?v=1" alt="What I Build — Core Engineering Pillars &amp; Performance Rings" width="100%"/>
 
 <br/><br/>
 
 <!-- 🪐 TECH STACK ARSENAL -->
-<img src="./stack.svg?v=1" alt="Technical Arsenal &amp; Orbiting Stack" width="100%"/>
+<img src="./github-profile/stack.svg?v=1" alt="Technical Arsenal &amp; Orbiting Stack" width="100%"/>
 
 <br/><br/>
 
 <!-- 🪪 HOLOGRAPHIC LANYARD ID + LIVE DASHBOARD -->
-<img src="./id-dashboard.svg?v=1" alt="Developer ID Badge and Live GitHub Dashboard" width="100%"/>
+<img src="./github-profile/id-dashboard.svg?v=1" alt="Developer ID Badge and Live GitHub Dashboard" width="100%"/>
 
 <br/><br/>
 
@@ -114,16 +118,18 @@
 
 <br/><br/>
 
+<img src="./github-profile/rasengan-run.gif" alt="Running animation" width="150"/>
+
 ### 🌃 3D Contribution City
 
 *Every commit raises another analytical tower — updated automatically every day via GitHub Actions.*
 
-<img src="./profile-3d-contrib/profile-night-view.svg" alt="3D contribution city" width="100%"/>
+<img src="./github-profile/profile-3d-contrib/profile-night-view.svg" alt="3D contribution city" width="100%"/>
 
 <br/><br/>
 
 <!-- 💌 CONNECT & COLLABORATE -->
-<img src="./connect.svg?v=1" alt="Let's connect" width="100%"/>
+<img src="./github-profile/connect.svg?v=1" alt="Let's connect" width="100%"/>
 
 <a href="https://thesubhankar.netlify.app/"><img src="https://img.shields.io/badge/Live_Portfolio-00F2FE?style=for-the-badge&logo=netlify&logoColor=041226" alt="Portfolio"/></a>
 <a href="https://www.linkedin.com/in/subhankar-giri-2a4b0a295"><img src="https://img.shields.io/badge/LinkedIn-007BA7?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
@@ -136,7 +142,11 @@
 
 <img src="https://komarev.com/ghpvc/?username=thesubhankar&color=00F2FE&style=for-the-badge&label=PROFILE+VIEWS" alt="Profile views"/>
 
-<br/><br/>
+<br/>
+
+<img src="./github-profile/chibi-walk.gif" alt="Chibi character walking" width="90"/>
+
+<br/>
 
 **"In God we trust, all others must bring data."** ⚡<br/>
 <sub>Designed &amp; Engineered with ❤️ by <b>Subhankar Giri</b> · © 2026</sub>
