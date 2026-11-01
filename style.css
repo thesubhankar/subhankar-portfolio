@@ -188,25 +188,35 @@
 
 [data-theme="dark"] .skill-pill {
 
-    background-color: rgba(255, 119, 0, 0.06) !important;
+    background-color: rgba(255, 255, 255, 0.03) !important;
 
-    border: 1.5px solid #FF7700 !important;
+    border: 1px solid rgba(139, 92, 246, 0.22) !important;
 
     color: #F8FAFC !important;
+
+    box-shadow: none !important;
+
+    transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+
+                border-color 0.22s ease,
+
+                box-shadow 0.22s ease,
+
+                background-color 0.22s ease !important;
 
 }
 
 [data-theme="dark"] .skill-pill:hover {
 
-    background-color: rgba(255, 119, 0, 0.16) !important;
+    background-color: rgba(0, 242, 254, 0.12) !important;
 
-    border-color: #FFA116 !important;
+    border-color: #00F2FE !important;
 
     color: #FFFFFF !important;
 
-    box-shadow: 0 0 14px rgba(255, 119, 0, 0.5) !important;
+    box-shadow: 0 0 16px rgba(0, 242, 254, 0.6), 0 4px 12px rgba(0, 0, 44, 0.6) !important;
 
-    transform: translateY(-2px) !important;
+    transform: translateY(-3px) scale(1.05) !important;
 
 }
 
@@ -2848,9 +2858,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 [data-theme="dark"] .skill-pill:hover {
 
-    border-color: #007BA7;
+    border-color: #00F2FE !important;
 
-    box-shadow: 0 0 14px rgba(0, 123, 167, 0.45);
+    box-shadow: 0 0 16px rgba(0, 242, 254, 0.6), 0 4px 12px rgba(0, 0, 44, 0.6) !important;
 
 }
 
@@ -13003,3 +13013,189 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* Cleaned up obsolete tray action buttons */
+
+/* ==========================================================================
+   Section-Specific Main Card Border & Glow System
+   Each section gets its own distinct, vibrant signature color in Day & Night
+   ========================================================================== */
+
+/* 1. Intro / Home - Neon Magenta Pink (Night) / Deep Navy Blue (Day) */
+#page-intro .hero-box:hover,
+#page-intro .cell-input-row:hover,
+#page-intro .cell-output-row:hover,
+#page-intro .summary-item:hover {
+    border-color: #FF2D95 !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(255, 45, 149, 0.45) !important;
+}
+
+[data-theme="light"] #page-intro .hero-box:hover,
+[data-theme="light"] #page-intro .cell-input-row:hover,
+[data-theme="light"] #page-intro .cell-output-row:hover,
+[data-theme="light"] #page-intro .summary-item:hover {
+    border-color: #007BA7 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(0, 123, 167, 0.35) !important;
+}
+
+/* 2. About Me - Electric Emerald / Mint (Night) / Forest Emerald (Day) */
+#page-about .cell-input-row:hover,
+#page-about .cell-output-row:hover,
+#page-about .about-info-card:hover,
+#page-about .objective-card-styled:hover {
+    border-color: #10B981 !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(16, 185, 129, 0.45) !important;
+}
+
+#page-about .objective-card-styled:hover {
+    border-left-color: #10B981 !important;
+}
+
+[data-theme="light"] #page-about .cell-input-row:hover,
+[data-theme="light"] #page-about .cell-output-row:hover,
+[data-theme="light"] #page-about .about-info-card:hover,
+[data-theme="light"] #page-about .objective-card-styled:hover {
+    border-color: #059669 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(5, 150, 105, 0.35) !important;
+}
+
+[data-theme="light"] #page-about .objective-card-styled:hover {
+    border-left-color: #059669 !important;
+}
+
+/* 3. Skills & Toolkit - Electric Cosmic Violet (Night) / Royal Indigo (Day) */
+#page-skills .cell-input-row:hover,
+#page-skills .cell-output-row:hover,
+#page-skills .skill-category-card:hover {
+    border-color: #A855F7 !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(168, 85, 247, 0.45) !important;
+}
+
+[data-theme="light"] #page-skills .cell-input-row:hover,
+[data-theme="light"] #page-skills .cell-output-row:hover,
+[data-theme="light"] #page-skills .skill-category-card:hover {
+    border-color: #6366F1 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(99, 102, 241, 0.35) !important;
+}
+
+/* 4. Featured Projects - Electric Sky Cyan (Night) / Ocean Cerulean Blue (Day) */
+#page-projects .cell-input-row:hover,
+#page-projects .cell-output-row:hover,
+#page-projects .project-featured-card:hover,
+#page-projects .project-card:hover {
+    border-color: #00F2FE !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(0, 242, 254, 0.45) !important;
+}
+
+[data-theme="light"] #page-projects .cell-input-row:hover,
+[data-theme="light"] #page-projects .cell-output-row:hover,
+[data-theme="light"] #page-projects .project-featured-card:hover,
+[data-theme="light"] #page-projects .project-card:hover {
+    border-color: #0284C7 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(2, 132, 199, 0.35) !important;
+}
+
+/* 5. Certificates - Radiant Cyber Gold (Night) / Warm Amber Gold (Day) */
+#page-certificates .cell-input-row:hover,
+#page-certificates .cell-output-row:hover,
+#page-certificates .cert-card-interactive:hover {
+    border-color: #FBBF24 !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(251, 191, 36, 0.45) !important;
+}
+
+[data-theme="light"] #page-certificates .cell-input-row:hover,
+[data-theme="light"] #page-certificates .cell-output-row:hover,
+[data-theme="light"] #page-certificates .cert-card-interactive:hover {
+    border-color: #D97706 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(217, 119, 6, 0.35) !important;
+}
+
+/* 6. Education - Electric Cornflower Blue (Night) / Royal Cobalt Blue (Day) */
+#page-education .cell-input-row:hover,
+#page-education .cell-output-row:hover,
+#page-education .edu-card-interactive:hover {
+    border-color: #60A5FA !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(96, 165, 250, 0.45) !important;
+}
+
+[data-theme="light"] #page-education .cell-input-row:hover,
+[data-theme="light"] #page-education .cell-output-row:hover,
+[data-theme="light"] #page-education .edu-card-interactive:hover {
+    border-color: #2563EB !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(37, 99, 235, 0.35) !important;
+}
+
+/* 7. Experience - Neon Spring Jade (Night) / Deep Forest Teal (Day) */
+#page-experience .cell-input-row:hover,
+#page-experience .cell-output-row:hover,
+#page-experience .exp-item-card:hover {
+    border-color: #2DD4BF !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(45, 212, 191, 0.45) !important;
+}
+
+[data-theme="light"] #page-experience .cell-input-row:hover,
+[data-theme="light"] #page-experience .cell-output-row:hover,
+[data-theme="light"] #page-experience .exp-item-card:hover {
+    border-color: #0D9488 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(13, 148, 136, 0.35) !important;
+}
+
+/* 8. Achievements - Radiant Cyber Tangerine (Night) / Deep Sunset Orange (Day) */
+#page-achievements .cell-input-row:hover,
+#page-achievements .cell-output-row:hover,
+#page-achievements .achievement-metric-card:hover {
+    border-color: #FB923C !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(251, 146, 60, 0.45) !important;
+}
+
+[data-theme="light"] #page-achievements .cell-input-row:hover,
+[data-theme="light"] #page-achievements .cell-output-row:hover,
+[data-theme="light"] #page-achievements .achievement-metric-card:hover {
+    border-color: #EA580C !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(234, 88, 12, 0.35) !important;
+}
+
+/* 9. GitHub Analytics - Cyber Lavender Purple (Night) / GitHub Slate Blue (Day) */
+#page-github .cell-input-row:hover,
+#page-github .cell-output-row:hover,
+#page-github .github-dashboard-card:hover {
+    border-color: #C084FC !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(192, 132, 252, 0.45) !important;
+}
+
+[data-theme="light"] #page-github .cell-input-row:hover,
+[data-theme="light"] #page-github .cell-output-row:hover,
+[data-theme="light"] #page-github .github-dashboard-card:hover {
+    border-color: #007BA7 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(0, 123, 167, 0.35) !important;
+}
+
+/* 10. Interactive Resume - Electric Ice Blue (Night) / Deep Steel Blue (Day) */
+#page-resume .cell-input-row:hover,
+#page-resume .cell-output-row:hover,
+#page-resume .resume-sheet-preview:hover {
+    border-color: #38BDF8 !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(56, 189, 248, 0.45) !important;
+}
+
+[data-theme="light"] #page-resume .cell-input-row:hover,
+[data-theme="light"] #page-resume .cell-output-row:hover,
+[data-theme="light"] #page-resume .resume-sheet-preview:hover {
+    border-color: #0369A1 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(3, 105, 161, 0.35) !important;
+}
+
+/* 11. Contact & Connect - Hot Neon Fuchsia (Night) / Deep Crimson Rose (Day) */
+#page-contact .cell-input-row:hover,
+#page-contact .cell-output-row:hover,
+#page-contact .contact-method-card:hover,
+#page-contact .footer-copyright-card:hover {
+    border-color: #FF2D95 !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(255, 45, 149, 0.45) !important;
+}
+
+[data-theme="light"] #page-contact .cell-input-row:hover,
+[data-theme="light"] #page-contact .cell-output-row:hover,
+[data-theme="light"] #page-contact .contact-method-card:hover,
+[data-theme="light"] #page-contact .footer-copyright-card:hover {
+    border-color: #E11D48 !important;
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(225, 29, 72, 0.35) !important;
+}
