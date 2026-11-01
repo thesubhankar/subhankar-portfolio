@@ -12000,13 +12000,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 }
 
-/* Compact Cards Grid (Small Box Cards) */
+/* Compact Cards Grid (Small Box Cards) - Original Left-Aligned on Laptop/Desktop */
 
 .compact-cards-grid {
 
     display: grid;
 
-    grid-template-columns: repeat(auto-fit, minmax(175px, 205px));
+    grid-template-columns: repeat(auto-fill, minmax(175px, 205px));
 
     gap: 0.85rem;
 
@@ -12014,9 +12014,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     box-sizing: border-box;
 
-    justify-content: center;
-
-    justify-items: center;
+    justify-content: start;
 
 }
 
@@ -12044,11 +12042,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     box-sizing: border-box;
 
-    width: 100%;
-
     max-width: 215px;
-
-    margin: 0 auto;
 
     transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 
