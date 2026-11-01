@@ -13015,18 +13015,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Cleaned up obsolete tray action buttons */
 
 /* ==========================================================================
-   Multi-Tier Nested Card Color Hierarchy (Day & Night)
-   - Level 1: Main Outer Card (cell-output-row / cell-input-row) -> Color 1
-   - Level 2: Inside Card (category-card / hero-box / project-card / etc.) -> Color 2
-   - Level 3: Card Inside That (skill-pill / summary-item / compact-card / etc.) -> Color 3
-   All levels have distinct, vibrant, and harmonious colors in Day & Night!
+   Multi-Tier Card Border & Glow System (Day & Night)
+   - Hover effects apply strictly to actual CARDS (outer main cards, inner cards, and sub-cards).
+   - Inner text, descriptions, badges, pills, and buttons remain completely normal with no glow.
+   - Idle cards have normal, subtle borders and clean backgrounds.
+   - Glowing borders illuminate smoothly only when the pointer hovers over a card.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
    1. Intro / Home Section
    - Level 1 (Main Card): Electric Violet (Night) / Royal Indigo (Day)
    - Level 2 (Hero Box): Neon Magenta Pink (Night) / Deep Navy Blue (Day)
-   - Level 3 (Summary Metrics Card): Electric Cyan (Night) / Forest Emerald (Day)
+   - Level 3 (Summary Metrics Cards): Electric Cyan (Night) / Forest Emerald (Day)
    -------------------------------------------------------------------------- */
 #page-intro .cell-output-row:hover,
 #page-intro .cell-input-row:hover {
@@ -13064,7 +13064,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
    2. About Me Section
    - Level 1 (Main Card): Electric Sky Blue (Night) / Ocean Cerulean (Day)
    - Level 2 (Info Cards & Objective): Cyber Emerald Green (Night) / Forest Emerald (Day)
-   - Level 3 (Meta & Info Boxes): Glowing Cyber Gold (Night) / Warm Amber Gold (Day)
+   - Inner text (Role, Email, Location, Availability, Data Scientist) stays normal!
    -------------------------------------------------------------------------- */
 #page-about .cell-output-row:hover,
 #page-about .cell-input-row:hover {
@@ -13081,7 +13081,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 #page-about .about-info-card:hover,
 #page-about .objective-card-styled:hover {
     border-color: #10B981 !important;
-    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(16, 185, 129, 0.45) !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(168, 85, 247, 0.2), 0 0 28px rgba(16, 185, 129, 0.45) !important;
 }
 
 #page-about .objective-card-styled:hover {
@@ -13098,23 +13098,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     border-left-color: #059669 !important;
 }
 
-#page-about .objective-info-box:hover,
-#page-about .about-card-meta:hover {
-    border-color: #FBBF24 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 44, 0.7), 0 0 20px rgba(251, 191, 36, 0.45) !important;
-}
-
-[data-theme="light"] #page-about .objective-info-box:hover,
-[data-theme="light"] #page-about .about-card-meta:hover {
-    border-color: #D97706 !important;
-    box-shadow: 0 6px 20px rgba(10, 10, 10, 0.08), 0 0 18px rgba(217, 119, 6, 0.35) !important;
-}
-
 /* --------------------------------------------------------------------------
    3. Skills & Toolkit Section
    - Level 1 (Main Card): Electric Sky Cyan (Night) / Ocean Cerulean Blue (Day)
    - Level 2 (Category Cards): Electric Cosmic Violet (Night) / Royal Indigo (Day)
-   - Level 3 (Particular Skill Cards - Python, Excel, SQL, etc.): Hot Neon Pink (Night) / Forest Emerald (Day)
+   - Level 3 (Particular Skill Cards - Python, Excel, SQL, Tableau, Power BI): Hot Neon Pink (Night) / Forest Emerald (Day)
    -------------------------------------------------------------------------- */
 #page-skills .cell-output-row:hover,
 #page-skills .cell-input-row:hover {
@@ -13161,8 +13149,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* --------------------------------------------------------------------------
    4. Featured Projects Section
    - Level 1 (Main Card): Royal Cosmic Violet (Night) / Royal Indigo (Day)
-   - Level 2 (Featured Studio & Carousel Project Cards): Electric Sky Cyan (Night) / Cerulean Blue (Day)
-   - Level 3 (Compact Cards & Project Action Pills): Hot Magenta Pink (Night) / Deep Navy Blue (Day)
+   - Level 2 (Featured Studio & Project Cards): Electric Sky Cyan (Night) / Cerulean Blue (Day)
+   - Level 3 (Compact Project Selector Cards): Hot Magenta Pink (Night) / Deep Navy Blue (Day)
    -------------------------------------------------------------------------- */
 #page-projects .cell-output-row:hover,
 #page-projects .cell-input-row:hover {
@@ -13201,10 +13189,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* --------------------------------------------------------------------------
-   5. Certificates Section
+   5. Certificates & Credentials Section
    - Level 1 (Main Card): Electric Cornflower Blue (Night) / Royal Cobalt Blue (Day)
-   - Level 2 (Interactive Certificate Cards): Radiant Cyber Gold (Night) / Warm Amber Gold (Day)
-   - Level 3 (Badge Items & View Buttons): Electric Emerald Green (Night) / Dark Emerald (Day)
+   - Level 2 (Certificate Cards): Radiant Cyber Gold (Night) / Warm Amber Gold (Day)
+   - Inner badges and credential action links stay completely normal!
    -------------------------------------------------------------------------- */
 #page-certificates .cell-output-row:hover,
 #page-certificates .cell-input-row:hover {
@@ -13228,23 +13216,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(217, 119, 6, 0.35) !important;
 }
 
-#page-certificates .cert-badge-pill:hover,
-#page-certificates .cert-btn-primary:hover {
-    border-color: #10B981 !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.7), 0 0 16px rgba(16, 185, 129, 0.5) !important;
-}
-
-[data-theme="light"] #page-certificates .cert-badge-pill:hover,
-[data-theme="light"] #page-certificates .cert-btn-primary:hover {
-    border-color: #059669 !important;
-    box-shadow: 0 6px 18px rgba(10, 10, 10, 0.08), 0 0 16px rgba(5, 150, 105, 0.35) !important;
-}
-
 /* --------------------------------------------------------------------------
    6. Education Section
    - Level 1 (Main Card): Neon Cosmic Violet (Night) / Deep Indigo (Day)
-   - Level 2 (Interactive Education Cards): Electric Cornflower Blue (Night) / Royal Cobalt Blue (Day)
-   - Level 3 (Action Boxes & Score Pills): Cyber Gold Amber (Night) / Warm Amber Gold (Day)
+   - Level 2 (Education Cards): Electric Cornflower Blue (Night) / Royal Cobalt Blue (Day)
+   - Inner GitHub credential links and score pills stay completely normal!
    -------------------------------------------------------------------------- */
 #page-education .cell-output-row:hover,
 #page-education .cell-input-row:hover {
@@ -13268,23 +13244,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(37, 99, 235, 0.35) !important;
 }
 
-#page-education .edu-action-box:hover,
-#page-education .edu-score-pill:hover {
-    border-color: #FBBF24 !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.7), 0 0 16px rgba(251, 191, 36, 0.45) !important;
-}
-
-[data-theme="light"] #page-education .edu-action-box:hover,
-[data-theme="light"] #page-education .edu-score-pill:hover {
-    border-color: #D97706 !important;
-    box-shadow: 0 6px 18px rgba(10, 10, 10, 0.08), 0 0 16px rgba(217, 119, 6, 0.35) !important;
-}
-
 /* --------------------------------------------------------------------------
    7. Experience Section
    - Level 1 (Main Card): Electric Sky Cyan (Night) / Ocean Cerulean (Day)
    - Level 2 (Experience Item Cards): Neon Spring Jade (Night) / Dark Forest Teal (Day)
-   - Level 3 (Tech Chips & Role Badges): Hot Magenta Pink (Night) / Deep Crimson Rose (Day)
+   - Inner role badges and tech chips stay completely normal!
    -------------------------------------------------------------------------- */
 #page-experience .cell-output-row:hover,
 #page-experience .cell-input-row:hover {
@@ -13308,23 +13272,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(13, 148, 136, 0.35) !important;
 }
 
-#page-experience .exp-tech-chip:hover,
-#page-experience .exp-role-badge:hover {
-    border-color: #FF2D95 !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.7), 0 0 16px rgba(255, 45, 149, 0.5) !important;
-}
-
-[data-theme="light"] #page-experience .exp-tech-chip:hover,
-[data-theme="light"] #page-experience .exp-role-badge:hover {
-    border-color: #E11D48 !important;
-    box-shadow: 0 6px 18px rgba(10, 10, 10, 0.08), 0 0 16px rgba(225, 29, 72, 0.35) !important;
-}
-
 /* --------------------------------------------------------------------------
    8. Achievements Section
    - Level 1 (Main Card): Electric Purple (Night) / Royal Indigo (Day)
-   - Level 2 (Achievement Cards): Radiant Cyber Tangerine (Night) / Deep Sunset Orange (Day)
-   - Level 3 (Icon Wraps & Badges): Glowing Cyber Gold (Night) / Warm Amber Gold (Day)
+   - Level 2 (Achievement Metric Cards): Radiant Cyber Tangerine (Night) / Deep Sunset Orange (Day)
+   - Inner icons and text stay completely normal!
    -------------------------------------------------------------------------- */
 #page-achievements .cell-output-row:hover,
 #page-achievements .cell-input-row:hover {
@@ -13346,16 +13298,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 [data-theme="light"] #page-achievements .achievement-metric-card:hover {
     border-color: #EA580C !important;
     box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(234, 88, 12, 0.35) !important;
-}
-
-#page-achievements .achievement-icon-wrap:hover {
-    border-color: #FBBF24 !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.7), 0 0 16px rgba(251, 191, 36, 0.45) !important;
-}
-
-[data-theme="light"] #page-achievements .achievement-icon-wrap:hover {
-    border-color: #D97706 !important;
-    box-shadow: 0 6px 18px rgba(10, 10, 10, 0.08), 0 0 16px rgba(217, 119, 6, 0.35) !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -13390,7 +13332,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
    10. Interactive Resume Section
    - Level 1 (Main Card): Electric Cosmic Violet (Night) / Royal Indigo (Day)
    - Level 2 (Resume Sheet Preview): Electric Ice Blue (Night) / Steel Deep Blue (Day)
-   - Level 3 (Resume Badges & Buttons): Cyber Mint Green (Night) / Forest Emerald (Day)
+   - Inner resume buttons and tags stay completely normal!
    -------------------------------------------------------------------------- */
 #page-resume .cell-output-row:hover,
 #page-resume .cell-input-row:hover {
@@ -13414,23 +13356,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(3, 105, 161, 0.35) !important;
 }
 
-#page-resume .resume-preview-overlay:hover,
-#page-resume .resume-action-btn:hover {
-    border-color: #10B981 !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.7), 0 0 16px rgba(16, 185, 129, 0.5) !important;
-}
-
-[data-theme="light"] #page-resume .resume-preview-overlay:hover,
-[data-theme="light"] #page-resume .resume-action-btn:hover {
-    border-color: #059669 !important;
-    box-shadow: 0 6px 18px rgba(10, 10, 10, 0.08), 0 0 16px rgba(5, 150, 105, 0.35) !important;
-}
-
 /* --------------------------------------------------------------------------
    11. Contact & Connect Section
    - Level 1 (Main Card): Electric Sky Cyan (Night) / Deep Navy Blue (Day)
    - Level 2 (Contact & Footer Cards): Hot Neon Fuchsia (Night) / Deep Crimson Rose (Day)
-   - Level 3 (Contact Icons & Social Buttons): Radiant Cyber Gold (Night) / Warm Amber Gold (Day)
+   - Inner contact icons and social links stay completely normal!
    -------------------------------------------------------------------------- */
 #page-contact .cell-output-row:hover,
 #page-contact .cell-input-row:hover {
@@ -13454,16 +13384,4 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 [data-theme="light"] #page-contact .footer-copyright-card:hover {
     border-color: #E11D48 !important;
     box-shadow: 0 12px 30px rgba(10, 10, 10, 0.08), 0 0 24px rgba(225, 29, 72, 0.35) !important;
-}
-
-#page-contact .contact-icon-wrapper:hover,
-#page-contact .contact-social-btn:hover {
-    border-color: #FBBF24 !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.7), 0 0 16px rgba(251, 191, 36, 0.5) !important;
-}
-
-[data-theme="light"] #page-contact .contact-icon-wrapper:hover,
-[data-theme="light"] #page-contact .contact-social-btn:hover {
-    border-color: #D97706 !important;
-    box-shadow: 0 6px 18px rgba(10, 10, 10, 0.08), 0 0 16px rgba(217, 119, 6, 0.35) !important;
 }
