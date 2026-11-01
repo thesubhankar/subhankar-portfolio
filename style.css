@@ -64,19 +64,19 @@
 
     /* Borders & Shadows */
 
-    --border-subtle: 1px solid rgba(0, 123, 167, 0.25);
+    --border-subtle: 1px solid #E5E7EB;
 
-    --border-card: 1.5px solid #007BA7;
+    --border-card: 1px solid #E5E7EB;
 
     --border-blue: 1px solid #007BA7;
 
     --border-focus: 2px solid #007BA7;
 
-    --shadow-sm: 0 2px 10px rgba(0, 123, 167, 0.16);
+    --shadow-sm: 0 2px 8px rgba(10, 10, 10, 0.04);
 
-    --shadow-md: 0 8px 24px rgba(0, 123, 167, 0.2), 0 0 16px rgba(0, 123, 167, 0.14);
+    --shadow-md: 0 8px 24px rgba(10, 10, 10, 0.07);
 
-    --shadow-lg: 0 16px 36px rgba(0, 123, 167, 0.25), 0 0 24px rgba(0, 123, 167, 0.2);
+    --shadow-lg: 0 16px 36px rgba(10, 10, 10, 0.1);
 
     /* Typography - Strong, Clean & Professional Portfolio System */
 
@@ -162,19 +162,19 @@
 
     --status-amber: #E0F003;       /* Electric Yellow (VS Code strings/docstrings) */
 
-    --border-subtle: 1px solid rgba(255, 45, 149, 0.2);
+    --border-subtle: 1px solid rgba(139, 92, 246, 0.16);
 
-    --border-card: 1.5px solid #FF2D95;
+    --border-card: 1px solid rgba(139, 92, 246, 0.24);
 
     --border-blue: 1px solid #0DA3DF;
 
     --border-focus: 2px solid #FF2D95;
 
-    --shadow-sm: 0 2px 10px rgba(0, 0, 44, 0.6), 0 0 12px rgba(255, 45, 149, 0.22);
+    --shadow-sm: 0 2px 10px rgba(0, 0, 44, 0.6);
 
-    --shadow-md: 0 8px 26px rgba(0, 0, 44, 0.75), 0 0 20px rgba(255, 45, 149, 0.35);
+    --shadow-md: 0 8px 26px rgba(0, 0, 44, 0.75), 0 0 16px rgba(10, 0, 37, 0.5);
 
-    --shadow-lg: 0 18px 42px rgba(0, 0, 44, 0.85), 0 0 32px rgba(255, 45, 149, 0.45);
+    --shadow-lg: 0 18px 42px rgba(0, 0, 44, 0.85), 0 0 32px rgba(139, 92, 246, 0.25);
 
 }
 
@@ -1248,7 +1248,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background-color: var(--bg-card);
 
-    border: 1.5px solid #FF2D95;
+    border: var(--border-card);
 
     border-radius: var(--radius-lg);
 
@@ -1256,7 +1256,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     margin-bottom: 1.5rem;
 
-    box-shadow: 0 8px 24px rgba(0, 0, 44, 0.6), 0 0 16px rgba(255, 45, 149, 0.2);
+    box-shadow: var(--shadow-sm);
 
     transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
 
@@ -1282,9 +1282,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background-color: #FFFFFF !important;
 
-    border: 1.5px solid #007BA7 !important;
+    border: 1px solid #E5E7EB !important;
 
-    box-shadow: 0 4px 16px rgba(0, 123, 167, 0.14), 0 0 12px rgba(0, 123, 167, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(10, 10, 10, 0.04) !important;
 
 }
 
@@ -1546,7 +1546,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background-color: var(--bg-card-subtle);
 
-    border: 1.5px solid #FF2D95;
+    border: var(--border-card);
 
     border-radius: var(--radius-lg);
 
@@ -1554,7 +1554,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     gap: 0.75rem;
 
-    box-shadow: 0 4px 14px rgba(0, 0, 44, 0.5), 0 0 12px rgba(255, 45, 149, 0.18);
+    box-shadow: var(--shadow-sm);
 
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
@@ -1576,9 +1576,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background-color: #F8F9FB !important;
 
-    border: 1.5px solid #007BA7 !important;
+    border: 1px solid #E5E7EB !important;
 
-    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.12) !important;
+    box-shadow: 0 2px 8px rgba(10, 10, 10, 0.04) !important;
 
 }
 
@@ -1728,7 +1728,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background-color: var(--bg-card);
 
-    border: 1.5px solid #FF2D95;
+    border: var(--border-card);
 
     border-radius: var(--radius-lg);
 
@@ -1736,7 +1736,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     gap: 1rem;
 
-    box-shadow: 0 4px 14px rgba(0, 0, 44, 0.5), 0 0 12px rgba(255, 45, 149, 0.18);
+    box-shadow: var(--shadow-sm);
 
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
@@ -1758,9 +1758,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background-color: #FFFFFF !important;
 
-    border: 1.5px solid #007BA7 !important;
+    border: 1px solid #E5E7EB !important;
 
-    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.12) !important;
+    box-shadow: 0 2px 8px rgba(10, 10, 10, 0.04) !important;
 
 }
 
@@ -1820,7 +1820,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background-color: var(--bg-card-subtle);
 
-    border: 1.5px solid rgba(255, 45, 149, 0.35);
+    border: var(--border-card);
 
     border-radius: var(--radius-md);
 
@@ -1840,7 +1840,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
                 background-color 0.25s ease;
 
-    box-shadow: 0 4px 12px rgba(0, 0, 44, 0.4), 0 0 10px rgba(255, 45, 149, 0.12);
+    box-shadow: var(--shadow-sm);
 
 }
 
@@ -1860,9 +1860,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background-color: #F8F9FB !important;
 
-    border: 1.5px solid #007BA7 !important;
+    border: 1px solid #E5E7EB !important;
 
-    box-shadow: 0 2px 8px rgba(0, 123, 167, 0.12) !important;
+    box-shadow: 0 2px 8px rgba(10, 10, 10, 0.04) !important;
 
 }
 
@@ -3130,7 +3130,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #141418;
 
-    border: 1.5px solid #FF2D95;
+    border: 1px solid #222228;
 
     border-radius: 20px;
 
@@ -3146,7 +3146,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     margin: 0 auto;
 
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 45, 149, 0.08);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
 
     transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), 
 
@@ -3176,9 +3176,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #FFFFFF;
 
-    border: 1.5px solid #007BA7;
+    border: 1px solid #E5E7EB;
 
-    box-shadow: 0 12px 32px rgba(10, 10, 10, 0.06), 0 0 20px rgba(0, 123, 167, 0.18);
+    box-shadow: 0 4px 14px rgba(10, 10, 10, 0.05);
 
 }
 
@@ -4834,13 +4834,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #0A0025;
 
-    border: 1.5px solid #FF2D95;
+    border: 1px solid rgba(139, 92, 246, 0.22);
 
     border-radius: 16px;
 
     padding: 2rem 2rem 1.75rem;
 
-    box-shadow: 0 12px 36px rgba(0, 0, 44, 0.6), 0 0 24px rgba(255, 45, 149, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 44, 0.5);
 
     transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 
@@ -4854,11 +4854,27 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #ffffff;
 
-    border: 1.5px solid #007BA7;
+    border: 1px solid #E5E7EB;
 
-    box-shadow: 0 12px 32px rgba(10, 10, 10, 0.06), 0 0 24px rgba(0, 123, 167, 0.25);
+    box-shadow: 0 4px 16px rgba(10, 10, 10, 0.05);
 
     color: #0A0A0A;
+
+}
+
+.github-dashboard-card:hover {
+
+    border-color: #FF2D95;
+
+    box-shadow: 0 16px 36px rgba(0, 0, 44, 0.75), 0 0 28px rgba(255, 45, 149, 0.42);
+
+}
+
+[data-theme="light"] .github-dashboard-card:hover {
+
+    border-color: #007BA7 !important;
+
+    box-shadow: 0 12px 32px rgba(10, 10, 10, 0.08), 0 0 24px rgba(0, 123, 167, 0.35) !important;
 
 }
 
@@ -5186,6 +5202,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #0D0429;
 
+    border: 1px solid rgba(139, 92, 246, 0.22);
+
     border-radius: 14px;
 
     padding: 1.6rem 1rem;
@@ -5202,6 +5220,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     gap: 0.55rem;
 
+    box-shadow: 0 4px 12px rgba(0, 0, 44, 0.5);
+
     transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.28s ease, box-shadow 0.28s ease, background-color 0.28s ease;
 
     cursor: default;
@@ -5213,10 +5233,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Card 1: Repositories - Sky Cyan / Electric Navy */
 
 .github-stat-card.card-repos {
-
-    border: 1.5px solid rgba(0, 242, 254, 0.45);
-
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.6), 0 0 14px rgba(0, 242, 254, 0.2);
 
 }
 
@@ -5250,10 +5266,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 .github-stat-card.card-commits {
 
-    border: 1.5px solid rgba(57, 211, 83, 0.45);
-
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.6), 0 0 14px rgba(57, 211, 83, 0.2);
-
 }
 
 .github-stat-card.card-commits .stat-number {
@@ -5286,10 +5298,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 .github-stat-card.card-stars {
 
-    border: 1.5px solid rgba(251, 191, 36, 0.45);
-
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.6), 0 0 14px rgba(251, 191, 36, 0.2);
-
 }
 
 .github-stat-card.card-stars .stat-number {
@@ -5321,10 +5329,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Card 4: Followers - Electric Purple / Violet */
 
 .github-stat-card.card-followers {
-
-    border: 1.5px solid rgba(192, 132, 252, 0.45);
-
-    box-shadow: 0 6px 18px rgba(0, 0, 44, 0.6), 0 0 14px rgba(192, 132, 252, 0.2);
 
 }
 
@@ -5360,13 +5364,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #FFFFFF !important;
 
+    border: 1px solid #E5E7EB !important;
+
+    box-shadow: 0 2px 8px rgba(10, 10, 10, 0.04) !important;
+
 }
 
 [data-theme="light"] .github-stat-card.card-repos {
-
-    border: 1.5px solid #007BA7 !important;
-
-    box-shadow: 0 4px 16px rgba(0, 123, 167, 0.15), 0 0 12px rgba(0, 123, 167, 0.1) !important;
 
 }
 
@@ -5398,10 +5402,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 [data-theme="light"] .github-stat-card.card-commits {
 
-    border: 1.5px solid #16A34A !important;
-
-    box-shadow: 0 4px 16px rgba(22, 163, 74, 0.15), 0 0 12px rgba(22, 163, 74, 0.1) !important;
-
 }
 
 [data-theme="light"] .github-stat-card.card-commits .stat-number {
@@ -5432,10 +5432,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 [data-theme="light"] .github-stat-card.card-stars {
 
-    border: 1.5px solid #D97706 !important;
-
-    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15), 0 0 12px rgba(217, 119, 6, 0.1) !important;
-
 }
 
 [data-theme="light"] .github-stat-card.card-stars .stat-number {
@@ -5465,10 +5461,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 [data-theme="light"] .github-stat-card.card-followers {
-
-    border: 1.5px solid #7C3AED !important;
-
-    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15), 0 0 12px rgba(124, 58, 237, 0.1) !important;
 
 }
 
@@ -9118,9 +9110,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #FFFFFF !important;
 
-    border: 1.5px solid #007BA7 !important;
+    border: 1px solid #E5E7EB !important;
 
-    box-shadow: 0 4px 18px rgba(0, 123, 167, 0.12), 0 2px 6px rgba(10, 10, 10, 0.04) !important;
+    box-shadow: 0 2px 8px rgba(10, 10, 10, 0.04) !important;
 
 }
 
@@ -10448,7 +10440,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #00002C;
 
-    border: 1.5px solid #FF2D95;
+    border: 1px solid rgba(139, 92, 246, 0.22);
 
     border-radius: 22px;
 
@@ -10462,7 +10454,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     box-sizing: border-box;
 
-    box-shadow: 0 16px 45px rgba(0, 0, 44, 0.75), 0 0 35px rgba(255, 45, 149, 0.28);
+    box-shadow: 0 16px 45px rgba(0, 0, 44, 0.75);
 
     backdrop-filter: blur(12px);
 
@@ -10522,9 +10514,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #FFFFFF;
 
-    border: 1.5px solid #007BA7;
+    border: 1px solid #E5E7EB;
 
-    box-shadow: 0 12px 36px rgba(10, 10, 10, 0.06), 0 0 28px rgba(0, 123, 167, 0.25);
+    box-shadow: 0 8px 24px rgba(10, 10, 10, 0.05);
 
 }
 
@@ -11922,7 +11914,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #0A0025;
 
-    border: 1.5px solid rgba(255, 45, 149, 0.35);
+    border: 1px solid rgba(139, 92, 246, 0.22);
 
     border-radius: 14px;
 
@@ -11944,7 +11936,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 
-    box-shadow: 0 6px 16px rgba(0, 0, 44, 0.5), 0 0 12px rgba(255, 45, 149, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 44, 0.4);
 
     user-select: none;
 
@@ -12008,9 +12000,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #FFFFFF !important;
 
-    border: 1.5px solid #007BA7 !important;
+    border: 1px solid #CBD5E1 !important;
 
-    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.15) !important;
+    box-shadow: 0 4px 12px rgba(10, 10, 10, 0.04) !important;
 
 }
 
@@ -12874,9 +12866,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     background: #FFFFFF !important;
 
-    border: 1.5px solid #007BA7 !important;
+    border: 1px solid #CBD5E1 !important;
 
-    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.15) !important;
+    box-shadow: 0 4px 12px rgba(10, 10, 10, 0.04) !important;
 
 }
 
