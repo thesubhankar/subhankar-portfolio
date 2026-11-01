@@ -5260,10 +5260,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Card 1: Repositories - Sky Cyan / Electric Navy */
 
-.github-stat-card.card-repos {
-
-}
-
 .github-stat-card.card-repos .stat-number {
 
     color: #00F2FE;
@@ -5291,10 +5287,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* Card 2: Contributions - Emerald Green */
-
-.github-stat-card.card-commits {
-
-}
 
 .github-stat-card.card-commits .stat-number {
 
@@ -5324,10 +5316,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Card 3: Stars Earned - Glowing Gold Amber */
 
-.github-stat-card.card-stars {
-
-}
-
 .github-stat-card.card-stars .stat-number {
 
     color: #FBBF24;
@@ -5355,10 +5343,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* Card 4: Followers - Electric Purple / Violet */
-
-.github-stat-card.card-followers {
-
-}
 
 .github-stat-card.card-followers .stat-number {
 
@@ -5398,10 +5382,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 }
 
-[data-theme="light"] .github-stat-card.card-repos {
-
-}
-
 [data-theme="light"] .github-stat-card.card-repos .stat-number {
 
     color: #007BA7 !important;
@@ -5425,10 +5405,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     border-color: #007BA7 !important;
 
     box-shadow: 0 12px 28px rgba(10, 10, 10, 0.08), 0 0 24px rgba(0, 123, 167, 0.38) !important;
-
-}
-
-[data-theme="light"] .github-stat-card.card-commits {
 
 }
 
@@ -5458,10 +5434,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 }
 
-[data-theme="light"] .github-stat-card.card-stars {
-
-}
-
 [data-theme="light"] .github-stat-card.card-stars .stat-number {
 
     color: #D97706 !important;
@@ -5485,10 +5457,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     border-color: #D97706 !important;
 
     box-shadow: 0 12px 28px rgba(10, 10, 10, 0.08), 0 0 24px rgba(217, 119, 6, 0.38) !important;
-
-}
-
-[data-theme="light"] .github-stat-card.card-followers {
 
 }
 
