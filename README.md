@@ -10,23 +10,23 @@
 <br/>
 
 <!-- ⚡ WHAT I BUILD & ANALYTICS PHILOSOPHY -->
-<img src="./github-profile/about-life.svg?v=1" alt="What I Build — Core Engineering Pillars &amp; Performance Rings" width="100%"/>
+<img src="./github-profile/ninja-way.svg?v=2" alt="My Ninja Way — Core Engineering Pillars &amp; Analytics Philosophy" width="100%"/>
 
 <br/><br/>
 
 <!-- 🪐 TECH STACK ARSENAL -->
-<img src="./github-profile/stack.svg?v=1" alt="Technical Arsenal &amp; Orbiting Stack" width="100%"/>
+<img src="./github-profile/jutsu-stack.svg?v=2" alt="Jutsu Arsenal — 15 Mastered Techniques" width="100%"/>
 
 <br/><br/>
 
 <!-- 🪪 HOLOGRAPHIC LANYARD ID + LIVE DASHBOARD -->
-<img src="./github-profile/id-dashboard.svg?v=1" alt="Developer ID Badge and Live GitHub Dashboard" width="100%"/>
+<img src="./github-profile/ninja-id.svg?v=2" alt="Ninja Registration ID and Live Stats Dashboard" width="100%"/>
 
 <br/><br/>
 
 </div>
 
-## ⚡ Featured Production Projects &amp; Pipelines
+## 📜 S-Rank Missions · Production Repositories
 
 <table>
 <tr>
@@ -120,7 +120,7 @@
 
 <img src="./github-profile/rasengan-run.gif" alt="Running animation" width="150"/>
 
-### 🌃 3D Contribution City
+### 🌌 Hidden Leaf 3D Contribution Village
 
 *Every commit raises another analytical tower — updated automatically every day via GitHub Actions.*
 
@@ -148,7 +148,7 @@
 
 <br/>
 
-**"In God we trust, all others must bring data."** ⚡<br/>
+*“Dattebayo — turning raw data into predictive intelligence.”* 🍥 ⚡<br/>
 <sub>Designed &amp; Engineered with ❤️ by <b>Subhankar Giri</b> · © 2026</sub>
 
 </div>
