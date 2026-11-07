@@ -25,7 +25,7 @@ text{font-family:'JBM',ui-monospace,Menlo,Consolas,monospace}
   <stop offset="0" stop-color="#ffe9b0" stop-opacity=".85"/><stop offset=".18" stop-color="#ffb52e" stop-opacity=".30"/>
   <stop offset="1" stop-color="#ffb52e" stop-opacity=".02"/></linearGradient>
 <linearGradient id="artFade" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#fff"/><stop offset=".62" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>
+  <stop offset="0" stop-color="#fff"/><stop offset=".85" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>
 <linearGradient id="artFadeB" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#000"/><stop offset=".12" stop-color="#fff"/><stop offset=".88" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>
 <mask id="artM" maskUnits="userSpaceOnUse" x="28" y="42" width="380" height="417">
@@ -41,10 +41,10 @@ text{font-family:'JBM',ui-monospace,Menlo,Consolas,monospace}
 
 <!-- torch beam -->
 <g class="beam">
-  <path d="M377 238 L1252 58 L1252 452 Z" fill="url(#beamG)"/>
-  <path d="M377 238 L1252 128 L1252 372 Z" fill="url(#beamG)" opacity=".55" filter="url(#softb)"/>
+  <path d="M367 326 L1252 70 L1252 470 Z" fill="url(#beamG)"/>
+  <path d="M367 326 L1252 150 L1252 420 Z" fill="url(#beamG)" opacity=".55" filter="url(#softb)"/>
 </g>
-<circle cx="377" cy="238" r="54" fill="url(#torch)" class="beam"/>
+<circle cx="367" cy="326" r="48" fill="url(#torch)" class="beam"/>
 
 <!-- artwork -->
 <g mask="url(#artM)"><g mask="url(#artMB)">
