@@ -1198,15 +1198,15 @@ function initProjectNav() {
 
             slides: [
 
-                { webp: 'assets/project image/thrianex image/thumblain.webp', alt: 'Thiranex Data Science Unified Portal Overview' },
+                { webp: 'assets/uploads/projects/thrianex image/thumblain.webp', alt: 'Thiranex Data Science Unified Portal Overview' },
 
-                { webp: 'assets/project image/thrianex image/task1_data_cleaning.webp', alt: 'Automated Data Cleaning & Imputation Pipeline' },
+                { webp: 'assets/uploads/projects/thrianex image/task1_data_cleaning.webp', alt: 'Automated Data Cleaning & Imputation Pipeline' },
 
-                { webp: 'assets/project image/thrianex image/task2_store_sales_ml.webp', alt: 'Store Sales Predictive Forecasting Engine' },
+                { webp: 'assets/uploads/projects/thrianex image/task2_store_sales_ml.webp', alt: 'Store Sales Predictive Forecasting Engine' },
 
-                { webp: 'assets/project image/thrianex image/task3_workforce_eda.webp', alt: 'Statistical Workforce Analytics & EDA Module' },
+                { webp: 'assets/uploads/projects/thrianex image/task3_workforce_eda.webp', alt: 'Statistical Workforce Analytics & EDA Module' },
 
-                { webp: 'assets/project image/thrianex image/task4_retail_churn_ai.webp', alt: 'Enterprise Customer Churn AI Simulator' }
+                { webp: 'assets/uploads/projects/thrianex image/task4_retail_churn_ai.webp', alt: 'Enterprise Customer Churn AI Simulator' }
 
             ],
 
@@ -1250,11 +1250,11 @@ function initProjectNav() {
 
             slides: [
 
-                { webp: 'assets/project image/employee/emp_slide1.webp', alt: 'Student Management System Overview & Student Directory' },
+                { webp: 'assets/uploads/projects/employee/emp_slide1.webp', alt: 'Student Management System Overview & Student Directory' },
 
-                { webp: 'assets/project image/employee/emp_slide2.webp', alt: 'Student Enrollment Analytics & SQLite Relational Backend' },
+                { webp: 'assets/uploads/projects/employee/emp_slide2.webp', alt: 'Student Enrollment Analytics & SQLite Relational Backend' },
 
-                { webp: 'assets/project image/employee/emp_slide3.webp', alt: 'Student Digital ID Card Generation & Tkinter GUI' }
+                { webp: 'assets/uploads/projects/employee/emp_slide3.webp', alt: 'Student Digital ID Card Generation & Tkinter GUI' }
 
             ],
 
@@ -1302,11 +1302,11 @@ function initProjectNav() {
 
             slides: [
 
-                { webp: 'assets/project image/movie/movie_slide1.webp', alt: 'Movie Recommendation Engine Model Matrix' },
+                { webp: 'assets/uploads/projects/movie/movie_slide1.webp', alt: 'Movie Recommendation Engine Model Matrix' },
 
-                { webp: 'assets/project image/movie/movie_slide2.webp', alt: 'TF-IDF Similarity Matrix & SVD Predictions' },
+                { webp: 'assets/uploads/projects/movie/movie_slide2.webp', alt: 'TF-IDF Similarity Matrix & SVD Predictions' },
 
-                { webp: 'assets/project image/movie/movie_slide3.webp', alt: 'Top-N Personalized Recommendations Interface' }
+                { webp: 'assets/uploads/projects/movie/movie_slide3.webp', alt: 'Top-N Personalized Recommendations Interface' }
 
             ],
 
@@ -1354,11 +1354,11 @@ function initProjectNav() {
 
             slides: [
 
-                { webp: 'assets/project image/logistics/logistics_slide1.webp', alt: 'Shipment Telematics & 3PL Benchmark Dashboard' },
+                { webp: 'assets/uploads/projects/logistics/logistics_slide1.webp', alt: 'Shipment Telematics & 3PL Benchmark Dashboard' },
 
-                { webp: 'assets/project image/logistics/logistics_slide2.webp', alt: 'Transportation Cost Function OLS Regression Analysis' },
+                { webp: 'assets/uploads/projects/logistics/logistics_slide2.webp', alt: 'Transportation Cost Function OLS Regression Analysis' },
 
-                { webp: 'assets/project image/logistics/logistics_slide3.webp', alt: 'Regional Corridor Heatmap & Delay Analysis' }
+                { webp: 'assets/uploads/projects/logistics/logistics_slide3.webp', alt: 'Regional Corridor Heatmap & Delay Analysis' }
 
             ],
 
@@ -1406,11 +1406,11 @@ function initProjectNav() {
 
             slides: [
 
-                { webp: 'assets/project image/supplychain/supply_slide1.webp', alt: 'Supply Chain Executive KPI Dashboard' },
+                { webp: 'assets/uploads/projects/supplychain/supply_slide1.webp', alt: 'Supply Chain Executive KPI Dashboard' },
 
-                { webp: 'assets/project image/supplychain/supply_slide2.webp', alt: 'SKU Demand Forecasting & ABC Pareto Analysis' },
+                { webp: 'assets/uploads/projects/supplychain/supply_slide2.webp', alt: 'SKU Demand Forecasting & ABC Pareto Analysis' },
 
-                { webp: 'assets/project image/supplychain/supply_slide3.webp', alt: 'Multi-Echelon Freight Routing Optimizer' }
+                { webp: 'assets/uploads/projects/supplychain/supply_slide3.webp', alt: 'Multi-Echelon Freight Routing Optimizer' }
 
             ],
 
@@ -4409,7 +4409,7 @@ async function initDynamicPortfolioSync() {
                         card.setAttribute('tabindex', '0');
                         card.setAttribute('title', 'Click to view ' + p.title + ' in Studio');
 
-                        const thumb = (p.slides && p.slides[0]?.webp) ? p.slides[0].webp : 'assets/project image/thrianex image/thumblain.webp';
+                        const thumb = (p.slides && p.slides[0]?.webp) ? p.slides[0].webp : 'assets/uploads/projects/thrianex image/thumblain.webp';
                         card.innerHTML = `
                             <div class="compact-thumb-wrap">
                                 <img src="/${thumb}" alt="${p.title}" class="compact-thumb-img" loading="lazy">

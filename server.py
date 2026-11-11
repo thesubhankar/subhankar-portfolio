@@ -452,7 +452,7 @@ def add_or_update_project():
         if existing_idx >= 0 and data["projects"][existing_idx].get("slides"):
             slides = data["projects"][existing_idx]["slides"]
         else:
-            fallback_img = request.form.get("imagePath", "assets/project image/thrianex image/thumblain.webp")
+            fallback_img = request.form.get("imagePath", "assets/uploads/projects/thrianex image/thumblain.webp")
             slides.append({
                 "webp": fallback_img,
                 "alt": f"{title} Screenshot"

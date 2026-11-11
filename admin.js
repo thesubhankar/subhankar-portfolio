@@ -254,7 +254,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
                 const firstImg = (p.slides && p.slides[0]?.webp) 
                     ? p.slides[0].webp 
-                    : ((p.slides && p.slides[0]?.png) ? p.slides[0].png : 'assets/project image/thrianex image/thumblain.webp');
+                    : ((p.slides && p.slides[0]?.png) ? p.slides[0].png : 'assets/uploads/projects/thrianex image/thumblain.webp');
 
                 const skillsText = (p.skills || []).map(s => typeof s === 'string' ? s : (s.name || '')).join(' · ');
 
