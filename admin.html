@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function () {
+            try {
+                var isManual = sessionStorage.getItem('sg_portfolio_theme_manual') === 'true';
+                var savedTheme = localStorage.getItem('sg_portfolio_theme');
+                if (!savedTheme) {
+                    var hour = new Date().getHours();
+                    savedTheme = (hour >= 6 && hour < 18) ? 'light' : 'dark';
+                }
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                if (document.body) document.body.setAttribute('data-theme', savedTheme);
+            } catch (e) {}
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Subhankar Giri | Admin Studio (admin.ipynb)</title>
+    <meta name="description" content="Subhankar Giri Portfolio Admin Control Center">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+        <link rel="stylesheet" href="admin.css">
+</head>
+
+<body data-theme="dark">
+
+    <!-- Toast Notification Banner -->
+    <div id="notifyBanner" class="admin-notification-toast success" style="display: none;"></div>
+
+    <!-- Main App Container (Desktop Split Layout / Mobile Left Drawer) -->
+    <div class="notebook-app-container" id="adminApp">
+
+        <!-- Left Sidebar Navigation -->
+        <aside class="notebook-sidebar" id="notebookSidebar" aria-label="Admin Navigation">
+            <div class="sidebar-top">
+                <!-- Mobile Drawer Close Header (<<) -->
+                <div class="mobile-drawer-header">
+                    <div class="sidebar-brand-mini">
+                        <span class="logo-accent">&lt;</span> thesubhankar.x <span class="logo-accent">/&gt;</span>
+                    </div>
+                    <button class="drawer-close-btn" id="mobileDrawerCloseBtn" aria-label="Close navigation sidebar" title="Close Sidebar">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="11 17 6 12 11 7"></polyline>
+                            <polyline points="18 17 13 12 18 7"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Profile Header -->
+                <div class="sidebar-profile">
+                    <div class="avatar-badge-lg">
+                        <img src="assets/images/profile.jpg" alt="Subhankar Giri" class="avatar-profile-img">
+                    </div>
+                    <div class="profile-meta">
+                        <h1 class="profile-name">Subhankar Giri</h1>
+                        <p class="profile-role">Admin Control Center</p>
+                    </div>
+                </div>
+
+                <!-- Notebook File Badge -->
+                <div class="notebook-file-badge">
+                    <span class="file-icon">📓</span>
+                    <span class="file-name">admin.ipynb</span>
+                    <span class="live-dot" title="Admin Kernel Active"></span>
+                </div>
+
+                <!-- 4 Numbered Navigation Items -->
+                <nav class="sidebar-nav-list" id="sidebarNav" aria-label="Admin Sections">
+                    <a href="#projects" class="sidebar-nav-item active" data-page="projects" onclick="switchPage('projects', event)">
+                        <span class="nav-num">[1]</span>
+                        <span class="nav-text">projects_manager</span>
+                        <span class="nav-dot"></span>
+                    </a>
+                    <a href="#certificates" class="sidebar-nav-item" data-page="certificates" onclick="switchPage('certificates', event)">
+                        <span class="nav-num">[2]</span>
+                        <span class="nav-text">certificates_manager</span>
+                        <span class="nav-dot"></span>
+                    </a>
+                    <a href="#skills" class="sidebar-nav-item" data-page="skills" onclick="switchPage('skills', event)">
+                        <span class="nav-num">[3]</span>
+                        <span class="nav-text">skills_logos</span>
+                        <span class="nav-dot"></span>
+                    </a>
+                    <a href="#education" class="sidebar-nav-item" data-page="education" onclick="switchPage('education', event)">
+                        <span class="nav-num">[4]</span>
+                        <span class="nav-text">education_manager</span>
+                        <span class="nav-dot"></span>
+                    </a>
+                    <a href="#resume" class="sidebar-nav-item" data-page="resume" onclick="switchPage('resume', event)">
+                        <span class="nav-num">[5]</span>
+                        <span class="nav-text">resume_manager</span>
+                        <span class="nav-dot"></span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <div class="kernel-status-badge" id="sidebarKernelStatus">
+                    <span class="status-indicator-dot idle" id="statusDot"></span>
+                    <span class="status-text" id="statusText">Python 3 | admin</span>
+                    <a href="/" target="_self" class="sidebar-admin-link" title="Return to Live Portfolio">← Portfolio</a>
+                </div>
+
+                <div class="theme-switch-container">
+                    <button class="theme-toggle-pill" id="desktopThemeToggle" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+                        <span class="toggle-icon sun-icon">☀️</span>
+                        <span class="toggle-icon moon-icon">🌙</span>
+                        <span class="toggle-slider"></span>
+                    </button>
+                    <span class="theme-label" id="themeLabel">Dark theme</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="notebook-main" id="notebookMain">
+
+            <!-- Mobile Topbar for small screens -->
+            <div class="mobile-drawer-header" style="display: none; padding: 0.75rem 1rem; border-bottom: var(--border-card); background: var(--bg-sidebar);" id="mobileTopbar">
+                <button class="drawer-close-btn" id="mobileDrawerOpenBtn" aria-label="Open navigation sidebar" style="transform: rotate(180deg);">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="sidebar-brand-mini">📓 admin.ipynb</div>
+                <a href="/" target="_self" class="sidebar-admin-link" style="font-size: 11px;">← Portfolio</a>
+            </div>
+
+            <!-- Top Kernel Action Toolbar -->
+            <div class="kernel-topbar" role="toolbar" aria-label="Notebook Kernel Controls">
+                <div class="kernel-controls-left">
+                    <button class="btn-kernel btn-run-all" id="btnSyncRefresh" title="Sync and refresh data from server" onclick="loadData()">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        <span>Sync &amp; Refresh</span>
+                    </button>
+                    <button class="btn-kernel btn-restart" id="btnLogout" title="Log out of Admin Studio" onclick="logoutAdmin()">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
+                <div class="kernel-info-right">
+                    <a href="/" target="_self" class="btn-kernel" style="text-decoration:none; margin-right:8px; padding:2px 8px; font-size:11px; display:inline-flex; align-items:center; gap:4px;" title="Return to Live Portfolio">← Live Portfolio</a>
+                    <span class="kernel-doc-status" id="kernelDocStatus">admin.ipynb · Admin Studio</span>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 [1] PROJECTS MANAGER (#page-projects)
+                 ============================================================ -->
+            <section class="notebook-page active" id="page-projects" data-page="projects">
+                <div class="cell-md-header">
+                    <span class="md-tag"># [1] Projects Studio · Add, Manage &amp; Upload Dynamic Projects</span>
+                </div>
+
+                <!-- Input Cell: Add Project Form -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [1]:</span>
+                        <div class="cell-code-box">
+                            <code><span class="token-keyword">from</span> portfolio_admin <span class="token-keyword">import</span> <span class="token-function">publish_project</span>; <span class="token-comment"># Fill form below and execute</span></code>
+                        </div>
+                        <button class="cell-run-btn" title="Publish Project" onclick="document.getElementById('projectSubmitBtn').click()">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [1]:</span>
+                        <div class="cell-output-card">
+                            <form id="projectForm" class="admin-form-panel">
+                                <input type="hidden" id="projId" value="" />
+                                
+                                <div class="admin-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label">Project Title *</label>
+                                        <input type="text" id="projTitle" class="form-input" placeholder="e.g. AI-Powered Medical Diagnostic Assistant" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Category Badge * <span style="font-size:0.75rem; color:var(--text-muted);">(Free text or suggestion)</span></label>
+                                        <input type="text" id="projCategory" class="form-input" list="projCategorySuggestions" placeholder="e.g. DATA SCIENCE, MACHINE LEARNING, DEEP LEARNING, NLP, etc." required />
+                                        <datalist id="projCategorySuggestions">
+                                            <option value="DATA SCIENCE"></option>
+                                            <option value="MACHINE LEARNING"></option>
+                                            <option value="DEEP LEARNING"></option>
+                                            <option value="COMPUTER VISION"></option>
+                                            <option value="NLP & GENAI"></option>
+                                            <option value="DATA ANALYTICS"></option>
+                                            <option value="BIG DATA ENGINEERING"></option>
+                                            <option value="MLOPS & CLOUD"></option>
+                                            <option value="FULL STACK ML"></option>
+                                        </datalist>
+                                    </div>
+                                </div>
+
+                                <div class="admin-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label">Tech Stack (comma separated) * <span style="font-size:0.75rem; color:var(--text-muted);">(Auto-matches official logos)</span></label>
+                                        <input type="text" id="projSkills" class="form-input" placeholder="Python, PyTorch, OpenCV, Flask, Docker, SQL, Pandas" required />
+                                        <div id="projSkillsLivePills" class="admin-skills-live-pills"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Project Images (Upload 3 to 5 images: PNG, JPG, WEBP) *</label>
+                                        <input type="file" id="projImages" class="form-input form-file-input" multiple accept="image/*" />
+                                        <div id="projImagesNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Upload 3-5 images for carousel. You can select multiple images at once (Ctrl/Shift) or pick them one-by-one:</div>
+                                        <div id="projImagesPreviewRow" class="admin-images-preview-row admin-preview-cards-container"></div>
+                                    </div>
+                                </div>
+
+                                <div class="admin-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label">GitHub Repository URL</label>
+                                        <input type="url" id="projCode" class="form-input" placeholder="https://github.com/thesubhankar/..." />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Live Demo / Streamlit URL</label>
+                                        <input type="url" id="projDemo" class="form-input" placeholder="https://...streamlit.app" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Project Description *</label>
+                                    <textarea id="projDesc" class="form-textarea" rows="3" placeholder="Explain the project scope, technical algorithms, datasets used, and key impact metrics..." required></textarea>
+                                </div>
+
+                                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+                                    <button type="button" id="projectCancelBtn" class="btn btn-outline" style="display: none;" onclick="cancelProjectEdit()">
+                                        <span>✖ Cancel Edit</span>
+                                    </button>
+                                    <button type="submit" id="projectSubmitBtn" class="btn btn-primary">
+                                        <span>💾 Publish Project to Portfolio</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects List Cell -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [2]:</span>
+                        <div class="cell-code-box">
+                            <code>projects_db.<span class="token-function">query_all</span>(sort_by=<span class="token-string">"order"</span>)</code>
+                        </div>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [2]:</span>
+                        <div class="cell-output-card">
+                            <div id="projectsList" class="admin-cards-grid">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 [2] CERTIFICATES MANAGER (#page-certificates)
+                 ============================================================ -->
+            <section class="notebook-page" id="page-certificates" data-page="certificates">
+                <div class="cell-md-header">
+                    <span class="md-tag"># [2] Certifications Studio · Manage Verified Credentials</span>
+                </div>
+
+                <!-- Input Cell: Add Certificate Form -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [3]:</span>
+                        <div class="cell-code-box">
+                            <code><span class="token-keyword">from</span> portfolio_admin <span class="token-keyword">import</span> <span class="token-function">issue_certificate</span>; <span class="token-comment"># Add verified credentials</span></code>
+                        </div>
+                        <button class="cell-run-btn" title="Publish Certificate" onclick="document.getElementById('certSubmitBtn').click()">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [3]:</span>
+                        <div class="cell-output-card">
+                            <form id="certForm" class="admin-form-panel">
+                                <input type="hidden" id="certId" value="" />
+
+                                <div class="admin-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label">Certificate Title *</label>
+                                        <input type="text" id="certTitle" class="form-input" placeholder="e.g. Deep Learning Specialization" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Issuing Organization *</label>
+                                        <input type="text" id="certIssuer" class="form-input" placeholder="e.g. DeepLearning.AI / Coursera / IBM" required />
+                                    </div>
+                                </div>
+
+                                <div class="admin-grid-3col">
+                                    <div class="form-group">
+                                        <label class="form-label">Issue Year / Date *</label>
+                                        <input type="text" id="certDate" class="form-input" placeholder="e.g. 2024" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Category * <span style="font-size:0.75rem; color:var(--text-muted);">(Type freely or pick)</span></label>
+                                        <input type="text" id="certCategory" class="form-input" list="certCategorySuggestions" placeholder="e.g. Data Science, Machine Learning, Deep Learning, Cloud, etc." required />
+                                        <datalist id="certCategorySuggestions">
+                                            <option value="Data Science"></option>
+                                            <option value="Machine Learning"></option>
+                                            <option value="Deep Learning & AI"></option>
+                                            <option value="Data Analytics"></option>
+                                            <option value="Python & Cloud"></option>
+                                            <option value="Big Data Engineering"></option>
+                                        </datalist>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Certificate Badge Image</label>
+                                        <input type="file" id="certImage" class="form-input form-file-input" accept="image/*" />
+                                        <div id="certImageNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Upload badge image (PNG, JPG, SVG). Preview card will appear below:</div>
+                                        <div id="certImagePreviewRow" class="admin-single-preview-wrap"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Verification / Credential URL</label>
+                                    <input type="url" id="certUrl" class="form-input" placeholder="https://coursera.org/verify/... or Google Drive URL" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Skills / Description</label>
+                                    <textarea id="certDesc" class="form-textarea" rows="2" placeholder="Neural Networks, CNNs, Transformers, Hyperparameter Tuning..."></textarea>
+                                </div>
+
+                                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+                                    <button type="button" id="certCancelBtn" class="btn btn-outline" style="display: none;" onclick="cancelCertEdit()">
+                                        <span>✖ Cancel Edit</span>
+                                    </button>
+                                    <button type="submit" id="certSubmitBtn" class="btn btn-primary">
+                                        <span>📜 Publish Certificate</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificates List Cell -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [4]:</span>
+                        <div class="cell-code-box">
+                            <code>certificates_db.<span class="token-function">fetch_active_credentials</span>()</code>
+                        </div>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [4]:</span>
+                        <div class="cell-output-card">
+                            <div id="certsList" class="admin-cards-grid">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 [3] SKILLS & LOGOS MANAGER (#page-skills)
+                 ============================================================ -->
+            <section class="notebook-page" id="page-skills" data-page="skills">
+                <div class="cell-md-header">
+                    <span class="md-tag"># [3] Technical Skills &amp; Official Vector SVG Logos</span>
+                </div>
+
+                <!-- Input Cell: Add Skill Form with Live SVG Matcher -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [5]:</span>
+                        <div class="cell-code-box">
+                            <code><span class="token-keyword">from</span> portfolio_admin <span class="token-keyword">import</span> <span class="token-function">attach_skill_logo</span>; <span class="token-comment"># Match vector SVGs</span></code>
+                        </div>
+                        <button class="cell-run-btn" title="Add Skill" onclick="document.getElementById('skillSubmitBtn').click()">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [5]:</span>
+                        <div class="cell-output-card">
+                            <form id="skillForm" class="admin-form-panel">
+                                <div class="admin-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label">Target Skill Category * <span style="font-size:0.75rem; color:var(--text-muted);">(Type any custom category or pick)</span></label>
+                                        <input type="text" id="skillCategory" class="form-input" list="skillCategoriesDatalist" placeholder="Type category name..." required />
+                                        <datalist id="skillCategoriesDatalist"></datalist>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Skill / Technology Name *</label>
+                                        <input type="text" id="skillName" class="form-input" placeholder="e.g. PyTorch, Mathematics, Spark, Docker, FastAPI" required />
+                                    </div>
+                                </div>
+
+                                <!-- Live Official SVG Matching Preview Bar -->
+                                <div class="skill-live-matcher">
+                                    <div class="skill-logo-box" id="skillLogoPreview">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#00F2FE" stroke-width="2">
+                                            <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+                                            <path d="M9 9h6v6H9z"></path>
+                                        </svg>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                                        <span id="skillMatchLabel" style="font-family: var(--font-mono); font-size: 0.8rem; color: #00F2FE; font-weight: 700;">
+                                            Type a skill name to test SVG auto-match...
+                                        </span>
+                                        <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                            Supports Python, Mathematics, Calculus, Spark, Kafka, PyTorch, TF, Docker, AWS, SQL, Power BI, and 60+ official logos.
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
+                                    <button type="submit" id="skillSubmitBtn" class="btn btn-primary">
+                                        <span>⚡ Add Skill to Category</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Categories & Pills List Cell -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [6]:</span>
+                        <div class="cell-code-box">
+                            <code>skills_registry.<span class="token-function">render_categories</span>()</code>
+                        </div>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [6]:</span>
+                        <div class="cell-output-card">
+                            <div id="skillsCategoriesList" class="admin-cards-grid">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 [4] RESUME MANAGER (#page-resume)
+                 ============================================================ -->
+            <!-- ============================================================
+                 [4] EDUCATION MANAGER (#page-education)
+                 ============================================================ -->
+            <section class="notebook-page" id="page-education" data-page="education">
+                <div class="cell-md-header">
+                    <span class="md-tag"># [4] Academic Journey & Education Manager</span>
+                </div>
+
+                <!-- Input Cell: Add/Edit Education Form -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [7]:</span>
+                        <div class="cell-code-box">
+                            <code>portfolio.admin.<span class="token-function">manage_education</span>()</code>
+                        </div>
+                        <button class="cell-run-btn" title="Publish Education" onclick="document.getElementById('eduSubmitBtn').click()">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                                <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [7]:</span>
+                        <div class="cell-output-card">
+                            <form id="eduForm" class="admin-form-panel">
+                                <input type="hidden" id="eduId" value="" />
+                                
+                                <div class="admin-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label">Degree / Academic Milestone *</label>
+                                        <input type="text" id="eduDegree" class="form-input" placeholder="e.g. B.Tech in Computer Science & Engineering" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Institution / College / School *</label>
+                                        <input type="text" id="eduInstitution" class="form-input" placeholder="e.g. KMBB College of Engineering and Technology" required />
+                                    </div>
+                                </div>
+
+                                <div class="admin-grid-3col">
+                                    <div class="form-group">
+                                        <label class="form-label">Timeline / Years *</label>
+                                        <input type="text" id="eduTimeline" class="form-input" placeholder="e.g. 2023 - 2027" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Status *</label>
+                                        <input type="text" id="eduStatus" class="form-input" list="eduStatusList" placeholder="In Progress or Completed" required />
+                                        <datalist id="eduStatusList">
+                                            <option value="In Progress"></option>
+                                            <option value="Completed"></option>
+                                        </datalist>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Grade / Aggregate</label>
+                                        <input type="text" id="eduGrade" class="form-input" placeholder="e.g. Current CGPA: 8.5/10 or First Class" />
+                                    </div>
+                                </div>
+
+                                <div class="admin-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label">Accent Theme Color</label>
+                                        <select id="eduColor" class="form-input">
+                                            <option value="cyan">Cyan (#00F2FE)</option>
+                                            <option value="blue">Blue (#38BDF8)</option>
+                                            <option value="purple">Purple (#A855F7)</option>
+                                            <option value="pink">Pink (#FF2D95)</option>
+                                            <option value="green">Green (#10B981)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Verification / GitHub Link</label>
+                                        <input type="url" id="eduLink" class="form-input" placeholder="https://github.com/thesubhankar" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Milestone Details & Coursework *</label>
+                                    <textarea id="eduDetails" class="form-textarea" rows="3" placeholder="Major coursework, university affiliation, key academic achievements..." required></textarea>
+                                </div>
+
+                                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+                                    <button type="button" id="eduCancelBtn" class="btn btn-outline" style="display: none;" onclick="cancelEduEdit()">
+                                        <span>✖ Cancel Edit</span>
+                                    </button>
+                                    <button type="submit" id="eduSubmitBtn" class="btn btn-primary">
+                                        <span>🎓 Publish Education Milestone</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Milestones Database Grid Cell -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [8]:</span>
+                        <div class="cell-code-box">
+                            <code>education_db.<span class="token-function">query_academic_journey</span>()</code>
+                        </div>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [8]:</span>
+                        <div class="cell-output-card">
+                            <div id="educationList" class="admin-cards-grid">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="notebook-page" id="page-resume" data-page="resume">
+                <div class="cell-md-header">
+                    <span class="md-tag"># [5] Curriculum Vitae · Direct PDF &amp; Cloud Resume Sync</span>
+                </div>
+
+                <!-- Input Cell: Update Resume Form -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [9]:</span>
+                        <div class="cell-code-box">
+                            <code><span class="token-keyword">from</span> portfolio_admin <span class="token-keyword">import</span> <span class="token-function">deploy_resume_pdf</span>; <span class="token-comment"># Direct upload</span></code>
+                        </div>
+                        <button class="cell-run-btn" title="Deploy Resume" onclick="document.getElementById('resumeSubmitBtn').click()">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [9]:</span>
+                        <div class="cell-output-card">
+                            <form id="resumeForm" class="admin-form-panel">
+                                <div class="admin-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label">Google Drive Shareable Link (Optional)</label>
+                                        <input type="url" id="resumeDriveUrl" class="form-input" placeholder="https://drive.google.com/file/d/.../view" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Upload New Resume PDF (assets/resume.pdf) *</label>
+                                        <input type="file" id="resumePdf" class="form-input form-file-input" accept="application/pdf" />
+                                        <div id="resumePdfNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Upload new PDF to deploy immediately. Active / selected PDF card below:</div>
+                                        <div id="resumePdfPreviewRow" class="admin-single-preview-wrap"></div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-live-matcher">
+                                    <div class="skill-logo-box" style="border-color: #ff477e;">
+                                        <span style="font-size: 20px;">📄</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                                        <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #ff477e; font-weight: 700;">
+                                            Live Resume Engine
+                                        </span>
+                                        <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                            Uploading a new PDF immediately replaces the live resume served across the portfolio.
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
+                                    <button type="submit" id="resumeSubmitBtn" class="btn btn-primary">
+                                        <span>🚀 Deploy Updated Resume</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resume Status Cell -->
+                <div class="notebook-cell">
+                    <div class="cell-input-row">
+                        <span class="cell-prompt">In [10]:</span>
+                        <div class="cell-code-box">
+                            <code>resume_engine.<span class="token-function">inspect_active_resume</span>()</code>
+                        </div>
+                    </div>
+                    <div class="cell-output-row">
+                        <span class="cell-prompt out">Out [10]:</span>
+                        <div class="cell-output-card">
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <span class="form-label" style="color: var(--color-cyan, #00F2FE);">Local PDF File</span>
+                                    <span style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-main);">/assets/resume.pdf</span>
+                                    <div style="margin-top: 0.5rem;">
+                                        <a href="/assets/resume.pdf" target="_blank" class="sidebar-admin-link">
+                                            <span>👁️ Preview Live PDF &nearr;</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="form-label" style="color: #17A223;">Kernel Status</span>
+                                    <span style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-main);">Synchronized &amp; Ready</span>
+                                    <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 0.35rem;">
+                                        Connected to Flask Dynamic Engine
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ============================================================
+         AUTHENTICATION MODAL OVERLAY (Matches 3D Glassmorphism)
+         ============================================================ -->
+    <div class="auth-overlay-backdrop hidden" id="loginOverlay" role="dialog" aria-modal="true">
+        <div class="copyright-modal-card">
+            <div class="modal-card-header">
+                <div class="modal-title-wrap">
+                    <span style="font-size: 1.3rem;">🔐</span>
+                    <h3 style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: var(--text-main);">
+                        admin.ipynb · Kernel Authentication
+                    </h3>
+                </div>
+                <a href="/" target="_self" class="btn-modal-close" title="Return to Public Portfolio">
+                    &times;
+                </a>
+            </div>
+
+            <div class="modal-card-body" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+                <p style="font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.5; margin: 0;">
+                    Please provide your secret admin credentials to unlock execution access to the portfolio management kernel.
+                </p>
+
+                <div id="loginError" class="form-status-alert error" style="display: none;"></div>
+
+                <form id="loginForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="loginUsername" class="form-input" value="subhankar" required autocomplete="username" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Secret Password / Key</label>
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Enter admin password..." required autocomplete="current-password" autofocus />
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem;">
+                        <a href="/" target="_self" class="sidebar-admin-link" style="color: var(--text-muted); border-color: transparent;">
+                            ← Return to Portfolio
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <span>🔓 Authenticate</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         ADMIN SCRIPTS & LOGIC
+         ============================================================ -->
+        <script src="admin.js"></script>
+</body>
+</html>

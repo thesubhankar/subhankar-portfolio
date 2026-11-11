@@ -54,6 +54,8 @@ function initApp() {
 
     initCopyrightModal();
 
+    initDynamicPortfolioSync();
+
 }
 
 // Note: Initialization safely triggered at end of script evaluation
@@ -1140,6 +1142,38 @@ const SKILL_SVGS = {
 
     'github': '<svg viewBox="0 0 24 24" width="24" height="24" fill="#F0F6FC"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>'
 
+,
+    'math': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7c3 0 5 11 8 11s5-11 8-11"/><path d="M9 17l6-10"/></svg>',
+    'mathematics': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7c3 0 5 11 8 11s5-11 8-11"/><path d="M9 17l6-10"/></svg>',
+    'calculus': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#EC4899" stroke-width="2.2" stroke-linecap="round"><path d="M14 4c-2 0-4 1-4 4v8c0 3-2 4-4 4M8 12h8"/></svg>',
+    'linearalgebra': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#8B5CF6" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="1.5" fill="#8B5CF6"/><circle cx="15" cy="9" r="1.5" fill="#00F2FE"/><circle cx="9" cy="15" r="1.5" fill="#00F2FE"/><circle cx="15" cy="15" r="1.5" fill="#8B5CF6"/></svg>',
+    'probability': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10B981" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5" fill="#10B981"/><circle cx="16" cy="8" r="1.5" fill="#10B981"/><circle cx="12" cy="12" r="1.5" fill="#10B981"/><circle cx="8" cy="16" r="1.5" fill="#10B981"/><circle cx="16" cy="16" r="1.5" fill="#10B981"/></svg>',
+    'optimization': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#06B6D4" stroke-width="2" stroke-linecap="round"><path d="M3 17c4-8 8-14 18-14M13 3h8v8"/><path d="M3 21h18" stroke="#64748B"/></svg>',
+    'dataanalysis': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect x="3" y="13" width="4" height="8" rx="1" fill="#3B82F6"/><rect x="10" y="8" width="4" height="13" rx="1" fill="#8B5CF6"/><rect x="17" y="3" width="4" height="18" rx="1" fill="#06B6D4"/><path d="M5 9l6-4 6 5" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/></svg>',
+    'timeseries': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00F2FE" stroke-width="2" stroke-linecap="round"><path d="M3 12h3l3-7 4 14 3-7h5"/></svg>',
+    'regression': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M3 21h18" stroke="#64748B" stroke-width="1.8"/><path d="M4 18L20 6" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round"/><circle cx="6" cy="17" r="1.8" fill="#38BDF8"/><circle cx="10" cy="11" r="1.8" fill="#38BDF8"/><circle cx="14" cy="12" r="1.8" fill="#38BDF8"/><circle cx="18" cy="5" r="1.8" fill="#38BDF8"/></svg>',
+    'clustering': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><circle cx="6" cy="8" r="2.5" fill="#EC4899"/><circle cx="9" cy="5" r="2" fill="#EC4899" opacity="0.8"/><circle cx="5" cy="11" r="2" fill="#EC4899" opacity="0.8"/><circle cx="17" cy="7" r="2.5" fill="#3B82F6"/><circle cx="19" cy="10" r="2" fill="#3B82F6" opacity="0.8"/><circle cx="15" cy="10" r="2" fill="#3B82F6" opacity="0.8"/><circle cx="12" cy="17" r="2.5" fill="#10B981"/><circle cx="9" cy="18" r="2" fill="#10B981" opacity="0.8"/><circle cx="15" cy="18" r="2" fill="#10B981" opacity="0.8"/></svg>',
+    'nlp': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/></svg>',
+    'computervision': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00F2FE" stroke-width="2"><circle cx="12" cy="12" r="3" fill="#00F2FE"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><path d="M6 3H3v3M18 3h3v3M6 21H3v-3M18 21h3v-3" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round"/></svg>',
+    'genai': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#8B5CF6"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="#00F2FE"/></svg>',
+    'llm': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect width="24" height="24" rx="4" fill="#0A0E1A" stroke="#8B5CF6" stroke-width="1.5"/><text x="12" y="16" fill="#00F2FE" font-family="monospace" font-size="9" font-weight="bold" text-anchor="middle">LLM</text></svg>',
+    'transformers': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#F59E0B" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="#F59E0B" fill-opacity="0.2"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="#F59E0B" fill-opacity="0.2"/><rect x="8.5" y="14" width="7" height="7" rx="1.5" fill="#F59E0B" fill-opacity="0.4"/><line x1="6.5" y1="10" x2="12" y2="14"/><line x1="17.5" y1="10" x2="12" y2="14"/></svg>',
+    'xgboost': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#22C55E"><rect width="24" height="24" rx="4" fill="#14532D"/><path d="M6 7l5 5-5 5h3l3.5-3.5L16 17h3l-5-5 5-5h-3l-3.5 3.5L9 7H6z" fill="#FFFFFF"/></svg>',
+    'spark': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#E25A1C"><path d="M12 2C9.5 5.5 8 9.5 8 13.5c0 2.5 1.5 4.5 4 4.5 1-3.5 3-6.5 5.5-9-1.5 4.5-1 8 1.5 10.5C21 17 22 14.5 22 12c0-5-4.5-9-10-10zm-3 8c-1.5 2-2 4-2 6 0 3 2 5 5 5 1-1.5 1.5-3.5 1.5-5.5 0-2.5-1.5-4.5-4.5-5.5z"/></svg>',
+    'pyspark': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#E25A1C"><path d="M12 2C9.5 5.5 8 9.5 8 13.5c0 2.5 1.5 4.5 4 4.5 1-3.5 3-6.5 5.5-9-1.5 4.5-1 8 1.5 10.5C21 17 22 14.5 22 12c0-5-4.5-9-10-10zm-3 8c-1.5 2-2 4-2 6 0 3 2 5 5 5 1-1.5 1.5-3.5 1.5-5.5 0-2.5-1.5-4.5-4.5-5.5z"/></svg>',
+    'hadoop': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#FFDE00"><rect width="24" height="24" rx="4" fill="#0A0E1A"/><circle cx="12" cy="11" r="5" fill="#FFDE00"/><path d="M7 11c0 3 2 6 5 6s5-3 5-6" stroke="#0A0E1A" stroke-width="2"/><circle cx="10" cy="10" r="1" fill="#0A0E1A"/><circle cx="14" cy="10" r="1" fill="#0A0E1A"/></svg>',
+    'kafka': '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><circle cx="7" cy="12" r="3" fill="#231F20"/><circle cx="17" cy="6" r="3" fill="#231F20"/><circle cx="17" cy="18" r="3" fill="#231F20"/><line x1="9.5" y1="10.5" x2="14.5" y2="7.5" stroke="#231F20" stroke-width="2"/><line x1="9.5" y1="13.5" x2="14.5" y2="16.5" stroke="#231F20" stroke-width="2"/></svg>',
+    'airflow': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#017CEE"><path d="M12 3l3 6-3 3-3-3 3-6zm6 6l3 6-6 0 0-3 3-3zm-6 6l3 3-3 3-3-3 3-3zm-6-6l3 3 0 3-6 0 3-6z"/></svg>',
+    'snowflake': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#29B5E8" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="3.3" y1="7" x2="20.7" y2="17"/><line x1="3.3" y1="17" x2="20.7" y2="7"/><path d="M10 5l2-3 2 3M10 19l2 3 2-3M5 10l-3 2 3 2M19 10l3 2-3 2"/></svg>',
+    'databricks': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#FF3621"><path d="M12 2L2 7.5l10 5.5 10-5.5L12 2zm0 6l-7-3.8 7-3.9 7 3.9L12 8zm0 5.5L2 18l10 5.5 10-5.5-10-5.5zm0 6l-7-3.8 7-3.9 7 3.9L12 19.5z"/></svg>',
+    'kubernetes': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#326CE5"><path d="M12 2l8.5 5v10L12 22 3.5 17V7L12 2zm0 3.2L6 8.5v7l6 3.3 6-3.3v-7L12 5.2z"/><circle cx="12" cy="12" r="2.5" fill="#FFFFFF"/></svg>',
+    'mlflow': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#0194E2"><rect width="24" height="24" rx="4" fill="#0E1E38"/><path d="M4 17l4-9 4 4 4-8 4 13" stroke="#00F2FE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'plotly': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#3F4F75"><rect x="3" y="11" width="3" height="10" rx="1" fill="#1F77B4"/><rect x="8" y="5" width="3" height="16" rx="1" fill="#FF7F0E"/><rect x="13" y="9" width="3" height="12" rx="1" fill="#2CA02C"/><rect x="18" y="3" width="3" height="18" rx="1" fill="#D62728"/></svg>',
+    'r': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#276DC3"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm2 14h-2.5l-2.5-3.5H8v3.5H6V8h4.5c2 0 3.5 1.2 3.5 3 0 1.2-.6 2.2-1.6 2.7L14 16zm-4-5.5H8v2h2c1 0 1.5-.5 1.5-1s-.5-1-1.5-1z"/></svg>',
+    'cpp': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#00599C"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm-2 13.5a4 4 0 1 1 0-7c.7 0 1.4.2 2 .5l-.8 1.4c-.4-.3-.8-.4-1.2-.4a2.5 2.5 0 1 0 0 5c.4 0 .8-.1 1.2-.4l.8 1.4c-.6.3-1.3.5-2 .5zm5-3.5h-1v-1h-1v1h-1v1h1v1h1v-1h1v-1zm4 0h-1v-1h-1v1h-1v1h1v1h1v-1h1v-1z"/></svg>',
+    'java': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#EA2D2E"><path d="M8 18c0 1 2 2 4 2s4-1 4-2-2-2-4-2-4 1-4 2zm-2-4c0 1.8 3 3 6 3s6-1.2 6-3h-2c0 .8-2 1.5-4 1.5s-4-.7-4-1.5H6zm7-9c0 1.5-1 2.5-2 3.5 1-1.5 2-2.5 2-3.5zm-2 2c-.5 1-1.5 2-2 3 1-1 2-2 2-3z"/></svg>',
+    'linux': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#FCC624"><path d="M12 2C9.8 2 8 3.8 8 6v4c-2 1-3 3-3 6 0 3 2 6 7 6s7-3 7-6c0-3-1-5-3-6V6c0-2.2-1.8-4-4-4zm-1.5 6c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm3 0c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm-1.5 2.5c1 0 2 .5 2 1.5h-4c0-1 1-1.5 2-1.5z"/></svg>',
+    'bash': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect width="24" height="24" rx="4" fill="#293134"/><path d="M5 8l4 4-4 4M12 16h6" stroke="#4EAA25" stroke-width="2.2" stroke-linecap="round"/></svg>'
 };
 
 function initProjectNav() {
@@ -1492,16 +1526,18 @@ function initProjectNav() {
     function renderActiveProject(projectId, animate = true) {
 
         currentProjectId = projectId;
+        window._currentProjectId = projectId;
 
         currentSlideIndex = 0;
 
-        const proj = STUDIO_PROJECTS[projectId];
+        const proj = (window._STUDIO_PROJECTS && window._STUDIO_PROJECTS[projectId]) || STUDIO_PROJECTS[projectId];
 
         if (!proj) return;
 
         // 1. Update active compact card highlight in bottom tray
 
-        compactCards.forEach(c => {
+        const currentCompactCards = document.querySelectorAll('.compact-project-card');
+        currentCompactCards.forEach(c => {
 
             if (c.getAttribute('data-project-id') === projectId) {
 
@@ -1564,28 +1600,22 @@ function initProjectNav() {
         }
 
         // 4. Update Skills Used Grid
-
         if (skillsGrid) {
-
-            skillsGrid.innerHTML = proj.skills.map(s => `
-
-                <div class="skill-tile-item" title="${s.name}">
-
+            skillsGrid.innerHTML = (proj.skills || []).map(s => {
+                const sName = typeof s === 'string' ? s : (s.name || '');
+                const sType = (typeof s === 'object' && s.type) ? s.type : sName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const sSvg = (typeof s === 'object' && s.svg) ? s.svg : (SKILL_SVGS[sType] || SKILL_SVGS['python']);
+                return `
+                <div class="skill-tile-item" title="${sName}">
                     <div class="skill-tile-icon">
-
-                        ${SKILL_SVGS[s.type] || SKILL_SVGS['python']}
-
+                        ${sSvg}
                     </div>
-
-                    <span class="skill-tile-name">${s.name}</span>
-
+                    <span class="skill-tile-name">${sName}</span>
                 </div>
-
-            `).join('');
-
+            `;}).join('');
         }
 
-        // 5. Update Carousel Dots
+        // 5. Update Carousel Dots// 5. Update Carousel Dots
 
         renderDots();
 
@@ -1599,7 +1629,7 @@ function initProjectNav() {
 
         if (!dotsRow) return;
 
-        const proj = STUDIO_PROJECTS[currentProjectId];
+        const proj = (window._STUDIO_PROJECTS && window._STUDIO_PROJECTS[currentProjectId]) || STUDIO_PROJECTS[currentProjectId];
 
         if (!proj || !proj.slides) return;
 
@@ -1629,7 +1659,7 @@ function initProjectNav() {
     let crossfadeTimer = null;
 
     function showSlide(index, withFade = true) {
-        const proj = STUDIO_PROJECTS[currentProjectId];
+        const proj = (window._STUDIO_PROJECTS && window._STUDIO_PROJECTS[currentProjectId]) || STUDIO_PROJECTS[currentProjectId];
         if (!proj || !proj.slides || !proj.slides.length) return;
         currentSlideIndex = (index + proj.slides.length) % proj.slides.length;
         const slide = proj.slides[currentSlideIndex];
@@ -1940,7 +1970,8 @@ function initProjectNav() {
 
             let firstVisibleId = null;
 
-            compactCards.forEach(card => {
+            const currentCompactCards = document.querySelectorAll('.compact-project-card');
+            currentCompactCards.forEach(card => {
 
                 const cat = card.getAttribute('data-category') || '';
 
@@ -1952,17 +1983,9 @@ function initProjectNav() {
 
                     card.style.display = 'flex';
 
-                    card.style.opacity = '0';
+                    card.style.opacity = '1';
 
-                    card.style.transform = 'translateY(6px)';
-
-                    setTimeout(() => {
-
-                        card.style.opacity = '1';
-
-                        card.style.transform = 'translateY(0)';
-
-                    }, 30);
+                    card.style.transform = 'translateY(0)';
 
                     if (!firstVisibleId) firstVisibleId = card.getAttribute('data-project-id');
 
@@ -1978,7 +2001,7 @@ function initProjectNav() {
 
             // switch top studio card to the first project of this category
 
-            const currentProj = STUDIO_PROJECTS[currentProjectId];
+            const currentProj = (window._STUDIO_PROJECTS && window._STUDIO_PROJECTS[currentProjectId]) || STUDIO_PROJECTS[currentProjectId];
 
             const currentTags = currentProj ? (currentProj.categoryTag || '').split(/\s+/) : [];
 
@@ -1999,6 +2022,10 @@ function initProjectNav() {
     renderActiveProject('thiranex', false);
 
     showSlide(0, false);
+
+    window._STUDIO_PROJECTS = window._STUDIO_PROJECTS || STUDIO_PROJECTS;
+    window._renderActiveProject = renderActiveProject;
+    window._currentProjectId = currentProjectId;
 
 }
 
@@ -4189,6 +4216,367 @@ function initCopyrightModal() {
     });
 
 }
+
+/* --------------------------------------------------------------------------
+   Dynamic Portfolio Backend Sync (Flask & Local JSON Integration)
+   Silently enhances portfolio with real-time projects, skills, certificates & resume
+   Reconciles deletions, additions, and edits in real-time across tabs
+   -------------------------------------------------------------------------- */
+const CATEGORY_BRAND_ICONS = {
+    'programming': `<svg class="cat-brand-svg" viewBox="0 0 128 128" width="30" height="30">
+        <defs>
+            <linearGradient id="py-hdr-sync-b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A9FD4"/><stop offset="100%" stop-color="#306998"/></linearGradient>
+            <linearGradient id="py-hdr-sync-y" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD43B"/><stop offset="100%" stop-color="#FFE873"/></linearGradient>
+        </defs>
+        <path fill="url(#py-hdr-sync-b)" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"/>
+        <path fill="url(#py-hdr-sync-y)" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"/>
+    </svg>`,
+    'data analysis': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#00F2FE" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>
+    </svg>`,
+    'data visualization': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#00F2FE" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+    </svg>`,
+    'machine learning': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#00F2FE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9.5 2A2.5 2.5 0 0 0 7 4.5v.7A4 4 0 0 0 4 9c0 1.4.7 2.6 1.8 3.3A4 4 0 0 0 5 15c0 1.9 1.3 3.5 3.1 3.9A3 3 0 0 0 11 22h2a3 3 0 0 0 2.9-3.1 4 4 0 0 0 3.1-3.9 4 4 0 0 0-.8-2.7 4 4 0 0 0 1.8-3.3 4 4 0 0 0-3-3.8v-.7A2.5 2.5 0 0 0 14.5 2h-5z" stroke="#00F2FE" stroke-width="1.8" fill="rgba(0,242,254,0.1)"/>
+        <path d="M12 2v20" stroke="#8B5CF6" stroke-width="1.8"/><circle cx="8" cy="8" r="1.3" fill="#00F2FE" stroke="none"/><circle cx="16" cy="8" r="1.3" fill="#00F2FE" stroke="none"/>
+    </svg>`,
+    'deep learning': `<svg class="cat-brand-svg" viewBox="58 50 150 168" width="28" height="28">
+        <defs><linearGradient id="tf-hdr-sync-l" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFA000"/><stop offset="100%" stop-color="#FF6F00"/></linearGradient></defs>
+        <path fill="url(#tf-hdr-sync-l)" d="M133 50l75 43.3v86.7l-75 43.3-75-43.3V93.3L133 50z"/>
+    </svg>`,
+    'databases': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#00F2FE" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+    </svg>`,
+    'tools': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#00F2FE" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+    </svg>`,
+    'version control': `<svg class="cat-brand-svg" viewBox="0 0 128 128" width="28" height="28">
+        <path fill="#F05032" d="M124.7 58.4L69.6 3.3c-3.2-3.2-8.3-3.2-11.5 0L46.7 14.7l14.5 14.5c3.4-1.1 7.2-.4 9.9 2.3 2.7 2.7 3.5 6.6 2.3 10l14 14c3.4-1.2 7.3-.4 10 2.3 3.8 3.8 3.8 9.9 0 13.7a9.7 9.7 0 01-13.7 0 9.7 9.7 0 01-2.1-10.5L68.6 47.9v34.3a9.7 9.7 0 012.6 1.8c3.8 3.8 3.8 9.9 0 13.7s-9.9 3.8-13.7 0-3.8-9.9 0-13.7a9.7 9.7 0 013.2-2.1V47.3a9.6 9.6 0 01-3.2-2.1c-2.9-2.9-3.6-7.1-2.1-10.6L41.1 20.3 3.3 58.1a8.1 8.1 0 000 11.5l55.1 55.1c3.2 3.2 8.3 3.2 11.5 0l54.8-54.8a8.1 8.1 0 000-11.5z"/>
+    </svg>`,
+    'deployment & web frameworks': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="28" height="28">
+        <circle cx="12" cy="12" r="10" fill="#009688"/><path d="M12.5 4L6.5 13.5h5L10.5 20l7-10.5h-5.5L12.5 4z" fill="#FFFFFF"/>
+    </svg>`
+};
+
+function getCategoryBrandSvg(catName) {
+    const key = (catName || '').trim().toLowerCase();
+    if (CATEGORY_BRAND_ICONS[key]) return CATEGORY_BRAND_ICONS[key];
+    for (const k in CATEGORY_BRAND_ICONS) {
+        if (key.includes(k) || k.includes(key)) return CATEGORY_BRAND_ICONS[k];
+    }
+    return `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#00F2FE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline>
+    </svg>`;
+}
+
+async function initDynamicPortfolioSync() {
+    try {
+        let response = null;
+        try {
+            response = await fetch('/api/portfolio-data');
+        } catch (e) {}
+
+        if (!response || !response.ok) {
+            try {
+                response = await fetch('data/portfolio_data.json');
+            } catch (e) {}
+        }
+
+        if (!response || !response.ok) return;
+        const data = await response.json();
+
+        // 1. Sync Resume Links
+        if (data.resume) {
+            const resumeSec = document.getElementById('page-resume');
+            if (resumeSec) {
+                const viewBtn = resumeSec.querySelector('.btn-primary.btn-resume');
+                const downloadBtn = resumeSec.querySelector('.btn-secondary.btn-resume');
+                if (viewBtn && data.resume.driveUrl) {
+                    viewBtn.href = data.resume.driveUrl;
+                }
+                if (downloadBtn) {
+                    if (data.resume.filePath) {
+                        downloadBtn.href = '/' + data.resume.filePath;
+                        downloadBtn.setAttribute('download', 'Subhankar_Giri_Resume.pdf');
+                    } else if (data.resume.driveUrl) {
+                        downloadBtn.href = data.resume.driveUrl;
+                    }
+                }
+            }
+        }
+
+        // 2. Sync Skills & Categories (Full dynamic reconciliation: deleted categories & skills are removed)
+        if (Array.isArray(data.skills)) {
+            const categoriesGrid = document.querySelector('.skills-categories-grid');
+            if (categoriesGrid) {
+                if (!window._AVAILABLE_LOGOS) {
+                    try {
+                        const lRes = await fetch('/api/skill-logos');
+                        if (lRes && lRes.ok) {
+                            const lData = await lRes.json();
+                            window._AVAILABLE_LOGOS = lData.logos || {};
+                        }
+                    } catch (e) {}
+                }
+
+                function getLiveSkillLogo(skillName, skillSvg) {
+                    if (skillSvg && skillSvg.trim().length > 15) return skillSvg;
+                    if (window._AVAILABLE_LOGOS) {
+                        const clean = (skillName || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+                        const keyMap = {
+                            'pytorch': 'pytorch', 'torch': 'pytorch', 'python': 'python', 'tensorflow': 'tensorflow', 'tf': 'tensorflow',
+                            'keras': 'keras', 'pandas': 'pandas', 'numpy': 'numpy', 'scikit': 'scikit-learn', 'scikitlearn': 'scikit-learn', 'sklearn': 'scikit-learn',
+                            'powerbi': 'powerbi', 'tableau': 'tableau', 'matplotlib': 'matplotlib', 'seaborn': 'seaborn',
+                            'sql': 'sql', 'mysql': 'mysql', 'postgres': 'postgresql', 'postgresql': 'postgresql', 'sqlite': 'sqlite',
+                            'mongodb': 'mongodb', 'docker': 'docker', 'fastapi': 'fastapi', 'flask': 'flask', 'streamlit': 'streamlit',
+                            'git': 'git', 'github': 'github', 'vscode': 'vscode', 'jupyter': 'jupyter', 'excel': 'excel',
+                            'anaconda': 'anaconda', 'opencv': 'opencv', 'langchain': 'langchain', 'huggingface': 'huggingface',
+                            'aws': 'aws', 'azure': 'azure', 'gcp': 'gcp',
+                            'math': 'math', 'mathematics': 'mathematics', 'calculus': 'calculus', 'linearalgebra': 'linearalgebra',
+                            'algebra': 'linearalgebra', 'matrix': 'linearalgebra', 'probability': 'probability', 'prob': 'probability',
+                            'optimization': 'optimization', 'statistics': 'stats', 'stats': 'stats'
+                        };
+                        const k = keyMap[clean] || clean;
+                        if (window._AVAILABLE_LOGOS[k]) return window._AVAILABLE_LOGOS[k];
+                    }
+                    return skillSvg || '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#00F2FE" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>';
+                }
+
+                categoriesGrid.innerHTML = '';
+                if (data.skills.length === 0) {
+                    categoriesGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No skill categories published yet.</div>';
+                } else {
+                    data.skills.forEach(catData => {
+                        const card = document.createElement('div');
+                        card.className = 'skill-category-card';
+                        const catIconSvg = getCategoryBrandSvg(catData.category);
+
+                        let pillsHtml = '';
+                        (catData.skills || []).forEach(skill => {
+                            const svgHtml = getLiveSkillLogo(skill.name, skill.svg);
+                            pillsHtml += `
+                                <span class="skill-pill">
+                                    <span class="skill-icon-wrap">${svgHtml}</span>
+                                    <span class="skill-pill-text">${skill.name}</span>
+                                </span>
+                            `;
+                        });
+
+                        card.innerHTML = `
+                            <div class="cat-card-header">
+                                <div class="cat-card-title-group">
+                                    <div class="cat-card-icon-wrap" title="${catData.category}">
+                                        ${catIconSvg}
+                                    </div>
+                                    <h4 class="cat-card-title">${catData.category}</h4>
+                                </div>
+                                <span class="cat-card-badge">${catData.badge || 'PRO'}</span>
+                            </div>
+                            <div class="cat-chips-wrap">
+                                ${pillsHtml}
+                            </div>
+                        `;
+                        categoriesGrid.appendChild(card);
+                    });
+                }
+            }
+        }
+
+        // 3. Sync Projects (Clean dynamic reconciliation: deleted projects are removed immediately)
+        if (Array.isArray(data.projects)) {
+            const compactGrid = document.getElementById('compactCardsGrid');
+            const newStudioProjects = {};
+            data.projects.forEach(p => {
+                newStudioProjects[p.id] = p;
+            });
+            window._STUDIO_PROJECTS = newStudioProjects;
+
+            if (compactGrid) {
+                compactGrid.innerHTML = '';
+                if (data.projects.length === 0) {
+                    compactGrid.innerHTML = '<div style="color:var(--text-muted); padding:1.5rem; font-family:var(--font-mono); font-size:0.85rem; text-align:center;">No projects published yet.</div>';
+                } else {
+                    const currentActiveId = window._currentProjectId || (data.projects[0] && data.projects[0].id);
+
+                    data.projects.forEach((p, idx) => {
+                        const card = document.createElement('div');
+                        const isActive = (p.id === currentActiveId) || (!window._currentProjectId && idx === 0);
+                        card.className = 'compact-project-card' + (isActive ? ' active-preview' : '');
+                        card.setAttribute('data-project-id', p.id);
+                        card.setAttribute('data-category', p.categoryTag || 'all data-science');
+                        card.setAttribute('role', 'button');
+                        card.setAttribute('tabindex', '0');
+                        card.setAttribute('title', 'Click to view ' + p.title + ' in Studio');
+
+                        const thumb = (p.slides && p.slides[0]?.webp) ? p.slides[0].webp : 'assets/project image/thrianex image/thumblain.webp';
+                        card.innerHTML = `
+                            <div class="compact-thumb-wrap">
+                                <img src="/${thumb}" alt="${p.title}" class="compact-thumb-img" loading="lazy">
+                                <span class="compact-badge-cat">${p.categoryBadge || 'PROJECT'}</span>
+                                <span class="compact-active-indicator">● ACTIVE</span>
+                            </div>
+                            <div class="compact-content">
+                                <h5 class="compact-title">${p.title}</h5>
+                                <div class="compact-action-row">
+                                    <span class="compact-open-text">Open in Studio</span>
+                                    <span class="compact-arrow-icon">↗</span>
+                                </div>
+                            </div>
+                        `;
+
+                        card.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (window._renderActiveProject) {
+                                window._renderActiveProject(p.id, true);
+                            }
+                        });
+
+                        card.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (window._renderActiveProject) {
+                                    window._renderActiveProject(p.id, true);
+                                }
+                            }
+                        });
+
+                        compactGrid.appendChild(card);
+                    });
+                }
+            }
+
+            // If active project was deleted, switch to first project in list
+            if (window._renderActiveProject && data.projects.length > 0) {
+                if (!newStudioProjects[window._currentProjectId]) {
+                    window._renderActiveProject(data.projects[0].id, false);
+                }
+            }
+        }
+
+        // 4. Sync Certificates (Full dynamic reconciliation: deleted certificates are removed)
+        if (Array.isArray(data.certificates)) {
+            const certGrid = document.querySelector('.certificates-grid');
+            if (certGrid) {
+                certGrid.innerHTML = '';
+                if (data.certificates.length === 0) {
+                    certGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No certificates published yet.</div>';
+                } else {
+                    data.certificates.forEach((cert, idx) => {
+                        const certCard = document.createElement('div');
+                        certCard.className = 'cert-card-interactive';
+
+                        let badgeHtml = '';
+                        if (cert.image) {
+                            badgeHtml = `<img src="/${cert.image}" alt="${cert.title}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`;
+                        } else {
+                            badgeHtml = `
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="7"></circle>
+                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                </svg>
+                            `;
+                        }
+
+                        const credUrl = cert.credentialUrl || '#';
+                        certCard.innerHTML = `
+                            <div class="cert-top-header">
+                                <div class="cert-badge-circle cyan">
+                                    ${badgeHtml}
+                                </div>
+                                <span class="cert-issuer-badge">${cert.issuer || 'Credential'}</span>
+                            </div>
+                            <h4 class="cert-name">${cert.title}</h4>
+                            <p class="cert-desc-text">${cert.description || 'Verified credential in ' + (cert.category || 'Data Science') + '.'}</p>
+                            <div class="cert-btn-group">
+                                ${credUrl !== '#' ? `
+                                <a href="${credUrl}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-view" aria-label="View Certificate" title="View Certificate">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                </a>
+                                <a href="${credUrl}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-verify" aria-label="Verify Credential" title="Verify Credential">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                                </a>` : ''}
+                            </div>
+                        `;
+                        certGrid.appendChild(certCard);
+                    });
+                }
+            }
+        }
+
+        // 5. Sync Education Timeline (Full dynamic reconciliation: deleted education milestones are removed)
+        if (Array.isArray(data.education)) {
+            const eduGrid = document.querySelector('.education-timeline-grid');
+            if (eduGrid) {
+                eduGrid.innerHTML = '';
+                if (data.education.length === 0) {
+                    eduGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No education milestones published yet.</div>';
+                } else {
+                    data.education.forEach(edu => {
+                        const card = document.createElement('div');
+                        card.className = 'edu-card-interactive';
+                        const colorClass = edu.color || 'cyan';
+                        const isProgress = (edu.status || '').toLowerCase().includes('progress');
+                        const badgeClass = isProgress ? 'status-badge-progress' : 'grade-badge';
+                        const badgeText = edu.grade || edu.status || 'Verified';
+
+                        let iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
+                        const degLower = (edu.degree || '').toLowerCase();
+                        if (degLower.includes('secondary') || degLower.includes('+2')) {
+                            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`;
+                        } else if (degLower.includes('matric') || degLower.includes('10th')) {
+                            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`;
+                        }
+
+                        card.innerHTML = `
+                            <div class="edu-left-icon">
+                                <div class="edu-badge-circle ${colorClass}">
+                                    ${iconSvg}
+                                </div>
+                            </div>
+                            <div class="edu-main-content">
+                                <div class="edu-header-row">
+                                    <span class="edu-timeline-pill">${edu.timeline || ''}</span>
+                                    <span class="${badgeClass}">${badgeText}</span>
+                                </div>
+                                <h4 class="edu-degree-title">${edu.degree}</h4>
+                                <p class="edu-institute">${edu.institution}</p>
+                                <p class="edu-details-text">${edu.details || ''}</p>
+                                ${edu.link ? `
+                                <div class="edu-action-box">
+                                    <a href="${edu.link}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-xs">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                        <span>View Education Credentials</span>
+                                    </a>
+                                </div>` : ''}
+                            </div>
+                        `;
+                        eduGrid.appendChild(card);
+                    });
+                }
+            }
+        }
+    } catch (err) {
+        // Silent fallback
+    }
+}
+
+// Cross-tab real-time sync listeners: auto-sync immediately when returning to tab or when admin deletes/saves
+window.addEventListener('storage', (e) => {
+    if (e.key === 'sg_portfolio_updated') {
+        initDynamicPortfolioSync();
+    }
+});
+window.addEventListener('focus', () => {
+    initDynamicPortfolioSync();
+});
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        initDynamicPortfolioSync();
+    }
+});
 
 // Safe Engine Initialization: Executed after all functions, classes, and constants are loaded
 

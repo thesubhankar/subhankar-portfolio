@@ -1,0 +1,20 @@
+# Netlify Configuration for Subhankar Giri Portfolio (portfolio.ipynb)
+
+[build]
+  publish = "dist"
+  command = "python minify.py"
+
+# SPA Redirect Rule: Ensure all routes serve index.html with 200 status
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security & Performance Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

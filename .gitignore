@@ -1,0 +1,35 @@
+# System & OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Editor & IDE directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary & Log files
+*.tmp
+*.log
+*.bak
+scratch/
+
+# Node & Vite build artifacts
+node_modules/
+dist/
+.env
+.env.local
+
+# Flask & Database
+database/*.db
+backend/uploads/

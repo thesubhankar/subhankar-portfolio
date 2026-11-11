@@ -180,9 +180,9 @@
 
 /* --------------------------------------------------------------------------
 
-   Skills Section Night Theme Optimization:
+   Skills Section Night & Day Theme Optimization:
 
-   Removes the overwhelming pink wash from inner skill pills and badges
+   Removes transition lag and guarantees high contrast across all pills & cards
 
    -------------------------------------------------------------------------- */
 
@@ -196,13 +196,12 @@
 
     box-shadow: none !important;
 
-    transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+}
 
-                border-color 0.22s ease,
+[data-theme="dark"] .skill-pill-text,
+[data-theme="dark"] .skill-pill span {
 
-                box-shadow 0.22s ease,
-
-                background-color 0.22s ease !important;
+    color: #F8FAFC !important;
 
 }
 
@@ -233,6 +232,62 @@
 [data-theme="dark"] .skill-category-card {
 
     background-color: #0A0025 !important;
+
+    border: 1px solid rgba(139, 92, 246, 0.25) !important;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+
+}
+
+[data-theme="dark"] .cat-card-title {
+
+    color: #F8FAFC !important;
+
+}
+
+/* Day / Light Theme Skills Contrast & Surface Optimization */
+[data-theme="light"] .skill-category-card {
+
+    background-color: #FFFFFF !important;
+
+    border: 1px solid #E2E8F0 !important;
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+
+}
+
+[data-theme="light"] .cat-card-title {
+
+    color: #0F172A !important;
+
+}
+
+[data-theme="light"] .cat-card-badge {
+
+    color: #007BA7 !important;
+
+    background-color: rgba(0, 123, 167, 0.08) !important;
+
+    border: 1px solid rgba(0, 123, 167, 0.25) !important;
+
+}
+
+[data-theme="light"] .skill-pill {
+
+    background-color: #FFFFFF !important;
+
+    border: 1px solid #CBD5E1 !important;
+
+    color: #0F172A !important;
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+
+}
+
+[data-theme="light"] .skill-pill-text,
+[data-theme="light"] .skill-pill span {
+
+    color: #0F172A !important;
 
 }
 
@@ -929,19 +984,51 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 .kernel-status-badge {
-
     display: flex;
-
     align-items: center;
-
     gap: 0.5rem;
-
     font-family: var(--font-mono);
-
     font-size: 0.8rem;
-
     color: var(--text-muted);
+}
 
+.sidebar-admin-link {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 7px;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--color-cyan, #00F2FE);
+    background: rgba(0, 242, 254, 0.08);
+    border: 1px solid rgba(0, 242, 254, 0.28);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    line-height: 1.25;
+}
+
+.sidebar-admin-link:hover {
+    background: rgba(0, 242, 254, 0.22);
+    border-color: rgba(0, 242, 254, 0.65);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.35);
+    transform: translateY(-1px);
+}
+
+[data-theme="light"] .sidebar-admin-link {
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.08);
+    border-color: rgba(2, 132, 199, 0.28);
+}
+
+[data-theme="light"] .sidebar-admin-link:hover {
+    background: rgba(2, 132, 199, 0.18);
+    border-color: rgba(2, 132, 199, 0.55);
+    color: #0369a1;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
 }
 
 .status-indicator-dot {
@@ -990,9 +1077,33 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 .theme-switching *::before,
 
-.theme-switching *::after {
+.theme-switching *::after,
+
+html.theme-switching .skill-pill,
+
+html.theme-switching .skill-category-card,
+
+html.theme-switching .skill-brand-svg,
+
+html.theme-switching .cat-brand-svg,
+
+html.theme-switching .skill-pill-text,
+
+html.theme-switching .cat-card-title,
+
+html.theme-switching .cat-card-badge,
+
+[data-theme="dark"].theme-switching .skill-pill,
+
+[data-theme="light"].theme-switching .skill-pill,
+
+[data-theme="dark"].theme-switching .skill-category-card,
+
+[data-theme="light"].theme-switching .skill-category-card {
 
     transition: none !important;
+
+    animation: none !important;
 
 }
 
@@ -12869,16 +12980,58 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 }
 
-/* GitHub, Flask, etc. in skill pills on light theme */
+/* High-contrast brand icons in skill pills on light (day) theme */
 
 [data-theme="light"] .skill-pill .github-pill-svg,
-
+[data-theme="light"] .skill-pill .github-pill-svg path,
+[data-theme="light"] .skill-pill svg[data-brand="github"],
+[data-theme="light"] .skill-pill svg[data-brand="github"] path,
+[data-theme="light"] .skill-pill svg [fill="#F0F6FC"],
+[data-theme="light"] .skill-pill svg[fill="#F0F6FC"],
 [data-theme="light"] .skill-pill .flask-pill-svg,
-
 [data-theme="light"] .skill-pill svg.skill-brand-svg[fill="currentColor"] {
+    fill: #181717 !important;
+    color: #181717 !important;
+}
 
-    color: #0F172A !important;
+/* Jupyter Notebook satellite orbital dots in light (day) theme: high-contrast slate-600 */
+[data-theme="light"] .skill-pill .jupyter-pill-svg .jupyter-dot,
+[data-theme="light"] .skill-pill svg[data-brand="jupyter"] .jupyter-dot,
+[data-theme="light"] .skill-pill svg [data-jupyter-dot="true"],
+[data-theme="light"] .skill-pill svg path[fill="#CBD5E1"],
+[data-theme="light"] .skill-pill svg [fill="#CBD5E1"] {
+    fill: #475569 !important;
+}
 
+/* Microsoft Excel 3D brand logo in light (day) theme: rich contrast & micro shadow */
+[data-theme="light"] .skill-pill .excel-pill-svg,
+[data-theme="light"] .skill-pill svg[data-brand="excel"] {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+
+[data-theme="light"] .skill-pill .excel-pill-svg path[fill="#33C481"],
+[data-theme="light"] .skill-pill svg[data-brand="excel"] path[fill="#33C481"] {
+    fill: #1E8E4F !important;
+}
+
+.skill-pill svg .keep-white,
+.skill-pill svg [data-keep-white="true"] {
+    fill: #FFFFFF !important;
+}
+
+/* Night (Dark) mode explicit contrast for GitHub & Jupyter */
+[data-theme="dark"] .skill-pill .github-pill-svg,
+[data-theme="dark"] .skill-pill .github-pill-svg path,
+[data-theme="dark"] .skill-pill svg[data-brand="github"],
+[data-theme="dark"] .skill-pill svg[data-brand="github"] path {
+    fill: #F0F6FC !important;
+    color: #F0F6FC !important;
+}
+
+[data-theme="dark"] .skill-pill .jupyter-pill-svg .jupyter-dot,
+[data-theme="dark"] .skill-pill svg[data-brand="jupyter"] .jupyter-dot,
+[data-theme="dark"] .skill-pill svg [data-jupyter-dot="true"] {
+    fill: #CBD5E1 !important;
 }
 
 /* Daytime / Light Theme Skill Cards (Pills) Interactive Pointer Hover */
