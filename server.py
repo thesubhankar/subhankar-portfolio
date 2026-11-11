@@ -422,17 +422,8 @@ def add_or_update_project():
             "svg": svg
         })
 
-    # Collect existing or uploaded slide images (3-5 images supported)
-    slides = []
-    existing_slides_json = request.form.get("existingSlidesJson")
-    if existing_slides_json:
-        try:
-            parsed_slides = json.loads(existing_slides_json)
-            if isinstance(parsed_slides, list):
-                slides.extend(parsed_slides)
-        except Exception:
-            pass
-
+    # 1. Collect newly uploaded slide images
+    new_slides = []
     files = request.files.getlist("images")
     for idx, f in enumerate(files):
         if f and f.filename:
@@ -440,12 +431,46 @@ def add_or_update_project():
             unique_name = f"{proj_id}_{int(time.time())}_{idx}_{fname}"
             fpath = os.path.join(UPLOAD_PROJECTS, unique_name)
             f.save(fpath)
-            slides.append({
+            new_slides.append({
                 "webp": f"assets/uploads/projects/{unique_name}",
-                "alt": f"{title} Screenshot {len(slides)+1}"
+                "alt": f"{title} Screenshot"
             })
 
-    # Check for existing project to preserve slides if no new images uploaded
+    # 2. Collect preserved existing slides
+    existing_slides = []
+    existing_slides_json = request.form.get("existingSlidesJson")
+    if existing_slides_json:
+        try:
+            parsed_slides = json.loads(existing_slides_json)
+            if isinstance(parsed_slides, list):
+                existing_slides = parsed_slides
+        except Exception:
+            pass
+
+    # 3. Assemble slides based on slideOrderPlanJson, or default to (new_slides + existing_slides)
+    order_plan_json = request.form.get("slideOrderPlanJson")
+    slides = []
+    if order_plan_json:
+        try:
+            order_plan = json.loads(order_plan_json)
+            if isinstance(order_plan, list) and order_plan:
+                for token in order_plan:
+                    parts = str(token).split(":")
+                    if len(parts) == 2:
+                        t_type, t_idx = parts[0], int(parts[1])
+                        if t_type == "new" and 0 <= t_idx < len(new_slides):
+                            slides.append(new_slides[t_idx])
+                        elif t_type == "existing" and 0 <= t_idx < len(existing_slides):
+                            slides.append(existing_slides[t_idx])
+        except Exception:
+            slides = []
+
+    # If no order plan was specified or empty, newly uploaded slides are placed first as primary,
+    # while ALL existing slides are preserved right after them!
+    if not slides:
+        slides = new_slides + existing_slides
+
+    # Check for existing project to preserve slides if no images passed
     existing_idx = next((i for i, p in enumerate(data.get("projects", [])) if p["id"] == proj_id), -1)
 
     if not slides:
@@ -455,8 +480,13 @@ def add_or_update_project():
             fallback_img = request.form.get("imagePath", "assets/uploads/projects/thrianex image/thumblain.webp")
             slides.append({
                 "webp": fallback_img,
-                "alt": f"{title} Screenshot"
+                "alt": f"{title} Screenshot 1"
             })
+
+    # Ensure clean sequential alt text
+    for s_idx, s in enumerate(slides):
+        if not s.get("alt") or s.get("alt") == f"{title} Screenshot":
+            s["alt"] = f"{title} Screenshot {s_idx + 1}"
 
     new_project = {
         "id": proj_id,
@@ -471,14 +501,16 @@ def add_or_update_project():
     }
 
     if existing_idx >= 0:
-        # Clean up any removed uploaded slide images from disk
+        # Clean up only explicitly removed uploaded slide images from disk
         old_slides = data["projects"][existing_idx].get("slides", [])
         new_slide_paths = {s.get("webp") for s in slides if s.get("webp")}
         for old_s in old_slides:
             old_p = old_s.get("webp") or old_s.get("src")
             if old_p and old_p not in new_slide_paths:
                 delete_upload_file(old_p)
-        data["projects"][existing_idx] = new_project
+        # Move updated project to top of list so it immediately shows first on the live portfolio!
+        data["projects"].pop(existing_idx)
+        data["projects"].insert(0, new_project)
     else:
         data["projects"].insert(0, new_project)
 
@@ -548,9 +580,11 @@ def add_certificate():
     if existing_idx >= 0:
         old_cert = data["certificates"][existing_idx]
         old_image = old_cert.get("image")
-        if old_image and old_image != cert_image:
+        if old_image and cert_image and old_image != cert_image:
             delete_upload_file(old_image)
-        data["certificates"][existing_idx] = new_cert
+        # Move updated certificate to top (index 0) so it's shown first in certificates section!
+        data["certificates"].pop(existing_idx)
+        data["certificates"].insert(0, new_cert)
     else:
         data.setdefault("certificates", []).insert(0, new_cert)
 
@@ -626,7 +660,8 @@ def add_skill():
 
     # Check if skill already exists in that category
     if not any(s.get("name", "").lower() == skill_name.lower() for s in target_cat.get("skills", [])):
-        target_cat.setdefault("skills", []).append(skill_item)
+        # Insert at index 0 so new skill appears first while keeping all existing skills preserved
+        target_cat.setdefault("skills", []).insert(0, skill_item)
         save_data(data)
         
     return jsonify({

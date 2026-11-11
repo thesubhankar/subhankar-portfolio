@@ -314,104 +314,120 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             });
         }
 
-        // 3-5 Project images multi-file accumulator & preview system
+        // 3-5 Project images unified multi-file accumulator & preview system
         const projImagesInput = document.getElementById('projImages');
         const projImagesPreviewRow = document.getElementById('projImagesPreviewRow');
         const projImagesNotice = document.getElementById('projImagesNotice');
 
-        let projectSelectedFiles = [];
-        let projectExistingSlides = [];
+        let projectSlideItems = [];
 
         function renderProjImagesPreviews() {
             if (!projImagesPreviewRow) return;
             projImagesPreviewRow.innerHTML = '';
 
-            const totalCount = projectExistingSlides.length + projectSelectedFiles.length;
+            const totalCount = projectSlideItems.length;
 
             if (projImagesNotice) {
                 if (totalCount === 0) {
                     projImagesNotice.textContent = 'Upload 3-5 images for carousel. You can select multiple images at once (Ctrl/Shift) or pick them one-by-one:';
                     projImagesNotice.style.color = 'var(--text-muted)';
-                } else if (totalCount < 3) {
-                    projImagesNotice.textContent = `⚠️ ${totalCount} image(s) selected (3 to 5 images recommended). Click 'Choose Files' again to add more images:`;
-                    projImagesNotice.style.color = '#F59E0B';
-                } else if (totalCount <= 5) {
-                    projImagesNotice.textContent = `✓ ${totalCount} images ready for carousel (3 to 5 recommended). Looking great!`;
-                    projImagesNotice.style.color = '#10B981';
                 } else {
-                    projImagesNotice.textContent = `ℹ️ ${totalCount} images ready (first 5 will be primary carousel slides). Click ✕ on any card to remove:`;
-                    projImagesNotice.style.color = 'var(--color-cyan, #00F2FE)';
+                    const hasNew = projectSlideItems.some(i => i.type === 'new');
+                    const hasExisting = projectSlideItems.some(i => i.type === 'existing');
+                    if (hasNew && hasExisting) {
+                        projImagesNotice.innerHTML = `✨ <strong>#1 is Primary Thumbnail</strong>. New upload placed at #1 while all previous slides are preserved! Use ◀ / ▶ to change order. (${totalCount} total)`;
+                        projImagesNotice.style.color = '#10B981';
+                    } else if (totalCount < 3) {
+                        projImagesNotice.innerHTML = `⚠️ ${totalCount} image(s) ready (3 to 5 recommended). Click 'Choose Files' to add more. Slide #1 will be the primary thumbnail.`;
+                        projImagesNotice.style.color = '#F59E0B';
+                    } else {
+                        projImagesNotice.innerHTML = `✓ ${totalCount} images ready for carousel. Slide #1 is the primary thumbnail shown on the website.`;
+                        projImagesNotice.style.color = '#10B981';
+                    }
                 }
             }
 
-            // 1. Existing slides (when editing)
-            projectExistingSlides.forEach((slide, idx) => {
-                const imgUrl = '/' + (slide.webp || slide.png || 'assets/images/profile.jpg');
-                const slideName = (slide.webp || slide.png || '').split('/').pop() || `Slide #${idx + 1}`;
-                const card = document.createElement('div');
-                card.className = 'admin-preview-file-card existing-slide';
-                card.innerHTML = `
-                    <div class="preview-card-thumb">
-                        <img src="${imgUrl}" alt="${slide.alt || 'Slide ' + (idx + 1)}" />
-                        <span class="preview-badge-num">#${idx + 1}</span>
-                    </div>
-                    <div class="preview-card-info">
-                        <div class="preview-card-name" title="${slideName}">${slideName}</div>
-                        <div class="preview-card-meta">
-                            <span class="preview-tag existing-tag">Saved Slide</span>
-                            <span class="preview-size">Active</span>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-remove-preview" title="Remove this slide" onclick="removeProjectExistingSlide(${idx})">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </button>
-                `;
-                projImagesPreviewRow.appendChild(card);
-            });
+            projectSlideItems.forEach((item, idx) => {
+                const isPrimary = (idx === 0);
+                const isNew = (item.type === 'new');
+                
+                let imgUrl = '';
+                let fileName = '';
+                let metaTagHtml = '';
+                let sizeInfo = '';
 
-            // 2. Newly selected files
-            projectSelectedFiles.forEach((file, idx) => {
-                const overallNum = projectExistingSlides.length + idx + 1;
-                const objectUrl = URL.createObjectURL(file);
+                if (isNew) {
+                    imgUrl = item.objectUrl || URL.createObjectURL(item.file);
+                    fileName = item.file.name;
+                    metaTagHtml = isPrimary ? '<span class="preview-tag primary-tag">★ New Primary</span>' : '<span class="preview-tag new-tag">New Upload</span>';
+                    sizeInfo = formatFileSize(item.file.size);
+                } else {
+                    imgUrl = '/' + (item.slide.webp || item.slide.png || 'assets/images/profile.jpg');
+                    fileName = (item.slide.webp || item.slide.png || '').split('/').pop() || `Slide #${idx + 1}`;
+                    metaTagHtml = isPrimary ? '<span class="preview-tag primary-tag">★ Primary Slide</span>' : '<span class="preview-tag existing-tag">✓ Preserved</span>';
+                    sizeInfo = 'Preserved';
+                }
+
                 const card = document.createElement('div');
-                card.className = 'admin-preview-file-card new-upload';
+                card.className = `admin-preview-file-card ${isPrimary ? 'is-primary' : ''} ${isNew ? 'new-upload' : 'existing-slide'}`;
                 card.innerHTML = `
                     <div class="preview-card-thumb">
-                        <img src="${objectUrl}" alt="${file.name}" />
-                        <span class="preview-badge-num">#${overallNum}</span>
+                        <img src="${imgUrl}" alt="${fileName}" />
+                        <span class="preview-badge-num ${isPrimary ? 'primary-badge' : ''}">${isPrimary ? '★ #1' : '#' + (idx + 1)}</span>
                     </div>
                     <div class="preview-card-info">
-                        <div class="preview-card-name" title="${file.name}">${file.name}</div>
+                        <div class="preview-card-name" title="${fileName}">${fileName}</div>
                         <div class="preview-card-meta">
-                            <span class="preview-tag new-tag">New Image</span>
-                            <span class="preview-size">${formatFileSize(file.size)}</span>
+                            ${metaTagHtml}
+                            <span class="preview-size">${sizeInfo}</span>
                         </div>
                     </div>
-                    <button type="button" class="btn-remove-preview" title="Remove image" onclick="removeProjectFile(${idx})">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </button>
+                    <div class="preview-card-controls">
+                        ${idx > 0 ? `<button type="button" class="btn-move-preview" title="Move Left (Make Primary / Earlier)" onclick="moveProjectSlide(${idx}, -1)">◀</button>` : ''}
+                        ${idx < projectSlideItems.length - 1 ? `<button type="button" class="btn-move-preview" title="Move Right" onclick="moveProjectSlide(${idx}, 1)">▶</button>` : ''}
+                        <button type="button" class="btn-remove-preview" title="Remove this slide" onclick="removeProjectSlide(${idx})">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
                 `;
                 projImagesPreviewRow.appendChild(card);
             });
         }
 
-        window.removeProjectFile = function(index) {
-            projectSelectedFiles.splice(index, 1);
+        window.moveProjectSlide = function(index, delta) {
+            const target = index + delta;
+            if (target < 0 || target >= projectSlideItems.length) return;
+            const temp = projectSlideItems[index];
+            projectSlideItems[index] = projectSlideItems[target];
+            projectSlideItems[target] = temp;
             renderProjImagesPreviews();
         };
 
-        window.removeProjectExistingSlide = function(index) {
-            projectExistingSlides.splice(index, 1);
+        window.removeProjectSlide = function(index) {
+            projectSlideItems.splice(index, 1);
             renderProjImagesPreviews();
+        };
+
+        // Backward-compat aliases
+        window.removeProjectFile = function(index) {
+            removeProjectSlide(index);
+        };
+        window.removeProjectExistingSlide = function(index) {
+            removeProjectSlide(index);
         };
 
         if (projImagesInput) {
             projImagesInput.addEventListener('change', () => {
                 const files = Array.from(projImagesInput.files || []);
                 files.forEach(f => {
-                    const alreadyExists = projectSelectedFiles.some(existing => existing.name === f.name && existing.size === f.size);
+                    const alreadyExists = projectSlideItems.some(i => i.type === 'new' && i.file.name === f.name && i.file.size === f.size);
                     if (!alreadyExists) {
-                        projectSelectedFiles.push(f);
+                        // Prepend newly selected files to FRONT so they become Primary Slide #1 immediately!
+                        projectSlideItems.unshift({
+                            type: 'new',
+                            file: f,
+                            objectUrl: URL.createObjectURL(f)
+                        });
                     }
                 });
                 projImagesInput.value = '';
@@ -435,9 +451,12 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             document.getElementById('projSkills').value = skillsStr;
             updateProjSkillsPreview();
 
-            // Populate existing slides in preview row
-            projectSelectedFiles = [];
-            projectExistingSlides = [...(project.slides || [])];
+            // Populate existing slides
+            projectSlideItems = (project.slides || []).map(s => ({
+                type: 'existing',
+                slide: s
+            }));
+            if (projImagesInput) projImagesInput.value = '';
             renderProjImagesPreviews();
 
             // Update submit button & show cancel
@@ -453,8 +472,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         function cancelProjectEdit() {
             document.getElementById('projectForm').reset();
             document.getElementById('projId').value = '';
-            projectSelectedFiles = [];
-            projectExistingSlides = [];
+            projectSlideItems = [];
             if (projImagesInput) projImagesInput.value = '';
             renderProjImagesPreviews();
             if (projSkillsLivePills) projSkillsLivePills.innerHTML = '';
@@ -477,18 +495,32 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             form.append('codeUrl', document.getElementById('projCode').value);
             form.append('demoUrl', document.getElementById('projDemo').value);
 
-            // Append all accumulated project images
-            projectSelectedFiles.forEach(f => {
-                form.append('images', f);
+            // Separate new files, existing preserved slides, and exact order plan
+            const newFiles = [];
+            const existingSlides = [];
+            const slideOrderPlan = [];
+
+            projectSlideItems.forEach(item => {
+                if (item.type === 'new') {
+                    const currentIdx = newFiles.length;
+                    newFiles.push(item.file);
+                    slideOrderPlan.push(`new:${currentIdx}`);
+                } else if (item.type === 'existing') {
+                    const currentIdx = existingSlides.length;
+                    existingSlides.push(item.slide);
+                    slideOrderPlan.push(`existing:${currentIdx}`);
+                }
             });
-            // Pass preserved existing slides (if any)
-            form.append('existingSlidesJson', JSON.stringify(projectExistingSlides));
+
+            newFiles.forEach(f => form.append('images', f));
+            form.append('existingSlidesJson', JSON.stringify(existingSlides));
+            form.append('slideOrderPlanJson', JSON.stringify(slideOrderPlan));
 
             try {
                 const res = await fetch('/api/admin/projects', { method: 'POST', body: form });
                 const d = await res.json();
                 if (d.success) {
-                    showNotify(projId ? 'Project updated successfully!' : 'Project published successfully to portfolio!');
+                    showNotify(projId ? 'Project updated successfully! Newly uploaded item set as primary.' : 'Project published successfully to portfolio!');
                     cancelProjectEdit();
                     loadData();
                 } else {

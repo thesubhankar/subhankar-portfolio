@@ -4448,11 +4448,10 @@ async function initDynamicPortfolioSync() {
                 }
             }
 
-            // If active project was deleted, switch to first project in list
+            // If active project was updated or deleted, ensure Studio renders the fresh state
             if (window._renderActiveProject && data.projects.length > 0) {
-                if (!newStudioProjects[window._currentProjectId]) {
-                    window._renderActiveProject(data.projects[0].id, false);
-                }
+                const activeId = newStudioProjects[window._currentProjectId] ? window._currentProjectId : data.projects[0].id;
+                window._renderActiveProject(activeId, false);
             }
         }
 
