@@ -377,6 +377,18 @@ def get_all_logos():
     })
 
 # =========================================================================
+# Health Check / Keep-Alive Ping (Prevents Sleep on Free Hosting like Render)
+# =========================================================================
+@app.route("/api/ping", methods=["GET", "HEAD"])
+@app.route("/health", methods=["GET", "HEAD"])
+def keep_alive_ping():
+    return jsonify({
+        "status": "healthy",
+        "service": "subhankar-portfolio",
+        "timestamp": int(time.time())
+    }), 200
+
+# =========================================================================
 # Admin Authentication
 # =========================================================================
 @app.route("/api/admin/login", methods=["POST"])
