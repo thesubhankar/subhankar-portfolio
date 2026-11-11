@@ -312,6 +312,20 @@ def save_data(data):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
+def delete_upload_file(rel_path):
+    """Safely delete an uploaded file from disk if it resides within assets/uploads/"""
+    if not rel_path or not isinstance(rel_path, str):
+        return
+    norm_path = rel_path.replace("\\", "/").strip()
+    if norm_path.startswith("assets/uploads/"):
+        abs_path = os.path.join(BASE_DIR, norm_path.replace("/", os.sep))
+        if os.path.exists(abs_path) and os.path.isfile(abs_path):
+            try:
+                os.remove(abs_path)
+                print(f"[Cleanup] Deleted file from disk: {rel_path}")
+            except Exception as e:
+                print(f"Error removing upload file {rel_path}:", e)
+
 # =========================================================================
 # Static Site Routes
 # =========================================================================
@@ -457,6 +471,13 @@ def add_or_update_project():
     }
 
     if existing_idx >= 0:
+        # Clean up any removed uploaded slide images from disk
+        old_slides = data["projects"][existing_idx].get("slides", [])
+        new_slide_paths = {s.get("webp") for s in slides if s.get("webp")}
+        for old_s in old_slides:
+            old_p = old_s.get("webp") or old_s.get("src")
+            if old_p and old_p not in new_slide_paths:
+                delete_upload_file(old_p)
         data["projects"][existing_idx] = new_project
     else:
         data["projects"].insert(0, new_project)
@@ -467,9 +488,15 @@ def add_or_update_project():
 @app.route("/api/admin/projects/<proj_id>", methods=["DELETE"])
 def delete_project(proj_id):
     data = load_data()
+    target_proj = next((p for p in data.get("projects", []) if p.get("id") == proj_id), None)
+    if target_proj:
+        # Delete all uploaded slide images from disk
+        for slide in target_proj.get("slides", []):
+            img_path = slide.get("webp") or slide.get("src")
+            delete_upload_file(img_path)
     data["projects"] = [p for p in data.get("projects", []) if p.get("id") != proj_id]
     save_data(data)
-    return jsonify({"success": True, "message": "Project deleted successfully"})
+    return jsonify({"success": True, "message": "Project and its uploaded images deleted successfully"})
 
 # =========================================================================
 # Certificate Management
@@ -519,6 +546,10 @@ def add_certificate():
     }
 
     if existing_idx >= 0:
+        old_cert = data["certificates"][existing_idx]
+        old_image = old_cert.get("image")
+        if old_image and old_image != cert_image:
+            delete_upload_file(old_image)
         data["certificates"][existing_idx] = new_cert
     else:
         data.setdefault("certificates", []).insert(0, new_cert)
@@ -529,9 +560,13 @@ def add_certificate():
 @app.route("/api/admin/certificates/<cert_id>", methods=["DELETE"])
 def delete_certificate(cert_id):
     data = load_data()
+    target_cert = next((c for c in data.get("certificates", []) if c.get("id") == cert_id), None)
+    if target_cert:
+        cert_img = target_cert.get("image")
+        delete_upload_file(cert_img)
     data["certificates"] = [c for c in data.get("certificates", []) if c.get("id") != cert_id]
     save_data(data)
-    return jsonify({"success": True, "message": "Certificate deleted"})
+    return jsonify({"success": True, "message": "Certificate and its badge image deleted"})
 
 # =========================================================================
 # Resume Management
