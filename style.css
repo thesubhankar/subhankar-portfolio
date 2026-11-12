@@ -886,134 +886,185 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 }
 
+/* ==========================================================================
+   Apple iPhone Liquid Glass Navigation Buttons (.sidebar-nav-item)
+   - Continuous Squircle Curvature (12px)
+   - High-End Liquid Glass Specular Reflection Overlay (Top-Half Gloss Shine)
+   - Refined Inner Bevel & Apple App Icon Ring Highlight
+   - Tactile iOS Spring Press Interaction (Scale on Click)
+   - Vibrant Apple Gradients & Colored Ambient Diffused Glow
+   ========================================================================== */
+
 .sidebar-nav-item {
-
-    display: flex;
-
-    align-items: center;
-
-    padding: 0.55rem 0.75rem;
-
-    border-radius: var(--radius-sm);
-
-    font-size: 0.92rem;
-
-    font-weight: 700;
-
-    color: var(--text-muted);
-
-    transition: background-color var(--transition-fast), color var(--transition-fast);
-
     position: relative;
-
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0.62rem 0.85rem;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.22s ease,
+                background 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
 }
 
+/* Subtle Specular Top Reflection for Liquid Look */
+.sidebar-nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.22) 0%, 
+        rgba(255, 255, 255, 0.05) 50%, 
+        transparent 100%);
+    border-radius: 12px 12px 100% 100% / 12px 12px 35% 35%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Inner Bevel Ring Highlight */
+.sidebar-nav-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), inset 0 -1px 1.5px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Hover State: Liquid Lift & Ambient Glow */
 .sidebar-nav-item:hover {
-
-    background-color: var(--bg-card);
-
+    transform: translateX(4px) scale(1.02);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
     color: var(--text-main);
-
-    font-weight: 700;
-
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2);
 }
 
+.sidebar-nav-item:hover::before,
+.sidebar-nav-item:hover::after {
+    opacity: 1;
+}
+
+/* Active State: Full Vibrant Apple Liquid Glass Pill */
 .sidebar-nav-item.active {
-
-    background-color: var(--accent-orange);
-
-    color: #FFFFFF;
-
-    font-weight: 700;
-
-    border-left: none;
-
-    box-shadow: 0 2px 10px var(--accent-orange-glow);
-
+    transform: translateX(4px) scale(1.02);
+    border: none !important;
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
+.sidebar-nav-item.active::before {
+    opacity: 1;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.42) 0%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        transparent 100%);
+}
+
+.sidebar-nav-item.active::after {
+    opacity: 1;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.65), inset 0 -1.5px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* Dark Theme Active State: Electric Neon Magenta Liquid Pill */
 [data-theme="dark"] .sidebar-nav-item.active {
-
-    background-color: #FF2D95 !important;
-
-    color: #FFFFFF !important;
-
-    box-shadow: 0 0 16px rgba(255, 45, 149, 0.5) !important;
-
-    border-left: 3px solid #FF4FA7 !important;
-
+    background: linear-gradient(135deg, #FF2D95 0%, #E01E78 50%, #B80D5A 100%) !important;
+    box-shadow: 0 6px 18px rgba(255, 45, 149, 0.5), 0 2px 4px rgba(0, 0, 0, 0.25) !important;
 }
 
-[data-theme="dark"] .sidebar-nav-item.active .nav-num {
+[data-theme="dark"] .sidebar-nav-item.active .nav-dot {
+    background-color: #00F2FE !important;
+    box-shadow: 0 0 10px #00F2FE !important;
+}
 
-    color: #FFFFFF !important;
+/* Light Theme Active State: Rich Cerulean Blue Liquid Pill */
+[data-theme="light"] .sidebar-nav-item {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: inset 0 1px 1px #FFFFFF;
+}
 
+[data-theme="light"] .sidebar-nav-item:hover {
+    background: rgba(0, 123, 167, 0.08);
+    border-color: rgba(0, 123, 167, 0.25);
+    color: var(--primary-blue);
+    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.12), inset 0 1px 1px #FFFFFF;
 }
 
 [data-theme="light"] .sidebar-nav-item.active {
+    background: linear-gradient(135deg, #0284C7 0%, #007BA7 55%, #005F83 100%) !important;
+    box-shadow: 0 6px 18px rgba(0, 123, 167, 0.42), 0 2px 4px rgba(0, 0, 0, 0.12) !important;
+}
 
-    background-color: #007BA7 !important;
+[data-theme="light"] .sidebar-nav-item.active .nav-dot {
+    background-color: #FFD43B !important;
+    box-shadow: 0 0 8px #FFD43B !important;
+}
 
-    color: #FFFFFF !important;
+/* iOS Spring Press Interaction (:active) */
+.sidebar-nav-item:active {
+    transform: translateX(4px) scale(0.96) translateY(1px);
+    transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
+}
 
-    box-shadow: 0 2px 10px rgba(0, 123, 167, 0.35) !important;
-
-    border-left: 3px solid #005F83 !important;
-
+.nav-num, .nav-text, .nav-dot {
+    position: relative;
+    z-index: 4;
 }
 
 .nav-num {
-
     font-family: var(--font-mono);
-
     font-size: 0.82rem;
-
     width: 32px;
-
     opacity: 0.85;
-
     font-weight: 700;
-
 }
 
 .sidebar-nav-item.active .nav-num {
-
     opacity: 1;
-
-    font-weight: 700;
-
+    color: #FFFFFF !important;
 }
 
 .nav-text {
-
     flex-grow: 1;
-
     text-transform: capitalize;
-
     font-weight: 700;
-
     letter-spacing: 0.01em;
+}
 
+.sidebar-nav-item.active .nav-text {
+    color: #FFFFFF !important;
 }
 
 .nav-dot {
-
-    width: 6px;
-
-    height: 6px;
-
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-
     background-color: transparent;
-
-    transition: background-color var(--transition-fast);
-
-}
-
-.sidebar-nav-item.active .nav-dot {
-
-    background-color: currentColor;
-
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 /* Sidebar Footer */
@@ -1041,44 +1092,53 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     color: var(--text-muted);
 }
 
+/* Liquid Glass Mini Button for Admin Link */
 .sidebar-admin-link {
     margin-left: auto;
     display: inline-flex;
     align-items: center;
-    gap: 3px;
-    padding: 2px 7px;
-    font-size: 0.72rem;
+    gap: 4px;
+    padding: 3px 9px;
+    font-size: 0.74rem;
     font-family: var(--font-mono);
-    font-weight: 600;
-    color: var(--color-cyan, #00F2FE);
-    background: rgba(0, 242, 254, 0.08);
-    border: 1px solid rgba(0, 242, 254, 0.28);
-    border-radius: 4px;
+    font-weight: 700;
+    color: #00F2FE !important;
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.16) 0%, rgba(13, 163, 223, 0.08) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.35);
+    border-radius: 8px;
     text-decoration: none;
-    transition: all 0.2s ease;
-    line-height: 1.25;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 8px rgba(0, 242, 254, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.sidebar-admin-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+    border-radius: 8px 8px 100% 100% / 8px 8px 40% 40%;
+    pointer-events: none;
 }
 
 .sidebar-admin-link:hover {
-    background: rgba(0, 242, 254, 0.22);
-    border-color: rgba(0, 242, 254, 0.65);
-    color: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 242, 254, 0.35);
-    transform: translateY(-1px);
+    transform: translateY(-2px) scale(1.05);
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.28) 0%, rgba(13, 163, 223, 0.18) 100%);
+    border-color: #00F2FE;
+    box-shadow: 0 4px 14px rgba(0, 242, 254, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    color: #FFFFFF !important;
 }
 
-[data-theme="light"] .sidebar-admin-link {
-    color: #0284c7;
-    background: rgba(2, 132, 199, 0.08);
-    border-color: rgba(2, 132, 199, 0.28);
+.sidebar-admin-link:active {
+    transform: scale(0.93) translateY(1px);
 }
 
-[data-theme="light"] .sidebar-admin-link:hover {
-    background: rgba(2, 132, 199, 0.18);
-    border-color: rgba(2, 132, 199, 0.55);
-    color: #0369a1;
-    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
-}
 
 .status-indicator-dot {
 

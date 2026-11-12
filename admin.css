@@ -941,71 +941,398 @@
     color: #E11D48 !important;
 }
 
-/* Sidebar Navigation Items in Dark Theme */
+/* ==========================================================================
+   Apple iPhone Liquid Glass Navigation Buttons in Admin Studio
+   ========================================================================== */
+
 .sidebar-nav-item {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    padding: 0.55rem 0.75rem;
-    border-radius: var(--radius-sm, 6px);
+    padding: 0.62rem 0.85rem;
+    border-radius: 12px;
     font-size: 0.92rem;
     font-weight: 700;
     color: var(--text-muted, #94a3b8);
-    transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
-    position: relative;
     text-decoration: none;
     cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.22s ease,
+                background 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
+}
+
+.sidebar-nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.22) 0%, 
+        rgba(255, 255, 255, 0.05) 50%, 
+        transparent 100%);
+    border-radius: 12px 12px 100% 100% / 12px 12px 35% 35%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar-nav-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), inset 0 -1px 1.5px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
 .sidebar-nav-item:hover {
-    background-color: var(--bg-card, rgba(15, 23, 42, 0.6));
-    color: var(--text-main, #f8fafc);
+    transform: translateX(4px) scale(1.02);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: var(--text-main, #F8FAFC);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-nav-item:hover::before,
+.sidebar-nav-item:hover::after {
+    opacity: 1;
 }
 
 .sidebar-nav-item.active {
-    background-color: var(--accent-orange, #F37626) !important;
+    transform: translateX(4px) scale(1.02);
+    border: none !important;
     color: #FFFFFF !important;
-    font-weight: 700 !important;
-    box-shadow: 0 4px 15px rgba(243, 118, 38, 0.45) !important;
-    border-left: 3px solid #FF8C42 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-.sidebar-nav-item.active .nav-num {
-    color: #FFFFFF !important;
-    opacity: 1 !important;
+.sidebar-nav-item.active::before {
+    opacity: 1;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.42) 0%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        transparent 100%);
 }
 
-.sidebar-nav-item.active .nav-text {
-    color: #FFFFFF !important;
+.sidebar-nav-item.active::after {
+    opacity: 1;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.65), inset 0 -1.5px 2px rgba(0, 0, 0, 0.35);
 }
 
-.sidebar-nav-item.active .nav-dot {
+/* Dark Theme Active State: Electric Neon Magenta Liquid Pill */
+[data-theme="dark"] .sidebar-nav-item.active {
+    background: linear-gradient(135deg, #FF2D95 0%, #E01E78 50%, #B80D5A 100%) !important;
+    box-shadow: 0 6px 18px rgba(255, 45, 149, 0.5), 0 2px 4px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .sidebar-nav-item.active .nav-dot {
     background-color: #00F2FE !important;
     box-shadow: 0 0 10px #00F2FE !important;
 }
 
-/* Sidebar Navigation Items in Light Theme */
+/* Light Theme Active State: Rich Cerulean Blue Liquid Pill */
 [data-theme="light"] .sidebar-nav-item {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: inset 0 1px 1px #FFFFFF;
     color: #475569;
 }
 
 [data-theme="light"] .sidebar-nav-item:hover {
-    background-color: #E2E8F0;
-    color: #0F172A;
+    background: rgba(0, 123, 167, 0.08);
+    border-color: rgba(0, 123, 167, 0.25);
+    color: #007BA7;
+    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.12), inset 0 1px 1px #FFFFFF;
 }
 
 [data-theme="light"] .sidebar-nav-item.active {
-    background-color: #007BA7 !important;
-    color: #FFFFFF !important;
-    box-shadow: 0 3px 12px rgba(0, 123, 167, 0.4) !important;
-    border-left: 3px solid #005F83 !important;
-}
-
-[data-theme="light"] .sidebar-nav-item.active .nav-num,
-[data-theme="light"] .sidebar-nav-item.active .nav-text {
-    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #0284C7 0%, #007BA7 55%, #005F83 100%) !important;
+    box-shadow: 0 6px 18px rgba(0, 123, 167, 0.42), 0 2px 4px rgba(0, 0, 0, 0.12) !important;
 }
 
 [data-theme="light"] .sidebar-nav-item.active .nav-dot {
     background-color: #FFD43B !important;
     box-shadow: 0 0 8px #FFD43B !important;
 }
+
+.sidebar-nav-item:active {
+    transform: translateX(4px) scale(0.96) translateY(1px);
+    transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nav-num, .nav-text, .nav-dot {
+    position: relative;
+    z-index: 4;
+}
+
+.nav-num {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    width: 32px;
+    opacity: 0.85;
+    font-weight: 700;
+}
+
+.sidebar-nav-item.active .nav-num {
+    opacity: 1;
+    color: #FFFFFF !important;
+}
+
+.nav-text {
+    flex-grow: 1;
+    text-transform: capitalize;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.sidebar-nav-item.active .nav-text {
+    color: #FFFFFF !important;
+}
+
+.nav-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* ==========================================================================
+   Admin Clean Cards & Headings
+   ========================================================================== */
+
+.admin-panel-card {
+    background-color: var(--bg-card);
+    border: var(--border-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.admin-card-header {
+    padding: 1.15rem 1.4rem;
+    border-bottom: var(--border-card);
+    background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+[data-theme="light"] .admin-card-header {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.admin-card-title {
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.cell-output-card {
+    background-color: transparent;
+    border: none;
+    padding: 1.4rem;
+}
+
+/* ==========================================================================
+   Liquid Glass Kernel Topbar Buttons & Lock
+   ========================================================================== */
+
+.btn-kernel {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn-kernel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, transparent 100%);
+    border-radius: 10px 10px 100% 100% / 10px 10px 40% 40%;
+    pointer-events: none;
+}
+
+.btn-kernel:hover {
+    transform: translateY(-2px) scale(1.04);
+}
+
+.btn-kernel:active {
+    transform: scale(0.93) translateY(1px);
+}
+
+.btn-lock-logout {
+    background: rgba(239, 68, 68, 0.16) !important;
+    color: #EF4444 !important;
+    border-color: rgba(239, 68, 68, 0.38) !important;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+}
+
+.btn-lock-logout:hover {
+    background: rgba(239, 68, 68, 0.28) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45) !important;
+}
+
+/* ==========================================================================
+   Apple iPhone Liquid Glass Modal Buttons (Admin Login Overlay)
+   ========================================================================== */
+
+.login-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.btn-ios-liquid {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.75rem 1.4rem;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.22s ease,
+                background 0.2s ease,
+                filter 0.2s ease;
+}
+
+/* Liquid Top Curved Specular Gloss */
+.btn-ios-liquid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52%;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.42) 0%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        transparent 100%);
+    border-radius: 12px 12px 100% 100% / 12px 12px 35% 35%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Subtle Inner Bevel / Ring Highlight */
+.btn-ios-liquid::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55), inset 0 -1.5px 2px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.btn-ios-liquid span,
+.btn-ios-liquid svg {
+    position: relative;
+    z-index: 4;
+}
+
+/* Primary iPhone Liquid Button (Sign In / Authenticate) */
+.btn-ios-liquid-primary {
+    background: linear-gradient(135deg, #00F2FE 0%, #0DA3DF 55%, #0077B5 100%);
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 6px 18px rgba(13, 163, 223, 0.48), 0 2px 4px rgba(0, 0, 0, 0.25);
+    border: none;
+    flex: 1.2;
+}
+
+.btn-ios-liquid-primary:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 24px rgba(13, 163, 223, 0.65), 0 0 18px rgba(0, 242, 254, 0.45);
+}
+
+.btn-ios-liquid-primary:active {
+    transform: scale(0.93) translateY(1px);
+    box-shadow: 0 2px 6px rgba(13, 163, 223, 0.4);
+}
+
+/* Secondary Frosted Liquid Button (Return to Portfolio) */
+.btn-ios-liquid-secondary {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+    color: var(--text-main) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    flex: 1;
+}
+
+.btn-ios-liquid-secondary:hover {
+    transform: translateY(-3px) scale(1.03);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+}
+
+.btn-ios-liquid-secondary:active {
+    transform: scale(0.93) translateY(1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .btn-ios-liquid-secondary {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+    border-color: #CBD5E1;
+    color: #0F172A !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 1px #FFFFFF;
+}
+
+[data-theme="light"] .btn-ios-liquid-secondary:hover {
+    background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 100%);
+    border-color: #94A3B8;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12), inset 0 1px 1px #FFFFFF;
+}
+
