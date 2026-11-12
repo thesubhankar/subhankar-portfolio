@@ -254,7 +254,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 'pytorch': 'pytorch', 'torch': 'pytorch', 'python': 'python', 'tensorflow': 'tensorflow', 'tf': 'tensorflow',
                 'keras': 'keras', 'pandas': 'pandas', 'numpy': 'numpy', 'scikit': 'scikit-learn', 'scikitlearn': 'scikit-learn', 'sklearn': 'scikit-learn',
                 'powerbi': 'powerbi', 'tableau': 'tableau', 'matplotlib': 'matplotlib', 'seaborn': 'seaborn',
-                'sql': 'sql', 'mysql': 'mysql', 'postgres': 'postgresql', 'postgresql': 'postgresql', 'sqlite': 'sqlite',
+                'sql': 'sql', 'mysql': 'mysql', 'postgres': 'postgresql', 'postgresql': 'postgresql', 'sqlite': 'sqlite', 'tkinter': 'tkinter', 'tk': 'tkinter', 'scipy': 'scipy', 'tmdb': 'tmdb', 'tmdbapi': 'tmdb', 'oop': 'oop', 'datastruct': 'datastruct', 'datastructures': 'datastruct', 'reporting': 'reporting', 'automation': 'automation', 'cosinesim': 'cosinesim', 'cosinesimilarity': 'cosinesim', 'tfidf': 'tfidf', 'telematics': 'telematics', 'forecasting': 'forecasting',
                 'mongodb': 'mongodb', 'docker': 'docker', 'fastapi': 'fastapi', 'flask': 'flask', 'streamlit': 'streamlit',
                 'git': 'git', 'github': 'github', 'vscode': 'vscode', 'jupyter': 'jupyter', 'excel': 'excel',
                 'anaconda': 'anaconda', 'opencv': 'opencv', 'langchain': 'langchain', 'huggingface': 'huggingface',

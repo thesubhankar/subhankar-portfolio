@@ -1134,7 +1134,20 @@ const SKILL_SVGS = {
     'cpp': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#00599C"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm-2 13.5a4 4 0 1 1 0-7c.7 0 1.4.2 2 .5l-.8 1.4c-.4-.3-.8-.4-1.2-.4a2.5 2.5 0 1 0 0 5c.4 0 .8-.1 1.2-.4l.8 1.4c-.6.3-1.3.5-2 .5zm5-3.5h-1v-1h-1v1h-1v1h1v1h1v-1h1v-1zm4 0h-1v-1h-1v1h-1v1h1v1h1v-1h1v-1z"/></svg>',
     'java': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#EA2D2E"><path d="M8 18c0 1 2 2 4 2s4-1 4-2-2-2-4-2-4 1-4 2zm-2-4c0 1.8 3 3 6 3s6-1.2 6-3h-2c0 .8-2 1.5-4 1.5s-4-.7-4-1.5H6zm7-9c0 1.5-1 2.5-2 3.5 1-1.5 2-2.5 2-3.5zm-2 2c-.5 1-1.5 2-2 3 1-1 2-2 2-3z"/></svg>',
     'linux': '<svg viewBox="0 0 24 24" width="22" height="22" fill="#FCC624"><path d="M12 2C9.8 2 8 3.8 8 6v4c-2 1-3 3-3 6 0 3 2 6 7 6s7-3 7-6c0-3-1-5-3-6V6c0-2.2-1.8-4-4-4zm-1.5 6c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm3 0c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm-1.5 2.5c1 0 2 .5 2 1.5h-4c0-1 1-1.5 2-1.5z"/></svg>',
-    'bash': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect width="24" height="24" rx="4" fill="#293134"/><path d="M5 8l4 4-4 4M12 16h6" stroke="#4EAA25" stroke-width="2.2" stroke-linecap="round"/></svg>'
+    'bash': '<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect width="24" height="24" rx="4" fill="#293134"/><path d="M5 8l4 4-4 4M12 16h6" stroke="#4EAA25" stroke-width="2.2" stroke-linecap="round"/></svg>',
+    'sqlite': '<svg viewBox="0 0 128 128" width="24" height="24"><defs><linearGradient id="sq-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#95d7f4" offset="0%"/><stop stop-color="#0f7fcc" offset="100%"/></linearGradient></defs><path d="M115.95 2.78c-5.5-4.9-12.16-2.93-18.73 2.9a44.3 44.3 0 0 0-2.91 2.86c-11.25 11.93-21.68 34.02-24.93 50.9 1.26 2.56 2.25 5.83 2.89 8.33.17.64.32 1.24.44 1.75.29 1.2.44 2 .44 2s-.1-.39-.52-1.59c-.08-.23-.17-.48-.27-.77-.04-.13-.1-.27-.17-.43-.73-1.7-2.77-5.3-3.66-6.87-.76 2.25-1.44 4.36-2 6.27 2.58 4.71 4.15 12.8 4.15 12.8s-.14-.53-.78-2.35c-.58-1.62-3.44-6.64-4.12-7.81-1.16 4.28-1.62 7.17-1.2 7.88.8 1.36 1.57 3.72 2.25 6.32 1.52 5.87 2.58 13.01 2.58 13.01s.03.47.09 1.2a118.6 118.6 0 0 0 .3 14.65c.5 6.11 1.45 11.36 2.66 14.17l.83-.45c-1.78-5.53-2.5-12.8-2.19-21.16.48-12.79 3.42-28.21 8.86-44.29C91.6 40.57 104.35 21.1 116 11.8c-10.63 9.6-25.02 40.69-29.33 52.2-4.82 12.89-8.24 24.98-10.3 36.57 3.55-10.86 15.05-15.53 15.05-15.53s5.63-6.96 12.22-16.89c-3.95.9-10.43 2.44-12.6 3.35-3.2 1.35-4.06 1.8-4.06 1.8s10.37-6.31 19.27-9.17c12.23-19.27 25.56-46.65 12.14-58.62z" fill="#003956"/><path d="M69.5 99.18c-.06-.73-.1-1.2-.1-1.2S67.2 83.09 64.57 78.64c-.41-.7.04-3.59 1.2-7.88.69 1.17 3.55 6.19 4.12 7.81.65 1.82.78 2.35.78 2.35s-1.57-8.08-4.14-12.8a162.3 162.3 0 0 1 2-6.26c.98 1.7 3.32 5.86 3.83 7.3.1.29.19.54.27.77.03-.14.05-.27.08-.41-.6-2.5-1.75-6.86-3.34-10.08 3.52-18.33 15.53-42.83 27.84-53.76H16.9C11.51 6.68 7.1 11.09 7.1 16.47v88.57c0 5.38 4.41 9.79 9.8 9.79h52.9a118.66 118.66 0 0 1-.3-14.65z" fill="url(#sq-g)"/></svg>',
+    'tkinter': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#0F172A"/><rect x="10" y="10" width="108" height="108" rx="16" fill="#1E293B" stroke="#00F2FE" stroke-width="2.5"/><rect x="10" y="10" width="108" height="24" rx="16" fill="#334155"/><rect x="10" y="24" width="108" height="10" fill="#334155"/><circle cx="24" cy="22" r="4.5" fill="#EF4444"/><circle cx="36" cy="22" r="4.5" fill="#F59E0B"/><circle cx="48" cy="22" r="4.5" fill="#10B981"/><path d="M38 52h52v9H69v47H57V61H38V52z" fill="#00F2FE"/><path d="M78 70l20-18h14L94 72l20 28H99L86 78v22H76V52h10v18z" fill="#FFD43B"/></svg>',
+    'scipy': '<svg viewBox="0 0 128 128" width="24" height="24"><circle cx="64" cy="64" r="60" fill="#005493"/><circle cx="64" cy="64" r="54" fill="#0D3559"/><path d="M26 64c8-26 24-26 38 0s30 26 38 0" stroke="#00A3E0" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M26 64c8 26 24 26 38 0s30-26 38 0" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round" fill="none" opacity="0.95"/><circle cx="26" cy="64" r="7" fill="#00F2FE"/><circle cx="64" cy="64" r="7" fill="#FFFFFF"/><circle cx="102" cy="64" r="7" fill="#00F2FE"/></svg>',
+    'tmdb': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#032541"/><defs><linearGradient id="tmdb-g" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#90CEA1"/><stop offset="50%" stop-color="#01B4E4"/><stop offset="100%" stop-color="#0D253F"/></linearGradient></defs><path d="M14 46h100c4.4 0 8 3.6 8 8v20c0 4.4-3.6 8-8 8H14c-4.4 0-8-3.6-8-8V54c0-4.4 3.6-8 8-8z" fill="url(#tmdb-g)"/><path d="M24 55h14v4h-5v14h-4V59h-5v-4zm18 0h4.5l3.5 11 3.5-11H48v18h-3.5v-12.5l-3.5 11h-2l-3.5-11V73H32V55h10zm17 0h7c3 0 5 1.5 5 4.5 0 2-1 3.5-2.5 4 2 .5 3.5 2 3.5 4.5 0 3-2 5-5.5 5h-7.5V55zm4 3.5v3.5h3c1.2 0 2-.6 2-1.8 0-1.1-.8-1.7-2-1.7h-3zm0 7v4h3.5c1.2 0 2.2-.6 2.2-2 0-1.3-1-2-2.2-2H63zm15-10.5h7c5.5 0 9.5 3.5 9.5 9s-4 9-9.5 9h-7V55zm4 3.5v11h3c3.5 0 5.5-2 5.5-5.5s-2-5.5-5.5-5.5h-3z" fill="#032541"/></svg>',
+    'tmdbapi': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#032541"/><defs><linearGradient id="tmdb-g2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#90CEA1"/><stop offset="50%" stop-color="#01B4E4"/><stop offset="100%" stop-color="#0D253F"/></linearGradient></defs><path d="M14 46h100c4.4 0 8 3.6 8 8v20c0 4.4-3.6 8-8 8H14c-4.4 0-8-3.6-8-8V54c0-4.4 3.6-8 8-8z" fill="url(#tmdb-g2)"/><path d="M24 55h14v4h-5v14h-4V59h-5v-4zm18 0h4.5l3.5 11 3.5-11H48v18h-3.5v-12.5l-3.5 11h-2l-3.5-11V73H32V55h10zm17 0h7c3 0 5 1.5 5 4.5 0 2-1 3.5-2.5 4 2 .5 3.5 2 3.5 4.5 0 3-2 5-5.5 5h-7.5V55zm4 3.5v3.5h3c1.2 0 2-.6 2-1.8 0-1.1-.8-1.7-2-1.7h-3zm0 7v4h3.5c1.2 0 2.2-.6 2.2-2 0-1.3-1-2-2.2-2H63zm15-10.5h7c5.5 0 9.5 3.5 9.5 9s-4 9-9.5 9h-7V55zm4 3.5v11h3c3.5 0 5.5-2 5.5-5.5s-2-5.5-5.5-5.5h-3z" fill="#032541"/></svg>',
+    'oop': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#0B132B"/><path d="M64 18l44 24-44 24-44-24 44-24z" fill="#00F2FE" opacity="0.9"/><path d="M20 42v44l44 24V66L20 42z" fill="#0284C7"/><path d="M108 42v44l-44 24V66l44-24z" fill="#0369A1"/><circle cx="64" cy="42" r="6" fill="#FFFFFF"/><circle cx="42" cy="78" r="5" fill="#38BDF8"/><circle cx="86" cy="78" r="5" fill="#38BDF8"/><path d="M64 48v22M48 74l16-8 16 8" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    'datastruct': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#0F172A"/><line x1="64" y1="36" x2="38" y2="68" stroke="#00F2FE" stroke-width="3"/><line x1="64" y1="36" x2="90" y2="68" stroke="#00F2FE" stroke-width="3"/><line x1="38" y1="68" x2="24" y2="98" stroke="#38BDF8" stroke-width="2.5"/><line x1="38" y1="68" x2="52" y2="98" stroke="#38BDF8" stroke-width="2.5"/><line x1="90" y1="68" x2="76" y2="98" stroke="#38BDF8" stroke-width="2.5"/><line x1="90" y1="68" x2="104" y2="98" stroke="#38BDF8" stroke-width="2.5"/><circle cx="64" cy="34" r="14" fill="#00F2FE"/><circle cx="38" cy="68" r="12" fill="#38BDF8"/><circle cx="90" cy="68" r="12" fill="#38BDF8"/><circle cx="24" cy="98" r="9" fill="#818CF8"/><circle cx="52" cy="98" r="9" fill="#818CF8"/><circle cx="76" cy="98" r="9" fill="#818CF8"/><circle cx="104" cy="98" r="9" fill="#818CF8"/></svg>',
+    'reporting': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#064E3B"/><path d="M32 20h44l26 26v62a6 6 0 0 1-6 6H32a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6z" fill="#047857"/><path d="M76 20v26h26" fill="#10B981" opacity="0.6"/><rect x="40" y="74" width="8" height="24" rx="2" fill="#34D399"/><rect x="54" y="60" width="8" height="38" rx="2" fill="#6EE7B7"/><rect x="68" y="50" width="8" height="48" rx="2" fill="#A7F3D0"/><rect x="82" y="68" width="8" height="30" rx="2" fill="#34D399"/><path d="M38 52l18-12 18 8 20-14" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none"/></svg>',
+    'automation': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#312E81"/><circle cx="64" cy="64" r="28" fill="none" stroke="#A855F7" stroke-width="6.5" stroke-dasharray="14 6"/><circle cx="64" cy="64" r="16" fill="#6366F1"/><circle cx="64" cy="64" r="7" fill="#FFFFFF"/><path d="M26 64h12M90 64h12M64 26v12M64 90v12M37 37l9 9M82 82l9 9M91 37l-9 9M37 91l9-9" stroke="#C084FC" stroke-width="3.5" stroke-linecap="round"/><polygon points="106,64 114,60 114,68" fill="#C084FC"/></svg>',
+    'cosinesim': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#0C1B33"/><line x1="26" y1="102" x2="104" y2="102" stroke="#475569" stroke-width="3"/><line x1="26" y1="102" x2="26" y2="24" stroke="#475569" stroke-width="3"/><line x1="26" y1="102" x2="98" y2="40" stroke="#00F2FE" stroke-width="5" stroke-linecap="round"/><polygon points="98,40 88,44 94,52" fill="#00F2FE"/><line x1="26" y1="102" x2="98" y2="82" stroke="#F59E0B" stroke-width="5" stroke-linecap="round"/><polygon points="98,82 88,77 90,88" fill="#F59E0B"/><path d="M56 76a36 36 0 0 1 12 18" stroke="#38BDF8" stroke-width="2.5" fill="none" stroke-dasharray="3 2"/><text x="66" y="80" fill="#38BDF8" font-size="16" font-family="sans-serif" font-weight="bold">θ</text></svg>',
+    'tfidf': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#18181B"/><path d="M28 22h46l24 24v58a6 6 0 0 1-6 6H28a6 6 0 0 1-6-6V28a6 6 0 0 1 6-6z" fill="#27272A"/><path d="M74 22v24h24" fill="#3F3F46"/><rect x="36" y="48" width="48" height="6" rx="3" fill="#EC4899"/><rect x="36" y="60" width="32" height="6" rx="3" fill="#A855F7"/><rect x="36" y="72" width="56" height="6" rx="3" fill="#06B6D4"/><rect x="36" y="84" width="22" height="6" rx="3" fill="#10B981"/><text x="36" y="104" fill="#F43F5E" font-size="11" font-family="monospace" font-weight="bold">W(t,d)</text></svg>',
+    'telematics': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#0B1E36"/><circle cx="64" cy="64" r="46" fill="none" stroke="#00F2FE" stroke-width="2" stroke-opacity="0.3" stroke-dasharray="6 4"/><circle cx="64" cy="64" r="32" fill="none" stroke="#00F2FE" stroke-width="2.5" stroke-opacity="0.6"/><path d="M36 56h32v28H36z" fill="#0284C7"/><path d="M68 64h16l8 10v10H68V64z" fill="#38BDF8"/><circle cx="48" cy="86" r="6" fill="#FFFFFF"/><circle cx="82" cy="86" r="6" fill="#FFFFFF"/><line x1="52" y1="56" x2="52" y2="40" stroke="#00F2FE" stroke-width="3"/><circle cx="52" cy="38" r="4" fill="#00F2FE"/><path d="M44 32a12 12 0 0 1 16 0" stroke="#00F2FE" stroke-width="2.5" fill="none"/></svg>',
+    'forecasting': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#111827"/><polygon points="70,60 108,30 108,90" fill="#3B82F6" fill-opacity="0.25"/><path d="M20 86l22-18 16 12 14-22" stroke="#60A5FA" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M72 58l18-12 18 6" stroke="#00F2FE" stroke-width="4" stroke-linecap="round" stroke-dasharray="4 3" fill="none"/><circle cx="72" cy="58" r="5" fill="#00F2FE"/><circle cx="108" cy="52" r="5" fill="#38BDF8"/></svg>'
 };
 
 function initProjectNav() {
@@ -1223,21 +1236,21 @@ function initProjectNav() {
 
                 { name: 'Python', type: 'python' },
 
-                { name: 'SQLite', type: 'postgres' },
+                { name: 'SQLite', type: 'sqlite' },
 
-                { name: 'Tkinter', type: 'flask' },
+                { name: 'Tkinter', type: 'tkinter' },
 
-                { name: 'OOP', type: 'python' },
+                { name: 'OOP', type: 'oop' },
 
                 { name: 'Pandas', type: 'pandas' },
 
                 { name: 'Matplotlib', type: 'matplotlib' },
 
-                { name: 'Data Struct', type: 'numpy' },
+                { name: 'Data Struct', type: 'datastruct' },
 
-                { name: 'Reporting', type: 'seaborn' },
+                { name: 'Reporting', type: 'reporting' },
 
-                { name: 'Automation', type: 'scikit' },
+                { name: 'Automation', type: 'automation' },
 
                 { name: 'GitHub', type: 'github' }
 
@@ -1281,15 +1294,15 @@ function initProjectNav() {
 
                 { name: 'NumPy', type: 'numpy' },
 
-                { name: 'NLP', type: 'tensorflow' },
+                { name: 'NLP', type: 'nlp' },
 
-                { name: 'Cosine Sim', type: 'seaborn' },
+                { name: 'Cosine Sim', type: 'cosinesim' },
 
-                { name: 'TF-IDF', type: 'matplotlib' },
+                { name: 'TF-IDF', type: 'tfidf' },
 
                 { name: 'Streamlit', type: 'streamlit' },
 
-                { name: 'TMDb API', type: 'postgres' },
+                { name: 'TMDb API', type: 'tmdb' },
 
                 { name: 'GitHub', type: 'github' }
 
@@ -1333,11 +1346,11 @@ function initProjectNav() {
 
                 { name: 'SQL', type: 'sql' },
 
-                { name: 'Optimization', type: 'tensorflow' },
+                { name: 'Optimization', type: 'optimization' },
 
-                { name: 'Telematics', type: 'flask' },
+                { name: 'Telematics', type: 'telematics' },
 
-                { name: 'Time Series', type: 'numpy' },
+                { name: 'Time Series', type: 'timeseries' },
 
                 { name: 'Seaborn', type: 'seaborn' },
 
@@ -1383,11 +1396,11 @@ function initProjectNav() {
 
                 { name: 'NumPy', type: 'numpy' },
 
-                { name: 'SciPy', type: 'scikit' },
+                { name: 'SciPy', type: 'scipy' },
 
-                { name: 'Forecasting', type: 'tensorflow' },
+                { name: 'Forecasting', type: 'forecasting' },
 
-                { name: 'Optimization', type: 'flask' },
+                { name: 'Optimization', type: 'optimization' },
 
                 { name: 'SQL', type: 'sql' },
 
