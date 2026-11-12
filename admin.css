@@ -1539,3 +1539,33 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12), inset 0 1px 1px #FFFFFF;
 }
 
+/* =========================================================================
+   Inline Skill Category Card Editing
+   ========================================================================= */
+.admin-item-card.admin-card-editing {
+    grid-column: 1 / -1;
+    border-color: var(--color-cyan, #00F2FE) !important;
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.22), 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 16px rgba(0, 242, 254, 0.04) !important;
+    background: rgba(10, 18, 32, 0.98) !important;
+    z-index: 5;
+    animation: fadeInSlideDown 0.25s ease-out;
+}
+
+[data-theme="light"] .admin-item-card.admin-card-editing {
+    background-color: #FFFFFF !important;
+    border-color: #007BA7 !important;
+    box-shadow: 0 10px 30px rgba(0, 123, 167, 0.2), 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 0 12px rgba(0, 123, 167, 0.04) !important;
+}
+
+@keyframes fadeInSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+

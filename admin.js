@@ -246,6 +246,24 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
         }
 
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeJs(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '\\"');
+        }
+
         // Helper to match skill logos
         function getSkillLogoHtml(skillName, customSvg) {
             if (customSvg) return customSvg;
@@ -817,8 +835,110 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         }
 
         // =========================================================================
-        // 3. Skills & Logos Management (with Category Edit & 60+ Official SVGs)
+        // 3. Skills & Logos Management (with In-Place Category Card Edit & Live SVGs)
         // =========================================================================
+        let editingSkillCatIdx = null;
+
+        function openSkillCategoryEdit(catIdx) {
+            editingSkillCatIdx = catIdx;
+            renderSkills();
+            setTimeout(() => {
+                const input = document.getElementById(`editCatName_${catIdx}`);
+                if (input) {
+                    input.focus();
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 60);
+        }
+
+        function cancelSkillCategoryEdit() {
+            editingSkillCatIdx = null;
+            renderSkills();
+        }
+
+        function removeSkillFromEdit(catIdx, skillNameToRemove) {
+            const textarea = document.getElementById(`editCatSkills_${catIdx}`);
+            if (!textarea) return;
+            const items = textarea.value.split(',').map(s => s.trim()).filter(Boolean);
+            const filtered = items.filter(s => s.toLowerCase() !== (skillNameToRemove || '').toLowerCase());
+            textarea.value = filtered.join(', ');
+            updateEditSkillsPreview(catIdx);
+        }
+
+        function updateEditSkillsPreview(catIdx) {
+            const textarea = document.getElementById(`editCatSkills_${catIdx}`);
+            const previewContainer = document.getElementById(`editCatPreview_${catIdx}`);
+            const countBadge = document.getElementById(`editCatCount_${catIdx}`);
+            if (!textarea || !previewContainer) return;
+
+            const raw = textarea.value;
+            const items = raw.split(',').map(s => s.trim()).filter(Boolean);
+            if (countBadge) {
+                countBadge.textContent = `${items.length} skill${items.length === 1 ? '' : 's'}`;
+            }
+
+            if (items.length === 0) {
+                previewContainer.innerHTML = '<span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); font-style: italic;">No skills typed yet. Separate skills with commas (e.g. Python, SQL, Docker).</span>';
+                return;
+            }
+
+            let html = '';
+            items.forEach(name => {
+                const svg = getSkillLogoHtml(name);
+                html += `
+                    <span class="skill-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; font-size: 0.72rem; font-family: var(--font-mono); background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 6px; margin: 2px;">
+                        <span style="display: flex; align-items: center; width: 16px; height: 16px;">${svg}</span>
+                        <span class="skill-pill-text" style="color: var(--text-main); font-weight: 500;">${escapeHtml(name)}</span>
+                        <button type="button" onclick="removeSkillFromEdit(${catIdx}, '${escapeJs(name)}')" class="skill-delete-tag-btn" title="Remove ${escapeHtml(name)} from category" style="margin-left: 4px; cursor: pointer;">
+                            &times;
+                        </button>
+                    </span>
+                `;
+            });
+            previewContainer.innerHTML = html;
+        }
+
+        async function saveSkillCategoryEdit(catIdx, oldName) {
+            const nameInput = document.getElementById(`editCatName_${catIdx}`);
+            const badgeInput = document.getElementById(`editCatBadge_${catIdx}`);
+            const skillsInput = document.getElementById(`editCatSkills_${catIdx}`);
+
+            const newName = nameInput ? nameInput.value.trim() : oldName;
+            const badge = badgeInput ? badgeInput.value.trim() : '85%';
+            const skillsText = skillsInput ? skillsInput.value : '';
+            const skillsList = skillsText.split(',').map(s => s.trim()).filter(Boolean);
+
+            if (!newName) {
+                showNotify('Category name cannot be empty', false);
+                if (nameInput) nameInput.focus();
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/admin/skill-category', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        oldCategory: oldName,
+                        newCategory: newName,
+                        badge: badge,
+                        skills: skillsList
+                    })
+                });
+                const d = await res.json();
+                if (d.success) {
+                    showNotify(`Category "${newName}" updated successfully!`);
+                    editingSkillCatIdx = null;
+                    await loadData();
+                } else {
+                    showNotify(d.message || 'Error updating category', false);
+                }
+            } catch (err) {
+                console.error('Error updating skill category:', err);
+                showNotify('Failed to update category', false);
+            }
+        }
+
         function renderSkills() {
             const list = document.getElementById('skillsCategoriesList');
             if (!list) return;
@@ -830,7 +950,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             }
 
             const skills = PORTFOLIO_DATA.skills || [];
-            skills.forEach(cat => {
+            skills.forEach((cat, catIdx) => {
                 const catName = cat.category || 'Custom Skills';
                 
                 // Add to datalist
@@ -841,74 +961,150 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 }
 
                 const box = document.createElement('div');
-                box.className = 'admin-item-card';
 
-                let pillsHtml = '';
-                (cat.skills || []).forEach(s => {
-                    const svgContent = s.svg || getSkillLogoHtml(s.name, AVAILABLE_LOGOS[s.key]);
-                    pillsHtml += `
-                        <span class="skill-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; font-size: 0.72rem; font-family: var(--font-mono); margin: 3px;">
-                            <span style="display: flex; align-items: center; width: 16px; height: 16px;">${svgContent}</span>
-                            <span class="skill-pill-text">${s.name}</span>
-                            <button onclick="deleteSkill('${catName}', '${s.name}')" class="skill-delete-tag-btn" title="Remove Skill">
-                                &times;
+                if (editingSkillCatIdx === catIdx) {
+                    // Inline Edit Mode
+                    box.className = 'admin-item-card admin-card-editing';
+                    const skillsStr = (cat.skills || []).map(s => typeof s === 'string' ? s : (s.name || '')).filter(Boolean).join(', ');
+                    const skillsCount = (cat.skills || []).length;
+
+                    box.innerHTML = `
+                        <div class="admin-card-header" style="padding-bottom: 0.6rem; border-bottom: 1px solid rgba(0, 242, 254, 0.3);">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: rgba(0, 242, 254, 0.15); color: #00F2FE;">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                </span>
+                                <h4 class="admin-card-title" style="color: var(--color-cyan, #00F2FE); font-size: 0.95rem; font-weight: 700; margin: 0;">
+                                    Editing Category: <span style="color: var(--text-main);">${escapeHtml(catName)}</span>
+                                </h4>
+                            </div>
+                            <button type="button" onclick="cancelSkillCategoryEdit()" class="btn-action-icon" title="Cancel Editing" style="color: var(--text-muted); width: 28px; height: 28px;">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
                             </button>
-                        </span>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; padding-top: 0.75rem;">
+                            <div class="admin-grid-2col" style="gap: 0.75rem;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 4px; display: block;">
+                                        Category Name *
+                                    </label>
+                                    <input type="text" id="editCatName_${catIdx}" class="form-input" value="${escapeHtml(catName)}" placeholder="e.g. Core Data Science & ML" style="padding: 0.5rem 0.7rem; font-size: 0.85rem;" required />
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 4px; display: block;">
+                                        Mastery Badge
+                                    </label>
+                                    <input type="text" id="editCatBadge_${catIdx}" class="form-input" value="${escapeHtml(cat.badge || '85%')}" placeholder="e.g. 95%, PRO, ADVANCED" style="padding: 0.5rem 0.7rem; font-size: 0.85rem;" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <label class="form-label" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 0;">
+                                        Skills in this Category (Comma Separated)
+                                    </label>
+                                    <span id="editCatCount_${catIdx}" class="tech-chip" style="font-size: 10px; color: var(--color-cyan, #00F2FE);">
+                                        ${skillsCount} skill${skillsCount === 1 ? '' : 's'}
+                                    </span>
+                                </div>
+                                <textarea id="editCatSkills_${catIdx}" class="form-input" rows="3" style="resize: vertical; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.4; padding: 0.5rem 0.7rem;" placeholder="e.g. Python, Pandas, NumPy, Scikit-Learn, Docker" oninput="updateEditSkillsPreview(${catIdx})">${escapeHtml(skillsStr)}</textarea>
+                                <span style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 3px; display: block;">
+                                    💡 Tip: Add, remove or edit skills separated by commas. Official vector SVGs auto-match live below!
+                                </span>
+                            </div>
+
+                            <!-- Live Preview of Vector SVGs -->
+                            <div style="padding: 0.65rem; border-radius: 8px; background: rgba(0, 242, 254, 0.04); border: 1px dashed rgba(0, 242, 254, 0.25);">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                    <span style="font-size: 0.72rem; color: var(--color-cyan, #00F2FE); font-family: var(--font-mono); font-weight: 600;">
+                                        👁️ Live Vector Logo Preview:
+                                    </span>
+                                    <span style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                        Updates as you type • Click &times; to remove
+                                    </span>
+                                </div>
+                                <div id="editCatPreview_${catIdx}" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center; margin-top: 0.25rem;">
+                                <button type="button" onclick="cancelSkillCategoryEdit()" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.8rem;">
+                                    <span>✕ Cancel</span>
+                                </button>
+                                <button type="button" onclick="saveSkillCategoryEdit(${catIdx}, '${escapeJs(catName)}')" class="btn btn-primary" style="padding: 0.45rem 1.1rem; font-size: 0.8rem;">
+                                    <span>💾 Save Category Changes</span>
+                                </button>
+                            </div>
+                        </div>
                     `;
-                });
 
-                box.innerHTML = `
-                    <div class="admin-card-header" style="padding-bottom: 0.5rem; border-bottom: var(--border-card);">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <h4 class="admin-card-title">${catName}</h4>
-                            <span class="tech-chip" style="color: var(--color-cyan, #00F2FE); font-size: 10px;">${cat.badge || 'PRO'}</span>
+                    list.appendChild(box);
+                    // Populate preview immediately
+                    updateEditSkillsPreview(catIdx);
+
+                } else {
+                    // Normal Card View
+                    box.className = 'admin-item-card';
+
+                    let pillsHtml = '';
+                    (cat.skills || []).forEach(s => {
+                        const svgContent = s.svg || getSkillLogoHtml(s.name, AVAILABLE_LOGOS[s.key]);
+                        pillsHtml += `
+                            <span class="skill-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; font-size: 0.72rem; font-family: var(--font-mono); margin: 3px;">
+                                <span style="display: flex; align-items: center; width: 16px; height: 16px;">${svgContent}</span>
+                                <span class="skill-pill-text">${escapeHtml(s.name)}</span>
+                                <button onclick="deleteSkill('${escapeJs(catName)}', '${escapeJs(s.name)}')" class="skill-delete-tag-btn" title="Remove Skill">
+                                    &times;
+                                </button>
+                            </span>
+                        `;
+                    });
+
+                    box.innerHTML = `
+                        <div class="admin-card-header" style="padding-bottom: 0.5rem; border-bottom: var(--border-card);">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <h4 class="admin-card-title">${escapeHtml(catName)}</h4>
+                                <span class="tech-chip" style="color: var(--color-cyan, #00F2FE); font-size: 10px;">${escapeHtml(cat.badge || 'PRO')}</span>
+                            </div>
+                            <div style="display: flex; gap: 6px; align-items: center;">
+                                <button type="button" onclick="openSkillCategoryEdit(${catIdx})" class="btn-action-icon btn-edit-cyber" title="Edit Category" aria-label="Edit Category">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" onclick="deleteSkillCategory('${escapeJs(catName)}')" class="btn-action-icon btn-delete-cyber" title="Delete Category" aria-label="Delete Category">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <button type="button" onclick="editSkillCategory('${catName}', '${cat.badge || '85%'}')" class="btn-action-icon btn-edit-cyber" title="Edit Category" aria-label="Edit Category">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                            </button>
-                            <button type="button" onclick="deleteSkillCategory('${catName}')" class="btn-action-icon btn-delete-cyber" title="Delete Category" aria-label="Delete Category">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                                </svg>
-                            </button>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px; padding-top: 0.5rem;">
+                            ${pillsHtml || '<span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">No skills added.</span>'}
                         </div>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 4px; padding-top: 0.5rem;">
-                        ${pillsHtml || '<span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">No skills added.</span>'}
-                    </div>
-                `;
-                list.appendChild(box);
+                    `;
+                    list.appendChild(box);
+                }
             });
         }
 
         async function editSkillCategory(oldName, oldBadge) {
-            const newName = prompt('Enter new category name:', oldName);
-            if (newName === null) return;
-            const newBadge = prompt('Enter category mastery badge (e.g. 90%, PRO, ADVANCED):', oldBadge || '85%');
-            if (newBadge === null) return;
-
-            try {
-                const res = await fetch('/api/admin/skill-category', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ oldCategory: oldName, newCategory: newName.trim(), badge: newBadge.trim() })
-                });
-                const d = await res.json();
-                if (d.success) {
-                    showNotify('Category updated successfully');
-                    loadData();
-                } else {
-                    showNotify(d.message || 'Error updating category', false);
-                }
-            } catch (err) {
-                showNotify('Failed to update category', false);
+            // Backward-compatibility wrapper for any direct calls
+            const catIdx = (PORTFOLIO_DATA.skills || []).findIndex(c => (c.category || '').toLowerCase() === (oldName || '').toLowerCase());
+            if (catIdx !== -1) {
+                openSkillCategoryEdit(catIdx);
             }
         }
 
@@ -923,6 +1119,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const d = await res.json();
                 if (d.success) {
                     showNotify(`Category "${catName}" removed`);
+                    editingSkillCatIdx = null;
                     loadData();
                 } else {
                     showNotify(d.message || 'Error deleting category', false);

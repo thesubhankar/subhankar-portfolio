@@ -755,15 +755,57 @@ def update_skill_category():
         if badge:
             found["badge"] = badge
     else:
-        new_entry = {
+        found = {
             "category": new_cat or old_cat,
             "badge": badge or "85%",
             "skills": []
         }
-        cats.append(new_entry)
+        cats.append(found)
+
+    # Process skills if provided in payload
+    if "skills" in req:
+        raw_skills = req.get("skills")
+        parsed_names = []
+        if isinstance(raw_skills, str):
+            parsed_names = [s.strip() for s in raw_skills.split(",") if s.strip()]
+        elif isinstance(raw_skills, list):
+            for item in raw_skills:
+                if isinstance(item, dict):
+                    name = item.get("name", "").strip()
+                elif isinstance(item, str):
+                    name = item.strip()
+                else:
+                    name = ""
+                if name:
+                    parsed_names.append(name)
+
+        existing_skills_map = {
+            s.get("name", "").lower(): s
+            for s in found.get("skills", [])
+            if isinstance(s, dict) and s.get("name")
+        }
+
+        updated_skills = []
+        for name in parsed_names:
+            lower = name.lower()
+            if lower in existing_skills_map and existing_skills_map[lower].get("svg"):
+                sk = existing_skills_map[lower].copy()
+                sk["name"] = name
+                if not sk.get("key"):
+                    sk["key"] = match_skill_key(name)
+                updated_skills.append(sk)
+            else:
+                key = match_skill_key(name)
+                updated_skills.append({
+                    "name": name,
+                    "key": key,
+                    "svg": get_skill_svg(name, key)
+                })
+
+        found["skills"] = updated_skills
 
     save_data(data)
-    return jsonify({"success": True, "message": "Skill category updated successfully"})
+    return jsonify({"success": True, "message": "Skill category updated successfully", "category": found})
 
 @app.route("/api/admin/skill-category", methods=["DELETE"])
 def delete_skill_category():
