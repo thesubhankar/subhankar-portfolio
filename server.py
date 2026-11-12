@@ -327,8 +327,17 @@ def delete_upload_file(rel_path):
                 print(f"Error removing upload file {rel_path}:", e)
 
 # =========================================================================
-# Static Site Routes
+# Static Site Routes & No-Cache Headers for Fast UI Updates
 # =========================================================================
+@app.after_request
+def add_no_cache_headers(response):
+    ctype = response.headers.get("Content-Type", "")
+    if any(t in ctype for t in ["text/html", "text/css", "application/javascript"]):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
 @app.route("/")
 @app.route("/index.html")
 def index():

@@ -7,60 +7,91 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         // --- Theme Engine Initialization (Matches script.js) ---
         function initTheme() {
-    const desktopToggle = document.getElementById('desktopThemeToggle');
-    const mobileToggle = document.getElementById('mobileThemeToggle');
-    const themeLabel = document.getElementById('themeLabel');
+            const desktopToggle = document.getElementById('desktopThemeToggle');
+            const mobileToggle = document.getElementById('mobileThemeToggle');
+            const themeLabel = document.getElementById('themeLabel');
+            const themeContainers = document.querySelectorAll('.theme-switch-container');
 
-    function getTimeBasedTheme() {
-        const hour = new Date().getHours();
-        return (hour >= 6 && hour < 18) ? 'light' : 'dark';
-    }
+            function getTimeBasedTheme() {
+                const hour = new Date().getHours();
+                return (hour >= 6 && hour < 18) ? 'light' : 'dark';
+            }
 
-    const isManualOverride = sessionStorage.getItem('sg_portfolio_theme_manual') === 'true';
-    const savedTheme = localStorage.getItem('sg_portfolio_theme');
-    const initialTheme = (isManualOverride && savedTheme) ? savedTheme : (savedTheme || getTimeBasedTheme());
+            const savedTheme = localStorage.getItem('sg_portfolio_theme');
+            const initialTheme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : getTimeBasedTheme();
 
-    setTheme(initialTheme, isManualOverride);
+            setTheme(initialTheme);
 
-    // Instant click listeners for desktop and mobile toggles
-    [desktopToggle, mobileToggle].forEach(btn => {
-        if (btn) {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
+            function toggleTheme(e) {
+                if (e && typeof e.preventDefault === 'function') {
+                    e.preventDefault();
+                }
+                if (e && typeof e.stopPropagation === 'function') {
+                    e.stopPropagation();
+                }
                 const current = document.documentElement.getAttribute('data-theme') || getTimeBasedTheme();
                 const next = current === 'dark' ? 'light' : 'dark';
+                localStorage.setItem('sg_portfolio_theme', next);
+                localStorage.setItem('sg_portfolio_theme_manual', 'true');
                 sessionStorage.setItem('sg_portfolio_theme_manual', 'true');
-                setTheme(next, true);
-            });
-        }
-    });
-
-    // Cross-tab synchronization
-    window.addEventListener('storage', (e) => {
-        if (e.key === 'sg_portfolio_theme' && e.newValue) {
-            setTheme(e.newValue, true);
-        }
-    });
-
-    function setTheme(theme, isManual = false) {
-        document.documentElement.setAttribute('data-theme', theme);
-        if (document.body) {
-            document.body.setAttribute('data-theme', theme);
-        }
-        localStorage.setItem('sg_portfolio_theme', theme);
-
-        if (themeLabel) {
-            themeLabel.textContent = theme === 'dark' ? 'Dark theme' : 'Light theme';
-        }
-
-        [desktopToggle, mobileToggle].forEach(btn => {
-            if (btn) {
-                btn.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
-                btn.setAttribute('title', `Current: ${theme === 'dark' ? 'Dark' : 'Light'} theme (Click to toggle)`);
+                setTheme(next);
             }
-        });
-    }
-}
+
+            // Multi-target event binding: button, container, label, touch & click
+            [desktopToggle, mobileToggle].forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', toggleTheme);
+                    btn.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        toggleTheme(e);
+                    }, { passive: false });
+                }
+            });
+
+            themeContainers.forEach(container => {
+                container.addEventListener('click', (e) => {
+                    if (e && e.target && typeof e.target.closest === 'function' && e.target.closest('.theme-toggle-pill')) return;
+                    toggleTheme(e);
+                });
+            });
+
+            if (themeLabel) {
+                themeLabel.addEventListener('click', toggleTheme);
+            }
+
+            // Cross-tab synchronization
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'sg_portfolio_theme' && (e.newValue === 'light' || e.newValue === 'dark')) {
+                    setTheme(e.newValue);
+                }
+            });
+
+            function setTheme(theme) {
+                document.documentElement.classList.add('theme-switching');
+                document.documentElement.setAttribute('data-theme', theme);
+                if (document.body) {
+                    document.body.setAttribute('data-theme', theme);
+                }
+                localStorage.setItem('sg_portfolio_theme', theme);
+
+                if (themeLabel) {
+                    themeLabel.textContent = theme === 'dark' ? 'Dark theme' : 'Light theme';
+                }
+
+                [desktopToggle, mobileToggle].forEach(btn => {
+                    if (btn) {
+                        btn.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
+                        btn.setAttribute('title', `Current: ${theme === 'dark' ? 'Dark' : 'Light'} theme (Click to toggle)`);
+                    }
+                });
+
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        document.documentElement.classList.remove('theme-switching');
+                    });
+                });
+            }
+        }
 
         // Clear any old persistent tokens immediately upon opening admin
         localStorage.removeItem('sg_admin_token');

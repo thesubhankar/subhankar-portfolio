@@ -173,92 +173,78 @@ function init3DPreloader() {
    -------------------------------------------------------------------------- */
 
 function initTheme() {
-
     const desktopToggle = document.getElementById('desktopThemeToggle');
-
     const mobileToggle = document.getElementById('mobileThemeToggle');
-
     const themeLabel = document.getElementById('themeLabel');
-
-    // Determines theme based on local time:
-
-    // Light time (Daytime): 6:00 AM (06:00) to 6:00 PM (18:00) -> 'light'
-
-    // Dark time (Nighttime): 6:00 PM (18:00) to 6:00 AM (06:00) -> 'dark'
+    const themeContainers = document.querySelectorAll('.theme-switch-container');
 
     function getTimeBasedTheme() {
-
         const hour = new Date().getHours();
-
         return (hour >= 6 && hour < 18) ? 'light' : 'dark';
-
     }
 
-    // Check if user has explicitly chosen a theme in this session
-
-    const isManualOverride = sessionStorage.getItem('sg_portfolio_theme_manual') === 'true';
-
+    // Determine initial theme:
+    // Respect saved theme from localStorage, or default to time-based
     const savedTheme = localStorage.getItem('sg_portfolio_theme');
+    const initialTheme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : getTimeBasedTheme();
 
-    // Default to time-based theme unless explicitly overridden by user
+    setTheme(initialTheme);
 
-    const initialTheme = (isManualOverride && savedTheme) ? savedTheme : getTimeBasedTheme();
-
-    setTheme(initialTheme, isManualOverride);
-
-    // Live monitor: automatically transition theme at dawn/dusk if user hasn't forced manual override
-
-    setInterval(() => {
-
-        const stillManual = sessionStorage.getItem('sg_portfolio_theme_manual') === 'true';
-
-        if (!stillManual) {
-
-            const timeTheme = getTimeBasedTheme();
-
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-
-            if (timeTheme !== currentTheme) {
-
-                setTheme(timeTheme, false);
-
-            }
-
+    function toggleTheme(e) {
+        if (e && typeof e.preventDefault === 'function') {
+            e.preventDefault();
         }
+        if (e && typeof e.stopPropagation === 'function') {
+            e.stopPropagation();
+        }
+        const current = document.documentElement.getAttribute('data-theme') || getTimeBasedTheme();
+        const next = current === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('sg_portfolio_theme', next);
+        localStorage.setItem('sg_portfolio_theme_manual', 'true');
+        sessionStorage.setItem('sg_portfolio_theme_manual', 'true');
+        setTheme(next);
+    }
 
-    }, 60000);
-
-    // Manual toggle listeners for desktop and mobile buttons
-
+    // Multi-target event binding: button, container, label, touch & click
     [desktopToggle, mobileToggle].forEach(btn => {
-
         if (btn) {
-
-            btn.addEventListener('click', () => {
-
-                const current = document.documentElement.getAttribute('data-theme') || getTimeBasedTheme();
-
-                const next = current === 'dark' ? 'light' : 'dark';
-
-                sessionStorage.setItem('sg_portfolio_theme_manual', 'true');
-
-                setTheme(next, true);
-
-            });
-
+            btn.addEventListener('click', toggleTheme);
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                toggleTheme(e);
+            }, { passive: false });
         }
-
     });
 
-    function setTheme(theme, isManual = false) {
+    themeContainers.forEach(container => {
+        container.addEventListener('click', (e) => {
+            if (e && e.target && typeof e.target.closest === 'function' && e.target.closest('.theme-toggle-pill')) return;
+            toggleTheme(e);
+        });
+    });
+
+    if (themeLabel) {
+        themeLabel.addEventListener('click', toggleTheme);
+    }
+
+    // Cross-tab synchronization
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'sg_portfolio_theme' && (e.newValue === 'light' || e.newValue === 'dark')) {
+            setTheme(e.newValue);
+        }
+    });
+
+    function setTheme(theme) {
+        // Instant 1-frame switch without 300ms transition lag on cards/borders
+        document.documentElement.classList.add('theme-switching');
         document.documentElement.setAttribute('data-theme', theme);
+        if (document.body) {
+            document.body.setAttribute('data-theme', theme);
+        }
         localStorage.setItem('sg_portfolio_theme', theme);
 
         if (themeLabel) {
-            const isAuto = !isManual && (theme === getTimeBasedTheme());
-            themeLabel.textContent = theme === 'dark'
-                ? (isAuto ? 'Dark theme (Night)' : 'Dark theme')
-                : (isAuto ? 'Light theme (Day)' : 'Light theme');
+            themeLabel.textContent = theme === 'dark' ? 'Dark theme' : 'Light theme';
         }
 
         [desktopToggle, mobileToggle].forEach(btn => {
@@ -267,14 +253,18 @@ function initTheme() {
                 btn.setAttribute('title', `Current: ${theme === 'dark' ? 'Dark' : 'Light'} theme (Click to toggle)`);
             }
         });
-    }
 
+        // Re-enable smooth component transitions on next frame
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                document.documentElement.classList.remove('theme-switching');
+            });
+        });
+    }
 }
 
 /* --------------------------------------------------------------------------
-
    2. Left Mobile Drawer Open / Close Toggle Navigation
-
    -------------------------------------------------------------------------- */
 
 function initMobileDrawer() {

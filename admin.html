@@ -6,7 +6,6 @@
     <script>
         (function () {
             try {
-                var isManual = sessionStorage.getItem('sg_portfolio_theme_manual') === 'true';
                 var savedTheme = localStorage.getItem('sg_portfolio_theme');
                 if (!savedTheme) {
                     var hour = new Date().getHours();
@@ -24,9 +23,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=12">
 
-        <link rel="stylesheet" href="admin.css">
+        <link rel="stylesheet" href="admin.css?v=12">
 </head>
 
 <body data-theme="dark">
@@ -724,6 +723,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-        <script src="admin.js"></script>
+        <script src="admin.js?v=12"></script>
 </body>
 </html>
