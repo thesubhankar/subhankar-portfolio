@@ -1079,7 +1079,7 @@ const SKILL_SVGS = {
 
     'pandas': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="22" fill="#150458"/><rect x="18" y="22" width="18" height="84" rx="5" fill="#FF4A83"/><rect x="44" y="48" width="18" height="58" rx="5" fill="#E70488"/><rect x="70" y="32" width="18" height="74" rx="5" fill="#FFD43B"/><rect x="96" y="58" width="18" height="48" rx="5" fill="#00D2B4"/></svg>',
 
-    'numpy': '<svg viewBox="0 0 128 128" width="24" height="24"><path fill="#4DABCF" d="M64 4l52 30v60L64 124 12 94V34z"/><path fill="#013243" d="M64 4v60l52 30V34z" opacity="0.3"/><path fill="#ffffff" d="M42 42h11v21l22-21h13v44H77V65L55 86H42z"/></svg>',
+    'numpy': '<svg viewBox="0 0 128 128" width="24" height="24"><g fill="none"><path d="M64 8.7L13.7 37.7v58.1L64 124.8l50.3-29V37.7L64 8.7z" fill="#013243"/><path d="M64 8.7l50.3 29v58.1L64 124.8V8.7z" fill="#4dabcf"/><path d="M64 8.7L13.7 37.7 64 66.8l50.3-29.1L64 8.7z" fill="#4d77cf"/><path d="M41.7 44.2h12.1v17.4l19.5-17.4h13v39.6H74.2V66.4L54.7 83.8H41.7V44.2z" fill="#ffffff"/></g></svg>',
 
     'matplotlib': '<svg viewBox="0 0 128 128" width="24" height="24"><path fill="#11557C" d="M64 4a60 60 0 1 0 60 60A60 60 0 0 0 64 4zm0 108a48 48 0 1 1 48-48 48 48 0 0 1-48 48z"/><path fill="#2CA02C" d="M64 16a48 48 0 0 0-48 48h48z"/><path fill="#FF7F0E" d="M64 16v48h48A48 48 0 0 0 64 16z"/><path fill="#D62728" d="M64 64H16a48 48 0 0 0 48 48z"/><path fill="#1F77B4" d="M64 64v48a48 48 0 0 0 48-48z"/><circle cx="64" cy="64" r="14" fill="#ffffff"/></svg>',
 
@@ -1093,7 +1093,7 @@ const SKILL_SVGS = {
 
     'postgres': '<svg viewBox="0 0 128 128" width="24" height="24"><path fill="#336791" d="M64 8c-30.9 0-56 25.1-56 56s25.1 56 56 56 56-25.1 56-56-25.1-56-56-56zm26.2 39.8c-1.3 4.8-4.2 9.2-8.5 12.3 2.1 4.5 4.9 8.7 8.3 12.4-3.5 1.5-7.3 2.3-11.2 2.3-3.2 0-6.3-.5-9.3-1.6-3.8 4.2-9 6.8-14.7 7.3-1.6.1-3.2.1-4.8-.1-2.9 6.2-7.5 11.5-13.3 15.1 4.3 2.9 9.5 4.6 15 4.6 13.9 0 25.5-10.4 27.2-24 4.7-.8 9.1-2.8 12.8-5.7 3.5 3.3 7.8 5.7 12.6 7 2.2-4.1 3.5-8.8 3.5-13.8 0-6.8-2.4-13.1-6.6-18z"/></svg>',
 
-    'sql': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none"><ellipse cx="12" cy="5" rx="8" ry="3" stroke="#00F2FE" stroke-width="1.8"/><path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6" stroke="#00F2FE" stroke-width="1.8"/><path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" stroke="#38BDF8" stroke-width="1.8"/></svg>',
+    'sql': '<svg width="24" height="24" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="sql-b" cx="9.36" cy="10.57" fx="9.36" fy="10.57" r="7.07" gradientTransform="matrix(73.03125 0 0 37.1875 29.797 56.535)"><stop offset="0" stop-color="#ffffff"/><stop offset=".58" stop-color="#eeeeee"/><stop offset="1" stop-color="#e0e0e0"/></radialGradient><linearGradient id="sql-a" gradientUnits="userSpaceOnUse" x1="2.59" y1="10.16" x2="15.41" y2="10.16" gradientTransform="scale(7.11111)"><stop offset="0" stop-color="#005ba1"/><stop offset=".36" stop-color="#0071c8"/><stop offset=".52" stop-color="#0078d4"/><stop offset="1" stop-color="#005ba1"/></linearGradient></defs><path fill="url(#sql-a)" d="M64 36.55c-25.17 0-45.58-7.11-45.58-16.5v87.89c0 9.03 20.06 16.36 44.94 16.5H64c25.17 0 45.58-7.11 45.58-16.5v-87.89c0 9.17-20.41 16.5-45.58 16.5z"/><path fill="#e8e8e8" d="M109.58 20.05c0 9.17-20.41 16.5-45.58 16.5s-45.58-7.11-45.58-16.5c0-9.39 20.41-16.5 45.58-16.5s45.58 7.11 45.58 16.5z"/><path fill="#50e6ff" d="M98.99 18.7c0 5.83-15.72 10.52-34.99 10.52S29.01 24.53 29.01 18.7C29.01 12.87 44.73 8.25 64 8.25s34.99 4.69 34.99 10.45z"/><path fill="#198ab3" d="M64 21.33a82.2 82.2 0 0 0-27.66 4.06A81.2 81.2 0 0 0 64 29.23a79.3 79.3 0 0 0 27.66-4.13A84.3 84.3 0 0 0 64 21.33z"/><path fill="url(#sql-b)" d="M91.73 81.07V56.89h-6.4v29.37h17.5v-5.19zM40.96 69.19a13.06 13.06 0 0 1-3.63-2.2 3.13 3.13 0 0 1-.85-2.28 2.42 2.42 0 0 1 1.07-2.13 4.85 4.85 0 0 1 2.99-.86 11.53 11.53 0 0 1 7.11 2.06v-6.11a18.24 18.24 0 0 0-7.11-1.14 11.67 11.67 0 0 0-7.75 2.41 7.68 7.68 0 0 0-2.98 6.33c0 3.63 2.27 6.47 7.11 8.6 1.57.67 3.05 1.53 4.41 2.56a2.98 2.98 0 0 1 1.07 2.28c0 .88-.43 1.7-1.14 2.2a5.79 5.79 0 0 1-3.2.78 11.8 11.8 0 0 1-7.75-2.98v6.61a15.41 15.41 0 0 0 7.61 1.7c2.98.18 5.93-.65 8.39-2.34a7.68 7.68 0 0 0 2.35-6.47 7.46 7.46 0 0 0-1.78-4.98 17.23 17.23 0 0 0-5.9-4.05zm37.26 11.3a16.63 16.63 0 0 0 2.35-8.95A16.51 16.51 0 0 0 78.22 64a12.87 12.87 0 0 0-4.98-5.33 14.23 14.23 0 0 0-7.11-1.85 15.02 15.02 0 0 0-7.68 1.92A13.22 13.22 0 0 0 53.26 64a17.48 17.48 0 0 0-1.85 8.1 16.06 16.06 0 0 0 1.71 7.12 12.53 12.53 0 0 0 4.9 5.26 14.68 14.68 0 0 0 7.11 2.13l6.12 7.11h8.6l-8.75-7.82a12.74 12.74 0 0 0 7.11-5.4zm-7.11-1.77a6.67 6.67 0 0 1-5.4 2.48 6.54 6.54 0 0 1-5.41-2.56 10.84 10.84 0 0 1-2.06-7.1 10.9 10.9 0 0 1 2.06-7.12 7.1 7.1 0 0 1 5.55-2.63 6.18 6.18 0 0 1 5.34 2.63 11.53 11.53 0 0 1 1.92 7.11 10.35 10.35 0 0 1-2 7.19z"/></svg>',
 
     'powerbi': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none"><rect width="24" height="24" rx="5" fill="#1E1E1E"/><rect x="4" y="13" width="4" height="7" rx="1" fill="#F2C811"/><rect x="10" y="8" width="4" height="12" rx="1" fill="#F2C811"/><rect x="16" y="4" width="4" height="16" rx="1" fill="#F2C811"/></svg>',
 
@@ -1147,7 +1147,72 @@ const SKILL_SVGS = {
     'cosinesim': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#0C1B33"/><line x1="26" y1="102" x2="104" y2="102" stroke="#475569" stroke-width="3"/><line x1="26" y1="102" x2="26" y2="24" stroke="#475569" stroke-width="3"/><line x1="26" y1="102" x2="98" y2="40" stroke="#00F2FE" stroke-width="5" stroke-linecap="round"/><polygon points="98,40 88,44 94,52" fill="#00F2FE"/><line x1="26" y1="102" x2="98" y2="82" stroke="#F59E0B" stroke-width="5" stroke-linecap="round"/><polygon points="98,82 88,77 90,88" fill="#F59E0B"/><path d="M56 76a36 36 0 0 1 12 18" stroke="#38BDF8" stroke-width="2.5" fill="none" stroke-dasharray="3 2"/><text x="66" y="80" fill="#38BDF8" font-size="16" font-family="sans-serif" font-weight="bold">θ</text></svg>',
     'tfidf': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#18181B"/><path d="M28 22h46l24 24v58a6 6 0 0 1-6 6H28a6 6 0 0 1-6-6V28a6 6 0 0 1 6-6z" fill="#27272A"/><path d="M74 22v24h24" fill="#3F3F46"/><rect x="36" y="48" width="48" height="6" rx="3" fill="#EC4899"/><rect x="36" y="60" width="32" height="6" rx="3" fill="#A855F7"/><rect x="36" y="72" width="56" height="6" rx="3" fill="#06B6D4"/><rect x="36" y="84" width="22" height="6" rx="3" fill="#10B981"/><text x="36" y="104" fill="#F43F5E" font-size="11" font-family="monospace" font-weight="bold">W(t,d)</text></svg>',
     'telematics': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#0B1E36"/><circle cx="64" cy="64" r="46" fill="none" stroke="#00F2FE" stroke-width="2" stroke-opacity="0.3" stroke-dasharray="6 4"/><circle cx="64" cy="64" r="32" fill="none" stroke="#00F2FE" stroke-width="2.5" stroke-opacity="0.6"/><path d="M36 56h32v28H36z" fill="#0284C7"/><path d="M68 64h16l8 10v10H68V64z" fill="#38BDF8"/><circle cx="48" cy="86" r="6" fill="#FFFFFF"/><circle cx="82" cy="86" r="6" fill="#FFFFFF"/><line x1="52" y1="56" x2="52" y2="40" stroke="#00F2FE" stroke-width="3"/><circle cx="52" cy="38" r="4" fill="#00F2FE"/><path d="M44 32a12 12 0 0 1 16 0" stroke="#00F2FE" stroke-width="2.5" fill="none"/></svg>',
-    'forecasting': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#111827"/><polygon points="70,60 108,30 108,90" fill="#3B82F6" fill-opacity="0.25"/><path d="M20 86l22-18 16 12 14-22" stroke="#60A5FA" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M72 58l18-12 18 6" stroke="#00F2FE" stroke-width="4" stroke-linecap="round" stroke-dasharray="4 3" fill="none"/><circle cx="72" cy="58" r="5" fill="#00F2FE"/><circle cx="108" cy="52" r="5" fill="#38BDF8"/></svg>'
+    'forecasting': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#111827"/><polygon points="70,60 108,30 108,90" fill="#3B82F6" fill-opacity="0.25"/><path d="M20 86l22-18 16 12 14-22" stroke="#60A5FA" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M72 58l18-12 18 6" stroke="#00F2FE" stroke-width="4" stroke-linecap="round" stroke-dasharray="4 3" fill="none"/><circle cx="72" cy="58" r="5" fill="#00F2FE"/><circle cx="108" cy="52" r="5" fill="#38BDF8"/></svg>',
+    'reportlab': '<svg viewBox="0 0 128 128" width="24" height="24"><defs><linearGradient id="rl-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0F2B5C"/><stop offset="100%" stop-color="#061633"/></linearGradient></defs><rect width="128" height="128" rx="24" fill="url(#rl-bg)"/><path d="M30 20h44l26 26v60a6 6 0 0 1-6 6H30a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6z" fill="#FFFFFF"/><path d="M74 20v26h26" fill="#CBD5E1"/><rect x="38" y="42" width="30" height="7" rx="2" fill="#DC2626"/><rect x="38" y="54" width="52" height="6" rx="2" fill="#0284C7"/><rect x="38" y="65" width="52" height="5" rx="2" fill="#64748B"/><rect x="38" y="75" width="36" height="5" rx="2" fill="#94A3B8"/><rect x="38" y="86" width="52" height="18" rx="4" fill="#DC2626"/><text x="44" y="99" fill="#FFFFFF" font-size="11" font-weight="900" font-family="system-ui, sans-serif" letter-spacing="1">ReportLab</text></svg>',
+    'machinelearning': '<svg viewBox="0 0 128 128" width="24" height="24"><defs><linearGradient id="ml-bg-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0F172A"/><stop offset="100%" stop-color="#1E1B4B"/></linearGradient><linearGradient id="ml-synapse" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00F2FE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs><rect width="128" height="128" rx="24" fill="url(#ml-bg-g)"/><line x1="28" y1="36" x2="64" y2="28" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="36" x2="64" y2="64" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="64" x2="64" y2="28" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="64" x2="64" y2="64" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="64" x2="64" y2="100" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="92" x2="64" y2="64" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="92" x2="64" y2="100" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="28" x2="100" y2="48" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="28" x2="100" y2="80" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="64" x2="100" y2="48" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="64" x2="100" y2="80" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="100" x2="100" y2="80" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><circle cx="28" cy="36" r="8.5" fill="#00F2FE"/><circle cx="28" cy="64" r="8.5" fill="#00F2FE"/><circle cx="28" cy="92" r="8.5" fill="#00F2FE"/><circle cx="64" cy="28" r="10.5" fill="#38BDF8"/><circle cx="64" cy="64" r="10.5" fill="#818CF8"/><circle cx="64" cy="100" r="10.5" fill="#C084FC"/><circle cx="100" cy="48" r="9.5" fill="#EC4899"/><circle cx="100" cy="80" r="9.5" fill="#F43F5E"/></svg>',
+    'ml': '<svg viewBox="0 0 128 128" width="24" height="24"><defs><linearGradient id="ml-bg-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0F172A"/><stop offset="100%" stop-color="#1E1B4B"/></linearGradient><linearGradient id="ml-synapse" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00F2FE"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs><rect width="128" height="128" rx="24" fill="url(#ml-bg-g)"/><line x1="28" y1="36" x2="64" y2="28" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="36" x2="64" y2="64" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="64" x2="64" y2="28" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="64" x2="64" y2="64" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="64" x2="64" y2="100" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="92" x2="64" y2="64" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="28" y1="92" x2="64" y2="100" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="28" x2="100" y2="48" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="28" x2="100" y2="80" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="64" x2="100" y2="48" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="64" x2="100" y2="80" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><line x1="64" y1="100" x2="100" y2="80" stroke="url(#ml-synapse)" stroke-width="2.5" stroke-opacity="0.8"/><circle cx="28" cy="36" r="8.5" fill="#00F2FE"/><circle cx="28" cy="64" r="8.5" fill="#00F2FE"/><circle cx="28" cy="92" r="8.5" fill="#00F2FE"/><circle cx="64" cy="28" r="10.5" fill="#38BDF8"/><circle cx="64" cy="64" r="10.5" fill="#818CF8"/><circle cx="64" cy="100" r="10.5" fill="#C084FC"/><circle cx="100" cy="48" r="9.5" fill="#EC4899"/><circle cx="100" cy="80" r="9.5" fill="#F43F5E"/></svg>',
+    'tableau': '<svg viewBox="0 0 128 128" width="24" height="24"><rect width="128" height="128" rx="24" fill="#FFFFFF"/><g transform="translate(14, 14) scale(0.78)"><path fill="#E8762D" d="M60.3 3.8h7.4v13.5h-7.4zM57.3 10.5h13.4v7.4H57.3z"/><path fill="#E8762D" d="M60.3 110.7h7.4v13.5h-7.4zM57.3 117.4h13.4v7.4H57.3z"/><path fill="#285994" d="M6.8 57.3h13.5v7.4H6.8zM10.5 54.3h7.4v13.4h-7.4z"/><path fill="#285994" d="M107.7 57.3h13.5v7.4h-13.5zM111.4 54.3h7.4v13.4h-7.4z"/><path fill="#5B93C7" d="M26.3 26.3h9.8v5.4h-9.8zM28.5 24.1h5.4v9.8h-5.4z"/><path fill="#5B93C7" d="M91.9 26.3h9.8v5.4h-9.8zM94.1 24.1h5.4v9.8h-5.4z"/><path fill="#5B93C7" d="M26.3 96.3h9.8v5.4h-9.8zM28.5 94.1h5.4v9.8h-5.4z"/><path fill="#5B93C7" d="M91.9 96.3h9.8v5.4h-9.8zM94.1 94.1h5.4v9.8h-5.4z"/><path fill="#E8762D" d="M58.3 48.3h11.4v31.4H58.3zM48.3 58.3h31.4v11.4H48.3z"/></g></svg>',
+    'scikitlearn': '<svg viewBox="0 0 128 128" width="24" height="24"><path fill="#F89939" d="M98.18 88.13c15.63-15.62 18.23-38.36 5.8-50.78-12.43-12.42-35.17-9.82-50.8 5.8-15.63 15.62-11.11 45.48-5.8 50.78 4.29 4.29 35.17 9.82 50.8-5.8Z"/><path fill="#3499CD" d="M34.04 65.56c-9.07-9.06-22.27-10.57-29.48-3.37-7.21 7.21-5.7 20.4 3.37 29.46 9.07 9.07 26.4 6.44 29.48 3.37 2.49-2.49 5.71-20.4-3.37-29.46Z"/><ellipse cx="64" cy="64" rx="14" ry="14" fill="#FFFFFF" fill-opacity="0.95"/></svg>',
+    'sklearn': '<svg viewBox="0 0 128 128" width="24" height="24"><path fill="#F89939" d="M98.18 88.13c15.63-15.62 18.23-38.36 5.8-50.78-12.43-12.42-35.17-9.82-50.8 5.8-15.63 15.62-11.11 45.48-5.8 50.78 4.29 4.29 35.17 9.82 50.8-5.8Z"/><path fill="#3499CD" d="M34.04 65.56c-9.07-9.06-22.27-10.57-29.48-3.37-7.21 7.21-5.7 20.4 3.37 29.46 9.07 9.07 26.4 6.44 29.48 3.37 2.49-2.49 5.71-20.4-3.37-29.46Z"/><ellipse cx="64" cy="64" rx="14" ry="14" fill="#FFFFFF" fill-opacity="0.95"/></svg>'
+};
+
+const SKILL_ALIASES = {
+    'scikitlearn': 'scikit',
+    'sklearn': 'scikit',
+    'scikit': 'scikit',
+    'ml': 'machinelearning',
+    'machinelearning': 'machinelearning',
+    'reportlab': 'reportlab',
+    'reporting': 'reporting',
+    'tmdb': 'tmdb',
+    'tmdbapi': 'tmdb',
+    'themoviedatabase': 'tmdb',
+    'dataanalysis': 'dataanalysis',
+    'dataanalytics': 'dataanalysis',
+    'datastruct': 'datastruct',
+    'datastructures': 'datastruct',
+    'cosinesimilarity': 'cosinesim',
+    'cosinesim': 'cosinesim',
+    'timeseries': 'timeseries',
+    'time': 'timeseries',
+    'nlp': 'nlp',
+    'naturallanguageprocessing': 'nlp',
+    'powerbi': 'powerbi',
+    'pbi': 'powerbi',
+    'tableau': 'tableau',
+    'sql': 'sql',
+    'mysql': 'mysql',
+    'postgresql': 'postgresql',
+    'postgres': 'postgresql',
+    'sqlite': 'sqlite',
+    'sqlite3': 'sqlite',
+    'numpy': 'numpy',
+    'np': 'numpy',
+    'pandas': 'pandas',
+    'pd': 'pandas',
+    'matplotlib': 'matplotlib',
+    'plt': 'matplotlib',
+    'seaborn': 'seaborn',
+    'sns': 'seaborn',
+    'scipy': 'scipy',
+    'tensorflow': 'tensorflow',
+    'tf': 'tensorflow',
+    'pytorch': 'pytorch',
+    'torch': 'pytorch',
+    'keras': 'keras',
+    'tkinter': 'tkinter',
+    'tk': 'tkinter',
+    'streamlit': 'streamlit',
+    'github': 'github',
+    'git': 'git',
+    'eda': 'eda',
+    'stats': 'stats',
+    'statistics': 'stats',
+    'forecasting': 'forecasting',
+    'optimization': 'optimization',
+    'telematics': 'telematics',
+    'oop': 'oop',
+    'automation': 'automation'
 };
 
 function initProjectNav() {
@@ -1577,8 +1642,9 @@ function initProjectNav() {
         if (skillsGrid) {
             skillsGrid.innerHTML = (proj.skills || []).map(s => {
                 const sName = typeof s === 'string' ? s : (s.name || '');
-                const sType = (typeof s === 'object' && s.type) ? s.type : sName.toLowerCase().replace(/[^a-z0-9]/g, '');
-                const sSvg = (typeof s === 'object' && s.svg) ? s.svg : (SKILL_SVGS[sType] || SKILL_SVGS['python']);
+                const rawType = (typeof s === 'object' && s.type) ? s.type : sName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const resolvedType = (typeof SKILL_ALIASES !== 'undefined' && SKILL_ALIASES[rawType]) || rawType;
+                const sSvg = (typeof s === 'object' && s.svg) ? s.svg : (SKILL_SVGS[resolvedType] || SKILL_SVGS[rawType] || SKILL_SVGS['python']);
                 return `
                 <div class="skill-tile-item" title="${sName}">
                     <div class="skill-tile-icon">
