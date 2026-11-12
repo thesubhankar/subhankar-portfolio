@@ -1618,6 +1618,29 @@ function initProjectNav() {
 
     let currentCrossfadeOverlay = null;
     let crossfadeTimer = null;
+    const PRELOADED_PROJECT_IMAGES = new Set();
+
+    function preloadProjectSlides(targetId) {
+        try {
+            const projs = (window._STUDIO_PROJECTS && Object.keys(window._STUDIO_PROJECTS).length) ? window._STUDIO_PROJECTS : STUDIO_PROJECTS;
+            if (!projs) return;
+            const targetProjects = targetId ? [projs[targetId]].filter(Boolean) : Object.values(projs);
+            targetProjects.forEach(p => {
+                if (!p || !p.slides || !Array.isArray(p.slides)) return;
+                p.slides.forEach(s => {
+                    const src = s && s.webp;
+                    if (src && !PRELOADED_PROJECT_IMAGES.has(src)) {
+                        PRELOADED_PROJECT_IMAGES.add(src);
+                        const img = new Image();
+                        img.decoding = 'async';
+                        img.src = src;
+                    }
+                });
+            });
+        } catch (e) {}
+    }
+
+    preloadProjectSlides();
 
     function showSlide(index, withFade = true) {
         const proj = (window._STUDIO_PROJECTS && window._STUDIO_PROJECTS[currentProjectId]) || STUDIO_PROJECTS[currentProjectId];
@@ -1671,7 +1694,7 @@ function initProjectNav() {
             currentCrossfadeOverlay = null;
         }
 
-        // Create overlay element sitting directly on top of dynamicImg with ZERO background exposure
+        // Fast snappy crossfade overlay (80ms smooth opacity transition)
         const overlay = document.createElement('img');
         overlay.className = 'inline-illustration-img laptop-img-crossfade-overlay';
         overlay.alt = targetAlt;
@@ -1683,7 +1706,7 @@ function initProjectNav() {
         overlay.style.objectFit = 'cover';
         overlay.style.opacity = '0';
         overlay.style.zIndex = '3';
-        overlay.style.transition = 'opacity 0.22s ease-in-out';
+        overlay.style.transition = 'opacity 0.08s ease-out';
         overlay.style.pointerEvents = 'none';
 
         currentCrossfadeOverlay = overlay;
@@ -1705,17 +1728,10 @@ function initProjectNav() {
                     currentCrossfadeOverlay = null;
                     crossfadeTimer = null;
                 }
-            }, 240);
+            }, 90);
         };
 
-        overlay.onload = () => {
-            if (typeof overlay.decode === 'function') {
-                overlay.decode().then(triggerCrossfade).catch(triggerCrossfade);
-            } else {
-                triggerCrossfade();
-            }
-        };
-
+        overlay.onload = triggerCrossfade;
         overlay.onerror = () => {
             if (currentCrossfadeOverlay === overlay) {
                 dynamicImg.src = targetSrc;
@@ -1729,11 +1745,18 @@ function initProjectNav() {
         overlay.src = targetSrc;
 
         if (overlay.complete && overlay.naturalWidth > 0) {
-            if (typeof overlay.decode === 'function') {
-                overlay.decode().then(triggerCrossfade).catch(triggerCrossfade);
-            } else {
-                triggerCrossfade();
-            }
+            triggerCrossfade();
+        }
+
+        const nextIdx = (currentSlideIndex + 1) % proj.slides.length;
+        const prevIdx = (currentSlideIndex - 1 + proj.slides.length) % proj.slides.length;
+        if (proj.slides[nextIdx] && proj.slides[nextIdx].webp) {
+            const nextImg = new Image();
+            nextImg.src = proj.slides[nextIdx].webp;
+        }
+        if (proj.slides[prevIdx] && proj.slides[prevIdx].webp) {
+            const prevImg = new Image();
+            prevImg.src = proj.slides[prevIdx].webp;
         }
     }
 
