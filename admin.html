@@ -23,8 +23,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=13">
-    <link rel="stylesheet" href="admin.css?v=13">
+    <link rel="stylesheet" href="style.css?v=14">
+    <link rel="stylesheet" href="admin.css?v=14">
 </head>
 
 <body data-theme="dark">
@@ -104,8 +104,19 @@
                 <div class="kernel-status-badge" id="sidebarKernelStatus">
                     <span class="status-indicator-dot idle" id="statusDot"></span>
                     <span class="status-text" id="statusText">System Ready</span>
-                    <a href="/" target="_self" class="sidebar-admin-link" title="Return to Live Portfolio">← Portfolio</a>
-                    <button type="button" onclick="logoutAdmin()" class="sidebar-admin-link btn-lock-logout" title="Lock Admin & Logout">🔒 Lock</button>
+                    <div style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px;">
+                        <a href="/" target="_self" class="btn-liquid-icon btn-liquid-portfolio" title="Return to Live Portfolio" aria-label="Return to Live Portfolio">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-5h-4v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+                            </svg>
+                        </a>
+                        <button type="button" onclick="logoutAdmin()" class="btn-liquid-icon btn-liquid-lock" title="Lock Admin & Logout" aria-label="Lock Admin & Logout">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="theme-switch-container">
@@ -132,29 +143,43 @@
                     </svg>
                 </button>
                 <div class="sidebar-brand-mini">🛡️ Admin Studio</div>
-                <a href="/" target="_self" class="sidebar-admin-link" style="font-size: 11px;">← Portfolio</a>
+                <div style="display: inline-flex; align-items: center; gap: 6px;">
+                    <a href="/" target="_self" class="btn-liquid-icon btn-liquid-portfolio" title="Return to Live Portfolio" aria-label="Return to Live Portfolio" style="width: 32px; height: 32px; min-width: 32px; min-height: 32px;">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-5h-4v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+                        </svg>
+                    </a>
+                    <button type="button" onclick="logoutAdmin()" class="btn-liquid-icon btn-liquid-lock" title="Lock Admin & Logout" aria-label="Lock Admin & Logout" style="width: 32px; height: 32px; min-width: 32px; min-height: 32px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <!-- Top Kernel Action Toolbar -->
             <div class="kernel-topbar" role="toolbar" aria-label="Admin Action Controls">
-                <div class="kernel-controls-left">
+                <div class="kernel-controls-left" style="display: flex; align-items: center; gap: 8px;">
                     <button class="btn-kernel btn-run-all" id="btnSyncRefresh" title="Sync and refresh data from server" onclick="loadData()">
                         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
                         <span>Sync &amp; Refresh</span>
                     </button>
-                    <button class="btn-kernel btn-restart" id="btnLogout" title="Log out of Admin Studio" onclick="logoutAdmin()">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                            <polyline points="16 17 21 12 16 7"></polyline>
-                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                    <button class="btn-liquid-icon btn-liquid-lock" id="btnLogout" title="Lock Admin & Logout" aria-label="Lock Admin & Logout" onclick="logoutAdmin()">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
-                        <span>Logout</span>
                     </button>
                 </div>
-                <div class="kernel-info-right">
-                    <a href="/" target="_self" class="btn-kernel" style="text-decoration:none; margin-right:8px; padding:3px 10px; font-size:11px; display:inline-flex; align-items:center; gap:4px;" title="Return to Live Portfolio">← Live Portfolio</a>
+                <div class="kernel-info-right" style="display: flex; align-items: center; gap: 8px;">
+                    <a href="/" target="_self" class="btn-liquid-icon btn-liquid-portfolio" title="Return to Live Portfolio" aria-label="Return to Live Portfolio">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-5h-4v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+                        </svg>
+                    </a>
                     <span class="kernel-doc-status" id="kernelDocStatus">Admin Studio · Active</span>
                 </div>
             </div>
@@ -636,6 +661,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-    <script src="admin.js?v=13"></script>
+    <script src="admin.js?v=14"></script>
 </body>
 </html>

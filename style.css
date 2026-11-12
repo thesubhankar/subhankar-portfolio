@@ -1139,6 +1139,125 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     transform: scale(0.93) translateY(1px);
 }
 
+/* Apple iPhone 3D Liquid Glass Icon Buttons */
+.btn-liquid-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.btn-liquid-icon::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.12) 60%, rgba(255, 255, 255, 0) 100%);
+    border-radius: 9px 9px 14px 14px / 9px 9px 4px 4px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.btn-liquid-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 11px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), inset 0 -1px 2px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.btn-liquid-icon svg {
+    position: relative;
+    z-index: 4;
+    display: block;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-liquid-portfolio {
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.22) 0%, rgba(13, 163, 223, 0.38) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.48);
+    color: #00F2FE;
+    box-shadow: 0 3px 12px rgba(0, 242, 254, 0.3), 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+.btn-liquid-portfolio:hover {
+    transform: translateY(-2px) scale(1.08);
+    border-color: #00F2FE;
+    color: #FFFFFF;
+    box-shadow: 0 6px 18px rgba(0, 242, 254, 0.5), 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.btn-liquid-portfolio:hover svg {
+    transform: scale(1.12);
+}
+
+.btn-liquid-lock {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.24) 0%, rgba(220, 38, 38, 0.42) 100%);
+    border: 1px solid rgba(239, 68, 68, 0.52);
+    color: #FF5A79;
+    box-shadow: 0 3px 12px rgba(239, 68, 68, 0.32), 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+.btn-liquid-lock:hover {
+    transform: translateY(-2px) scale(1.08);
+    border-color: #FF477E;
+    color: #FFFFFF;
+    box-shadow: 0 6px 18px rgba(239, 68, 68, 0.55), 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.btn-liquid-lock:hover svg {
+    transform: scale(1.12);
+}
+
+.btn-liquid-icon:active {
+    transform: scale(0.90) translateY(1px) !important;
+}
+
+[data-theme="light"] .btn-liquid-portfolio {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.18) 0%, rgba(0, 123, 167, 0.32) 100%);
+    border-color: rgba(2, 132, 199, 0.45);
+    color: #007BA7;
+    box-shadow: 0 3px 10px rgba(2, 132, 199, 0.22);
+}
+
+[data-theme="light"] .btn-liquid-portfolio:hover {
+    color: #005F83;
+    box-shadow: 0 5px 14px rgba(2, 132, 199, 0.35);
+}
+
+[data-theme="light"] .btn-liquid-lock {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.26) 100%);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #DC2626;
+    box-shadow: 0 3px 10px rgba(239, 68, 68, 0.2);
+}
+
+[data-theme="light"] .btn-liquid-lock:hover {
+    color: #991B1B;
+    box-shadow: 0 5px 14px rgba(239, 68, 68, 0.35);
+}
+
 
 .status-indicator-dot {
 
@@ -2364,115 +2483,126 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .btn-section-nav {
-
     width: 48px;
-
     height: 48px;
-
     min-width: 48px;
-
-    border-radius: var(--radius-md);
-
-    background-color: var(--bg-card);
-
-    border: var(--border-card);
-
-    color: var(--text-main);
-
+    border-radius: 14px;
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     cursor: pointer;
-
-    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-    box-shadow: var(--shadow-sm);
-
     position: relative;
-
+    overflow: hidden;
+    isolation: isolate;
     padding: 0;
-
     text-decoration: none;
-
     user-select: none;
-
     -webkit-tap-highlight-color: transparent;
-
     flex-shrink: 0;
-
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
 }
 
+/* Liquid glass top gloss reflection */
+.btn-section-nav::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.15) 55%, rgba(255, 255, 255, 0) 100%);
+    border-radius: 12px 12px 20px 20px / 12px 12px 6px 6px;
+    pointer-events: none;
+    z-index: 2;
+    transition: opacity 0.22s ease;
+}
+
+/* Inner bevel ring highlight */
+.btn-section-nav::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), inset 0 -1px 2px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Next Button - Electric Cyan/Blue Liquid Theme (Dark) */
+.btn-section-nav.next {
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.24) 0%, rgba(13, 163, 223, 0.42) 55%, rgba(0, 119, 181, 0.55) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.55);
+    box-shadow: 0 4px 18px rgba(0, 242, 254, 0.35), 0 2px 6px rgba(0, 0, 0, 0.32);
+}
+
+.btn-section-nav.next:hover {
+    transform: translateY(-3px) scale(1.08);
+    border-color: #00F2FE;
+    box-shadow: 0 8px 24px rgba(0, 242, 254, 0.55), 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Prev Button - Frosted Crystal Liquid Theme (Dark) */
+.btn-section-nav.prev {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.btn-section-nav.prev:hover {
+    transform: translateY(-3px) scale(1.08);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 22px rgba(255, 255, 255, 0.18), 0 4px 10px rgba(0, 0, 0, 0.45);
+}
+
+/* Tactile Spring Press */
+.btn-section-nav:active {
+    transform: scale(0.91) translateY(1px) !important;
+}
+
+/* Emoji 3D Drop Shadow & Animations */
 .nav-emoji {
-
     font-size: 1.35rem;
-
     line-height: 1;
-
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
-    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease;
-
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-
-}
-
-.btn-section-nav:hover {
-
-    background-color: var(--bg-card-subtle);
-
-    border-color: var(--primary-blue);
-
-    box-shadow: 0 0 16px var(--primary-blue-glow);
-
-    transform: translateY(-2px) scale(1.06);
-
-}
-
-.btn-section-nav:hover .nav-emoji {
-
-    transform: scale(1.15);
-
+    position: relative;
+    z-index: 4;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.22s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
 
 .btn-section-nav.prev:hover .nav-emoji {
-
-    transform: translateX(-2px) scale(1.15);
-
+    transform: translateX(-3px) scale(1.15);
 }
 
 .btn-section-nav.next:hover .nav-emoji {
-
-    transform: translateX(2px) scale(1.15);
-
+    transform: translateX(3px) scale(1.15);
 }
 
-.btn-section-nav:active {
-
-    transform: scale(0.94);
-
+/* Light Mode Styling */
+[data-theme="light"] .btn-section-nav.next {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.22) 0%, rgba(0, 123, 167, 0.38) 100%);
+    border: 1px solid rgba(2, 132, 199, 0.5);
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.28), 0 2px 5px rgba(0, 0, 0, 0.08);
 }
 
-[data-theme="dark"] .btn-section-nav:hover {
-
-    border-color: var(--accent-orange);
-
-    box-shadow: 0 0 18px var(--accent-orange-glow);
-
+[data-theme="light"] .btn-section-nav.next:hover {
+    border-color: #007BA7;
+    box-shadow: 0 7px 20px rgba(2, 132, 199, 0.4);
 }
 
-[data-theme="light"] .btn-section-nav:hover {
+[data-theme="light"] .btn-section-nav.prev {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 100%);
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
 
-    border-color: var(--accent-orange);
-
-    box-shadow: 0 4px 16px var(--accent-orange-glow);
-
+[data-theme="light"] .btn-section-nav.prev:hover {
+    border-color: rgba(0, 0, 0, 0.25);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.16);
 }
 
 /* --------------------------------------------------------------------------

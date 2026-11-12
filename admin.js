@@ -319,12 +319,20 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;">
                             ${skillsText}
                         </span>
-                        <div style="display: flex; gap: 6px;">
-                            <button onclick="editProject('${p.id}')" class="btn-edit-cyber" title="Edit Project">
-                                <span>✏️ Edit</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <button type="button" onclick="editProject('${p.id}')" class="btn-action-icon btn-edit-cyber" title="Edit Project" aria-label="Edit Project">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
                             </button>
-                            <button onclick="deleteProject('${p.id}')" class="btn-delete-cyber" title="Remove Project">
-                                <span>🗑️ Delete</span>
+                            <button type="button" onclick="deleteProject('${p.id}')" class="btn-action-icon btn-delete-cyber" title="Delete Project" aria-label="Delete Project">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
                             </button>
                         </div>
                     </div>
@@ -622,12 +630,20 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
                     <div class="admin-card-footer">
                         ${c.credentialUrl ? `<a href="${c.credentialUrl}" target="_blank" class="sidebar-admin-link" style="font-size: 10px;">Verify &nearr;</a>` : '<span></span>'}
-                        <div style="display: flex; gap: 6px;">
-                            <button onclick="editCert('${c.id}')" class="btn-edit-cyber" title="Edit Certificate">
-                                <span>✏️ Edit</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <button type="button" onclick="editCert('${c.id}')" class="btn-action-icon btn-edit-cyber" title="Edit Certificate" aria-label="Edit Certificate">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
                             </button>
-                            <button onclick="deleteCert('${c.id}')" class="btn-delete-cyber" title="Remove Certificate">
-                                <span>🗑️ Delete</span>
+                            <button type="button" onclick="deleteCert('${c.id}')" class="btn-action-icon btn-delete-cyber" title="Delete Certificate" aria-label="Delete Certificate">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
                             </button>
                         </div>
                     </div>
@@ -848,11 +864,19 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                             <span class="tech-chip" style="color: var(--color-cyan, #00F2FE); font-size: 10px;">${cat.badge || 'PRO'}</span>
                         </div>
                         <div style="display: flex; gap: 6px; align-items: center;">
-                            <button onclick="editSkillCategory('${catName}', '${cat.badge || '85%'}')" class="btn-edit-cyber" style="padding: 2px 8px; font-size: 11px;" title="Edit Category Title or Badge">
-                                <span>✏️ Edit Category</span>
+                            <button type="button" onclick="editSkillCategory('${catName}', '${cat.badge || '85%'}')" class="btn-action-icon btn-edit-cyber" title="Edit Category" aria-label="Edit Category">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
                             </button>
-                            <button onclick="deleteSkillCategory('${catName}')" class="btn-delete-cyber" style="padding: 2px 8px; font-size: 11px;" title="Delete Whole Category">
-                                <span>🗑️</span>
+                            <button type="button" onclick="deleteSkillCategory('${catName}')" class="btn-action-icon btn-delete-cyber" title="Delete Category" aria-label="Delete Category">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
                             </button>
                         </div>
                     </div>
@@ -1026,12 +1050,20 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
                     <div class="admin-card-footer" style="margin-top: 0.75rem;">
                         ${edu.link ? `<a href="${edu.link}" target="_blank" rel="noopener noreferrer" class="sidebar-admin-link" style="font-size: 11px;">Credentials &nearr;</a>` : '<span></span>'}
-                        <div style="display: flex; gap: 6px;">
-                            <button type="button" onclick="editEducation('${edu.id}')" class="btn-edit-cyber" title="Edit Education Milestone">
-                                <span>✏️ Edit</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <button type="button" onclick="editEducation('${edu.id}')" class="btn-action-icon btn-edit-cyber" title="Edit Education Milestone" aria-label="Edit Education Milestone">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
                             </button>
-                            <button type="button" onclick="deleteEducation('${edu.id}')" class="btn-delete-cyber" title="Remove Education">
-                                <span>🗑️ Delete</span>
+                            <button type="button" onclick="deleteEducation('${edu.id}')" class="btn-action-icon btn-delete-cyber" title="Delete Education Milestone" aria-label="Delete Education Milestone">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
                             </button>
                         </div>
                     </div>
