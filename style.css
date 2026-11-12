@@ -441,8 +441,6 @@ body {
 
     position: relative;
 
-    transition: background-color var(--transition-normal), color var(--transition-normal);
-
     -webkit-font-smoothing: antialiased;
 
     -moz-osx-font-smoothing: grayscale;
@@ -1067,26 +1065,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
     100% { opacity: 1; }
 
-}
-
-/* Smooth Natural Day / Night Theme Transition */
-body,
-.editor-layout,
-.main-editor,
-.activity-bar,
-.sidebar,
-.status-bar,
-.nav-cell,
-.code-card,
-.card,
-.skill-category-card,
-.skill-pill,
-.compact-project-card,
-.cert-card-interactive,
-.portfolio-header,
-.footer,
-.modal-content {
-    transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
 }
 
 /* Subtle, performant ambient RGB background shift */
@@ -7411,225 +7389,410 @@ body,
    - Smooth, fluid transitions with subtle lift and harmonious glowing borders on hover
    ========================================================================== */
 
+/* ==========================================================================
+   3D Tactile Social Media Dock (Isometric Depth & Mechanical Press Effect)
+   ========================================================================== */
+
 .social-links-dock {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
+    gap: 1.15rem;
     flex-wrap: wrap;
+    perspective: 800px;
+    padding: 10px 4px 14px 4px;
 }
 
 .social-icon-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
     cursor: pointer;
     box-sizing: border-box;
-    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
-                background-color 0.25s ease,
-                background 0.25s ease,
-                border-color 0.25s ease,
-                color 0.25s ease,
-                box-shadow 0.28s ease;
+    transform-style: preserve-3d;
+    transform: perspective(600px) rotateX(12deg) translateZ(0);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .social-icon-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     fill: currentColor !important;
-    transition: transform 0.25s ease, fill 0.25s ease;
+    transform: translateZ(10px);
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.22s ease;
+    pointer-events: none;
 }
 
+/* 3D Hover: Lift up, tilt forward, and emit glow */
 .social-icon-btn:hover {
-    transform: translateY(-4px) scale(1.08);
+    transform: perspective(600px) translateY(-6px) rotateX(0deg) scale(1.08) translateZ(12px);
 }
 
 .social-icon-btn:hover svg {
-    transform: scale(1.08);
+    transform: translateZ(16px) scale(1.12);
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
 
+/* 3D Active: Physical Mechanical Press Down */
 .social-icon-btn:active {
-    transform: translateY(-1px) scale(0.98);
+    transform: perspective(600px) translateY(4px) rotateX(6deg) scale(0.96) translateZ(0);
+}
+
+.social-icon-btn:active svg {
+    transform: translateZ(4px) scale(0.95);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 /* --------------------------------------------------------------------------
-   Night Theme (Dark Mode) - Smooth Tinted Glass at Idle, Rich Glow on Hover
+   3D Platforms - Dark Mode (Cyber Metallic Prisms with 3D Bevel & Extrusion)
    -------------------------------------------------------------------------- */
 
-/* 1. GitHub - Night */
+/* 1. GitHub 3D */
 .social-icon-btn.platform-github {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    color: #F1F5F9;
-    box-shadow: 0 4px 12px rgba(0, 0, 44, 0.4);
+    background: linear-gradient(145deg, #2A3038 0%, #161B22 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #F8FAFC;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.35),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.5),
+        0 6px 0 #0D1117,
+        0 10px 18px rgba(0, 0, 0, 0.6);
 }
 .social-icon-btn.platform-github:hover {
-    background: #24292E;
-    border-color: rgba(255, 255, 255, 0.45);
+    background: linear-gradient(145deg, #38414D 0%, #1F242C 100%);
+    border-color: rgba(255, 255, 255, 0.5);
     color: #FFFFFF;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 255, 255, 0.25);
+    box-shadow: 
+        inset 0 2px 2px rgba(255, 255, 255, 0.6),
+        0 10px 0 #0D1117,
+        0 16px 28px rgba(0, 0, 0, 0.75),
+        0 0 20px rgba(255, 255, 255, 0.25);
+}
+.social-icon-btn.platform-github:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.6),
+        0 2px 0 #0D1117,
+        0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* 2. LinkedIn - Night */
+/* 2. LinkedIn 3D */
 .social-icon-btn.platform-linkedin {
-    background: rgba(10, 102, 194, 0.14);
-    border: 1px solid rgba(10, 102, 194, 0.35);
-    color: #38BDF8;
-    box-shadow: 0 4px 12px rgba(10, 102, 194, 0.15);
+    background: linear-gradient(145deg, #0A66C2 0%, #00478F 100%);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #FFFFFF;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.45),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.4),
+        0 6px 0 #002D5C,
+        0 10px 18px rgba(0, 0, 0, 0.55);
 }
 .social-icon-btn.platform-linkedin:hover {
-    background: #0A66C2;
+    background: linear-gradient(145deg, #1A7DE6 0%, #0056B3 100%);
     border-color: #38BDF8;
-    color: #FFFFFF;
-    box-shadow: 0 8px 24px rgba(0, 0, 44, 0.75), 0 0 20px rgba(10, 102, 194, 0.65);
+    box-shadow: 
+        inset 0 2px 2px rgba(255, 255, 255, 0.7),
+        0 10px 0 #002D5C,
+        0 16px 28px rgba(0, 0, 0, 0.7),
+        0 0 24px rgba(10, 102, 194, 0.75);
+}
+.social-icon-btn.platform-linkedin:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.6),
+        0 2px 0 #002D5C,
+        0 4px 8px rgba(0, 0, 0, 0.45);
 }
 
-/* 3. Kaggle - Night */
+/* 3. Kaggle 3D */
 .social-icon-btn.platform-kaggle {
-    background: rgba(32, 190, 255, 0.14);
-    border: 1px solid rgba(32, 190, 255, 0.35);
-    color: #20BEFF;
-    box-shadow: 0 4px 12px rgba(32, 190, 255, 0.15);
+    background: linear-gradient(145deg, #20BEFF 0%, #0087BA 100%);
+    border: 1px solid rgba(0, 242, 254, 0.5);
+    color: #06111E;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.6),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.4),
+        0 6px 0 #005B7F,
+        0 10px 18px rgba(0, 0, 0, 0.55);
 }
 .social-icon-btn.platform-kaggle:hover {
-    background: #20BEFF;
+    background: linear-gradient(145deg, #42CBFF 0%, #009BD6 100%);
     border-color: #00F2FE;
-    color: #080E1A;
-    box-shadow: 0 8px 24px rgba(0, 0, 44, 0.75), 0 0 20px rgba(32, 190, 255, 0.65);
+    color: #02070D;
+    box-shadow: 
+        inset 0 2px 2px rgba(255, 255, 255, 0.8),
+        0 10px 0 #005B7F,
+        0 16px 28px rgba(0, 0, 0, 0.7),
+        0 0 24px rgba(32, 190, 255, 0.75);
+}
+.social-icon-btn.platform-kaggle:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.6),
+        0 2px 0 #005B7F,
+        0 4px 8px rgba(0, 0, 0, 0.45);
 }
 
-/* 4. LeetCode - Night */
+/* 4. LeetCode 3D */
 .social-icon-btn.platform-leetcode {
-    background: rgba(255, 161, 22, 0.14);
-    border: 1px solid rgba(255, 161, 22, 0.35);
-    color: #FFA116;
-    box-shadow: 0 4px 12px rgba(255, 161, 22, 0.15);
+    background: linear-gradient(145deg, #FFA116 0%, #CC7500 100%);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    color: #0F172A;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.6),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.4),
+        0 6px 0 #8C4E00,
+        0 10px 18px rgba(0, 0, 0, 0.55);
 }
 .social-icon-btn.platform-leetcode:hover {
-    background: #FFA116;
+    background: linear-gradient(145deg, #FFB43E 0%, #E68500 100%);
     border-color: #FBBF24;
-    color: #080E1A;
-    box-shadow: 0 8px 24px rgba(0, 0, 44, 0.75), 0 0 20px rgba(255, 161, 22, 0.65);
+    color: #000000;
+    box-shadow: 
+        inset 0 2px 2px rgba(255, 255, 255, 0.8),
+        0 10px 0 #8C4E00,
+        0 16px 28px rgba(0, 0, 0, 0.7),
+        0 0 24px rgba(255, 161, 22, 0.75);
+}
+.social-icon-btn.platform-leetcode:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.6),
+        0 2px 0 #8C4E00,
+        0 4px 8px rgba(0, 0, 0, 0.45);
 }
 
-/* 5. HackerRank - Night */
+/* 5. HackerRank 3D */
 .social-icon-btn.platform-hackerrank {
-    background: rgba(46, 200, 102, 0.14);
-    border: 1px solid rgba(46, 200, 102, 0.35);
-    color: #2EC866;
-    box-shadow: 0 4px 12px rgba(46, 200, 102, 0.15);
+    background: linear-gradient(145deg, #2EC866 0%, #15873E 100%);
+    border: 1px solid rgba(52, 211, 153, 0.5);
+    color: #041409;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.55),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.4),
+        0 6px 0 #0E5C2A,
+        0 10px 18px rgba(0, 0, 0, 0.55);
 }
 .social-icon-btn.platform-hackerrank:hover {
-    background: #2EC866;
+    background: linear-gradient(145deg, #43D87A 0%, #1CA34C 100%);
     border-color: #34D399;
-    color: #080E1A;
-    box-shadow: 0 8px 24px rgba(0, 0, 44, 0.75), 0 0 20px rgba(46, 200, 102, 0.65);
+    color: #000000;
+    box-shadow: 
+        inset 0 2px 2px rgba(255, 255, 255, 0.8),
+        0 10px 0 #0E5C2A,
+        0 16px 28px rgba(0, 0, 0, 0.7),
+        0 0 24px rgba(46, 200, 102, 0.75);
+}
+.social-icon-btn.platform-hackerrank:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.6),
+        0 2px 0 #0E5C2A,
+        0 4px 8px rgba(0, 0, 0, 0.45);
 }
 
-/* 6. Instagram - Night */
+/* 6. Instagram 3D */
 .social-icon-btn.platform-instagram {
-    background: rgba(225, 48, 108, 0.14);
-    border: 1px solid rgba(225, 48, 108, 0.35);
-    color: #FF2D95;
-    box-shadow: 0 4px 12px rgba(225, 48, 108, 0.15);
+    background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCB045 100%);
+    border: 1px solid rgba(255, 45, 149, 0.5);
+    color: #FFFFFF;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.55),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.4),
+        0 6px 0 #7A1038,
+        0 10px 18px rgba(0, 0, 0, 0.55);
 }
 .social-icon-btn.platform-instagram:hover {
-    background: linear-gradient(135deg, #F58529 0%, #DD2A7B 50%, #8134AF 100%);
-    border-color: #FF2D95;
-    color: #FFFFFF;
-    box-shadow: 0 8px 24px rgba(0, 0, 44, 0.75), 0 0 20px rgba(255, 45, 149, 0.65);
+    background: linear-gradient(135deg, #954BC6 0%, #FF3333 50%, #FFBD59 100%);
+    border-color: #FF66B2;
+    box-shadow: 
+        inset 0 2px 2px rgba(255, 255, 255, 0.8),
+        0 10px 0 #7A1038,
+        0 16px 28px rgba(0, 0, 0, 0.7),
+        0 0 24px rgba(253, 29, 29, 0.75);
+}
+.social-icon-btn.platform-instagram:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.6),
+        0 2px 0 #7A1038,
+        0 4px 8px rgba(0, 0, 0, 0.45);
 }
 
 /* --------------------------------------------------------------------------
-   Day Theme (Light Mode) - Soft Pastel Clean Tint at Idle, Rich Fill on Hover
+   3D Platforms - Day Mode (Tactile 3D Keycaps with Crisp Solid Extrusions)
    -------------------------------------------------------------------------- */
 
-/* 1. GitHub - Day */
+/* 1. GitHub 3D - Day */
 [data-theme="light"] .social-icon-btn.platform-github {
-    background: #F1F5F9 !important;
+    background: linear-gradient(145deg, #FFFFFF 0%, #E2E8F0 100%) !important;
     border: 1px solid #CBD5E1 !important;
-    color: #24292E !important;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06) !important;
+    color: #1E293B !important;
+    box-shadow: 
+        inset 0 1.5px 1px #FFFFFF,
+        inset 0 -2px 2px rgba(0, 0, 0, 0.08),
+        0 6px 0 #94A3B8,
+        0 8px 14px rgba(15, 23, 42, 0.12) !important;
 }
 [data-theme="light"] .social-icon-btn.platform-github:hover {
-    background: #24292E !important;
+    background: linear-gradient(145deg, #24292E 0%, #0F172A 100%) !important;
     border-color: #0F172A !important;
     color: #FFFFFF !important;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.22), 0 0 14px rgba(36, 41, 46, 0.2) !important;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.4),
+        0 10px 0 #020617,
+        0 16px 24px rgba(15, 23, 42, 0.25),
+        0 0 16px rgba(15, 23, 42, 0.2) !important;
+}
+[data-theme="light"] .social-icon-btn.platform-github:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 2px 0 #94A3B8,
+        0 3px 6px rgba(15, 23, 42, 0.12) !important;
 }
 
-/* 2. LinkedIn - Day */
+/* 2. LinkedIn 3D - Day */
 [data-theme="light"] .social-icon-btn.platform-linkedin {
-    background: #EFF6FF !important;
+    background: linear-gradient(145deg, #FFFFFF 0%, #EFF6FF 100%) !important;
     border: 1px solid #BFDBFE !important;
     color: #0A66C2 !important;
-    box-shadow: 0 2px 6px rgba(10, 102, 194, 0.08) !important;
+    box-shadow: 
+        inset 0 1.5px 1px #FFFFFF,
+        inset 0 -2px 2px rgba(10, 102, 194, 0.08),
+        0 6px 0 #93C5FD,
+        0 8px 14px rgba(10, 102, 194, 0.15) !important;
 }
 [data-theme="light"] .social-icon-btn.platform-linkedin:hover {
-    background: #0A66C2 !important;
+    background: linear-gradient(145deg, #0A66C2 0%, #00478F 100%) !important;
     border-color: #0A66C2 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 8px 20px rgba(10, 102, 194, 0.35), 0 0 16px rgba(10, 102, 194, 0.25) !important;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.5),
+        0 10px 0 #003366,
+        0 16px 24px rgba(10, 102, 194, 0.35),
+        0 0 18px rgba(10, 102, 194, 0.3) !important;
+}
+[data-theme="light"] .social-icon-btn.platform-linkedin:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 2px 0 #93C5FD,
+        0 3px 6px rgba(10, 102, 194, 0.15) !important;
 }
 
-/* 3. Kaggle - Day */
+/* 3. Kaggle 3D - Day */
 [data-theme="light"] .social-icon-btn.platform-kaggle {
-    background: #F0F9FF !important;
+    background: linear-gradient(145deg, #FFFFFF 0%, #F0F9FF 100%) !important;
     border: 1px solid #BAE6FD !important;
     color: #0284C7 !important;
-    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.08) !important;
+    box-shadow: 
+        inset 0 1.5px 1px #FFFFFF,
+        inset 0 -2px 2px rgba(2, 132, 199, 0.08),
+        0 6px 0 #7DD3FC,
+        0 8px 14px rgba(2, 132, 199, 0.15) !important;
 }
 [data-theme="light"] .social-icon-btn.platform-kaggle:hover {
-    background: #0284C7 !important;
+    background: linear-gradient(145deg, #0284C7 0%, #0369A1 100%) !important;
     border-color: #0284C7 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35), 0 0 16px rgba(2, 132, 199, 0.25) !important;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.5),
+        0 10px 0 #075985,
+        0 16px 24px rgba(2, 132, 199, 0.35),
+        0 0 18px rgba(2, 132, 199, 0.3) !important;
+}
+[data-theme="light"] .social-icon-btn.platform-kaggle:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 2px 0 #7DD3FC,
+        0 3px 6px rgba(2, 132, 199, 0.15) !important;
 }
 
-/* 4. LeetCode - Day */
+/* 4. LeetCode 3D - Day */
 [data-theme="light"] .social-icon-btn.platform-leetcode {
-    background: #FFFBEB !important;
+    background: linear-gradient(145deg, #FFFFFF 0%, #FFFBEB 100%) !important;
     border: 1px solid #FDE68A !important;
     color: #D97706 !important;
-    box-shadow: 0 2px 6px rgba(217, 119, 6, 0.08) !important;
+    box-shadow: 
+        inset 0 1.5px 1px #FFFFFF,
+        inset 0 -2px 2px rgba(217, 119, 6, 0.08),
+        0 6px 0 #FCD34D,
+        0 8px 14px rgba(217, 119, 6, 0.15) !important;
 }
 [data-theme="light"] .social-icon-btn.platform-leetcode:hover {
-    background: #EA580C !important;
-    border-color: #D97706 !important;
+    background: linear-gradient(145deg, #EA580C 0%, #C2410C 100%) !important;
+    border-color: #EA580C !important;
     color: #FFFFFF !important;
-    box-shadow: 0 8px 20px rgba(217, 119, 6, 0.35), 0 0 16px rgba(234, 88, 12, 0.25) !important;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.5),
+        0 10px 0 #9A3412,
+        0 16px 24px rgba(234, 88, 12, 0.35),
+        0 0 18px rgba(234, 88, 12, 0.3) !important;
+}
+[data-theme="light"] .social-icon-btn.platform-leetcode:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 2px 0 #FCD34D,
+        0 3px 6px rgba(217, 119, 6, 0.15) !important;
 }
 
-/* 5. HackerRank - Day */
+/* 5. HackerRank 3D - Day */
 [data-theme="light"] .social-icon-btn.platform-hackerrank {
-    background: #F0FDF4 !important;
+    background: linear-gradient(145deg, #FFFFFF 0%, #F0FDF4 100%) !important;
     border: 1px solid #BBF7D0 !important;
     color: #16A34A !important;
-    box-shadow: 0 2px 6px rgba(22, 163, 74, 0.08) !important;
+    box-shadow: 
+        inset 0 1.5px 1px #FFFFFF,
+        inset 0 -2px 2px rgba(22, 163, 74, 0.08),
+        0 6px 0 #86EFAC,
+        0 8px 14px rgba(22, 163, 74, 0.15) !important;
 }
 [data-theme="light"] .social-icon-btn.platform-hackerrank:hover {
-    background: #16A34A !important;
+    background: linear-gradient(145deg, #16A34A 0%, #15803D 100%) !important;
     border-color: #16A34A !important;
     color: #FFFFFF !important;
-    box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35), 0 0 16px rgba(46, 200, 102, 0.25) !important;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.5),
+        0 10px 0 #14532D,
+        0 16px 24px rgba(22, 163, 74, 0.35),
+        0 0 18px rgba(22, 163, 74, 0.3) !important;
+}
+[data-theme="light"] .social-icon-btn.platform-hackerrank:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 2px 0 #86EFAC,
+        0 3px 6px rgba(22, 163, 74, 0.15) !important;
 }
 
-/* 6. Instagram - Day */
+/* 6. Instagram 3D - Day */
 [data-theme="light"] .social-icon-btn.platform-instagram {
-    background: #FFF1F2 !important;
+    background: linear-gradient(145deg, #FFFFFF 0%, #FFF1F2 100%) !important;
     border: 1px solid #FECDD3 !important;
     color: #E11D48 !important;
-    box-shadow: 0 2px 6px rgba(225, 29, 72, 0.08) !important;
+    box-shadow: 
+        inset 0 1.5px 1px #FFFFFF,
+        inset 0 -2px 2px rgba(225, 29, 72, 0.08),
+        0 6px 0 #FDA4AF,
+        0 8px 14px rgba(225, 29, 72, 0.15) !important;
 }
 [data-theme="light"] .social-icon-btn.platform-instagram:hover {
-    background: linear-gradient(135deg, #F58529 0%, #DD2A7B 50%, #8134AF 100%) !important;
-    border-color: #DD2A7B !important;
+    background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCB045 100%) !important;
+    border-color: #E11D48 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 8px 20px rgba(221, 42, 123, 0.35), 0 0 16px rgba(221, 42, 123, 0.25) !important;
+    box-shadow: 
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.5),
+        0 10px 0 #881337,
+        0 16px 24px rgba(225, 29, 72, 0.35),
+        0 0 18px rgba(225, 29, 72, 0.3) !important;
+}
+[data-theme="light"] .social-icon-btn.platform-instagram:active {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 2px 0 #FDA4AF,
+        0 3px 6px rgba(225, 29, 72, 0.15) !important;
 }
 
 

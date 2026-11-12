@@ -62,22 +62,35 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
     }
 }
 
+        // Clear any old persistent tokens immediately upon opening admin
+        localStorage.removeItem('sg_admin_token');
+        sessionStorage.removeItem('sg_admin_token');
+
+        let isKernelAuthenticated = false;
+
         // --- Authentication Handler ---
         function checkAuth() {
-            const token = localStorage.getItem('sg_admin_token');
             const overlay = document.getElementById('loginOverlay');
-            if (token) {
-                overlay.classList.add('hidden');
+            if (isKernelAuthenticated) {
+                if (overlay) overlay.classList.add('hidden');
                 loadData();
             } else {
-                overlay.classList.remove('hidden');
+                if (overlay) overlay.classList.remove('hidden');
+                const pInput = document.getElementById('loginPassword');
+                if (pInput) {
+                    pInput.value = '';
+                    setTimeout(() => pInput.focus(), 150);
+                }
             }
         }
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const u = document.getElementById('loginUsername').value;
-            const p = document.getElementById('loginPassword').value;
+            const u = document.getElementById('loginUsername').value.trim();
+            const p = document.getElementById('loginPassword').value.trim();
+            const errEl = document.getElementById('loginError');
+            if (errEl) errEl.style.display = 'none';
+
             try {
                 const res = await fetch('/api/admin/login', {
                     method: 'POST',
@@ -86,8 +99,10 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 });
                 const d = await res.json();
                 if (d.success) {
-                    localStorage.setItem('sg_admin_token', d.token);
+                    isKernelAuthenticated = true;
+                    sessionStorage.setItem('sg_admin_token', d.token);
                     checkAuth();
+                    showNotify('🔓 Access granted. Admin kernel unlocked!');
                 } else {
                     showLoginError(d.message || 'Authentication rejected. Invalid password.');
                 }
@@ -97,8 +112,11 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         });
 
         function logoutAdmin() {
+            isKernelAuthenticated = false;
+            sessionStorage.removeItem('sg_admin_token');
             localStorage.removeItem('sg_admin_token');
             checkAuth();
+            showNotify('🔒 Admin kernel locked successfully');
         }
 
         function showLoginError(msg) {
