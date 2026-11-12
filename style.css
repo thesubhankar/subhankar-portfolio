@@ -1069,42 +1069,24 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 }
 
-/* Instant Lag-Free Theme Switcher Override */
-
-.theme-switching,
-
-.theme-switching *,
-
-.theme-switching *::before,
-
-.theme-switching *::after,
-
-html.theme-switching .skill-pill,
-
-html.theme-switching .skill-category-card,
-
-html.theme-switching .skill-brand-svg,
-
-html.theme-switching .cat-brand-svg,
-
-html.theme-switching .skill-pill-text,
-
-html.theme-switching .cat-card-title,
-
-html.theme-switching .cat-card-badge,
-
-[data-theme="dark"].theme-switching .skill-pill,
-
-[data-theme="light"].theme-switching .skill-pill,
-
-[data-theme="dark"].theme-switching .skill-category-card,
-
-[data-theme="light"].theme-switching .skill-category-card {
-
-    transition: none !important;
-
-    animation: none !important;
-
+/* Smooth Natural Day / Night Theme Transition */
+body,
+.editor-layout,
+.main-editor,
+.activity-bar,
+.sidebar,
+.status-bar,
+.nav-cell,
+.code-card,
+.card,
+.skill-category-card,
+.skill-pill,
+.compact-project-card,
+.cert-card-interactive,
+.portfolio-header,
+.footer,
+.modal-content {
+    transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
 }
 
 /* Subtle, performant ambient RGB background shift */

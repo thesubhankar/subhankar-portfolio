@@ -251,51 +251,22 @@ function initTheme() {
     });
 
     function setTheme(theme, isManual = false) {
-
-        // Prevent layout/transition lag across 371+ grid elements during theme switch
-
-        document.documentElement.classList.add('theme-switching');
-
         document.documentElement.setAttribute('data-theme', theme);
-
         localStorage.setItem('sg_portfolio_theme', theme);
 
         if (themeLabel) {
-
             const isAuto = !isManual && (theme === getTimeBasedTheme());
-
             themeLabel.textContent = theme === 'dark'
-
                 ? (isAuto ? 'Dark theme (Night)' : 'Dark theme')
-
                 : (isAuto ? 'Light theme (Day)' : 'Light theme');
-
         }
 
         [desktopToggle, mobileToggle].forEach(btn => {
-
             if (btn) {
-
                 btn.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
-
                 btn.setAttribute('title', `Current: ${theme === 'dark' ? 'Dark' : 'Light'} theme (Click to toggle)`);
-
             }
-
         });
-
-        // Re-enable smooth component transitions on next frame
-
-        requestAnimationFrame(() => {
-
-            requestAnimationFrame(() => {
-
-                document.documentElement.classList.remove('theme-switching');
-
-            });
-
-        });
-
     }
 
 }

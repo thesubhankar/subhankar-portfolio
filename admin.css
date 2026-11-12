@@ -941,17 +941,24 @@
     color: #E11D48 !important;
 }
 
-/* Zero-lag theme switcher */
-.theme-switching,
-.theme-switching *,
-.theme-switching *::before,
-.theme-switching *::after,
-html.theme-switching .skill-pill,
-html.theme-switching .admin-item-card,
-[data-theme="dark"].theme-switching .skill-pill,
-[data-theme="light"].theme-switching .skill-pill {
-    transition: none !important;
-    animation: none !important;
+/* Smooth Day/Night Theme Transition for Admin Studio */
+body,
+.admin-body,
+.admin-app-container,
+.admin-sidebar,
+.admin-main,
+.admin-header,
+.admin-content,
+.admin-card,
+.admin-item-card,
+.admin-preview-file-card,
+.admin-form-panel,
+.form-input,
+.form-textarea,
+.admin-status-bar,
+.admin-pill,
+.admin-tab-btn {
+    transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
 }
 
 /* Sidebar Navigation Items in Dark Theme */

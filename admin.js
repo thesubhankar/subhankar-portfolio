@@ -43,8 +43,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
     });
 
     function setTheme(theme, isManual = false) {
-        // Zero-lag instant theme application: disable transition delay across the document
-        document.documentElement.classList.add('theme-switching');
         document.documentElement.setAttribute('data-theme', theme);
         if (document.body) {
             document.body.setAttribute('data-theme', theme);
@@ -60,13 +58,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 btn.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
                 btn.setAttribute('title', `Current: ${theme === 'dark' ? 'Dark' : 'Light'} theme (Click to toggle)`);
             }
-        });
-
-        // Re-enable transitions in next animation frame
-        requestAnimationFrame(() => {
-            setTimeout(() => {
-                document.documentElement.classList.remove('theme-switching');
-            }, 30);
         });
     }
 }
