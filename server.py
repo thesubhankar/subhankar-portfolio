@@ -315,9 +315,106 @@ def get_skill_svg(skill_name, skill_key=None):
     return f"""<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#00F2FE" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>"""
 
 # =========================================================================
-# Data Helpers
+# PostgreSQL Cloud Database Engine (Neon.tech / Render / Supabase)
+# =========================================================================
+def get_db_connection():
+    db_url = os.environ.get("DATABASE_URL", "").strip()
+    if not db_url:
+        return None
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+    try:
+        import psycopg2
+        return psycopg2.connect(db_url)
+    except Exception as e1:
+        print("[Database] PostgreSQL connection failed:", e1)
+        if "channel_binding" in db_url:
+            try:
+                import re, psycopg2
+                clean_url = re.sub(r'[?&]channel_binding=[^&]+', '', db_url)
+                if '?' not in clean_url and '&' in clean_url:
+                    clean_url = clean_url.replace('&', '?', 1)
+                return psycopg2.connect(clean_url)
+            except Exception as e2:
+                print("[Database] Retry without channel_binding failed:", e2)
+        return None
+
+def init_db():
+    conn = get_db_connection()
+    if not conn:
+        print("[Database] DATABASE_URL not available or failed to connect. Falling back to portfolio_data.json.")
+        return False
+
+    try:
+        with conn.cursor() as cur:
+            # 1. State Table for Portfolio JSON (Projects, Skills, Certs, Edu, Resume)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS portfolio_state (
+                    id VARCHAR(50) PRIMARY KEY,
+                    data JSONB NOT NULL,
+                    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                );
+            """)
+
+            # 2. Check if 'main' state is already initialized
+            cur.execute("SELECT id FROM portfolio_state WHERE id = 'main';")
+            row = cur.fetchone()
+            if not row:
+                print("[Database] Initializing PostgreSQL with existing portfolio_data.json...")
+                initial_data = {}
+                if os.path.exists(DATA_FILE):
+                    try:
+                        with open(DATA_FILE, "r", encoding="utf-8") as f:
+                            initial_data = json.load(f)
+                    except Exception as err:
+                        print("Error reading initial data file:", err)
+
+                import psycopg2.extras
+                cur.execute(
+                    "INSERT INTO portfolio_state (id, data, updated_at) VALUES ('main', %s, CURRENT_TIMESTAMP);",
+                    (psycopg2.extras.Json(initial_data),)
+                )
+                conn.commit()
+                print("[Database] Successfully migrated portfolio_data.json to PostgreSQL!")
+            else:
+                print("[Database] PostgreSQL portfolio_state table verified (already seeded).")
+        conn.close()
+        return True
+    except Exception as e:
+        print("[Database] Error during init_db:", e)
+        if conn:
+            conn.rollback()
+            conn.close()
+        return False
+
+# Trigger initialization on module import
+try:
+    init_db()
+except Exception as _e:
+    print("[Database] Auto-init exception:", _e)
+
+# =========================================================================
+# Data Helpers (Hybrid Database with Seamless JSON Fallback)
 # =========================================================================
 def load_data():
+    conn = get_db_connection()
+    if conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("SELECT data FROM portfolio_state WHERE id = 'main';")
+                row = cur.fetchone()
+                if row and row[0]:
+                    conn.close()
+                    data = row[0] if isinstance(row[0], dict) else json.loads(row[0])
+                    return data
+            conn.close()
+        except Exception as e:
+            print("[Database] Error loading from PostgreSQL, falling back to local file:", e)
+            if conn:
+                conn.close()
+
+    # File-based fallback
     if not os.path.exists(DATA_FILE):
         return {"projects": [], "certificates": [], "resume": {}, "skills": []}
     try:
@@ -328,8 +425,33 @@ def load_data():
         return {"projects": [], "certificates": [], "resume": {}, "skills": []}
 
 def save_data(data):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    # 1. Always save locally to file as fallback backup
+    try:
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print("Error saving local file backup:", e)
+
+    # 2. Save directly to PostgreSQL if DATABASE_URL is active
+    conn = get_db_connection()
+    if conn:
+        try:
+            import psycopg2.extras
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO portfolio_state (id, data, updated_at)
+                    VALUES ('main', %s, CURRENT_TIMESTAMP)
+                    ON CONFLICT (id) DO UPDATE SET
+                        data = EXCLUDED.data,
+                        updated_at = CURRENT_TIMESTAMP;
+                """, (psycopg2.extras.Json(data),))
+                conn.commit()
+            conn.close()
+        except Exception as e:
+            print("[Database] Error saving to PostgreSQL:", e)
+            if conn:
+                conn.rollback()
+                conn.close()
 
 def delete_upload_file(rel_path):
     """Safely delete an uploaded file from disk if it resides within assets/uploads/"""
@@ -344,6 +466,52 @@ def delete_upload_file(rel_path):
                 print(f"[Cleanup] Deleted file from disk: {rel_path}")
             except Exception as e:
                 print(f"Error removing upload file {rel_path}:", e)
+
+# =========================================================================
+# Static Site Routes & Diagnostic Endpoints
+# =========================================================================
+@app.route("/api/db-status", methods=["GET"])
+def db_status():
+    db_url = os.environ.get("DATABASE_URL", "").strip()
+    if not db_url:
+        return jsonify({
+            "database": "Local File (portfolio_data.json)",
+            "connected": False,
+            "message": "DATABASE_URL environment variable is not configured."
+        })
+
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({
+            "database": "PostgreSQL",
+            "connected": False,
+            "error": "Failed to connect to PostgreSQL with DATABASE_URL."
+        }), 500
+
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT version();")
+            ver = cur.fetchone()[0]
+            cur.execute("SELECT updated_at FROM portfolio_state WHERE id = 'main';")
+            row = cur.fetchone()
+            last_synced = str(row[0]) if row else None
+        conn.close()
+
+        return jsonify({
+            "database": "PostgreSQL (Neon Cloud)",
+            "connected": True,
+            "status": "Healthy & Online",
+            "engine": ver.split()[0] + " " + ver.split()[1],
+            "last_synced": last_synced
+        })
+    except Exception as e:
+        if conn:
+            conn.close()
+        return jsonify({
+            "database": "PostgreSQL",
+            "connected": False,
+            "error": str(e)
+        }), 500
 
 # =========================================================================
 # Static Site Routes & No-Cache Headers for Fast UI Updates
