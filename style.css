@@ -2281,29 +2281,55 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .btn {
-
     display: inline-flex;
-
     align-items: center;
-
     gap: 0.55rem;
-
-    padding: 0.7rem 1.35rem;
-
-    border-radius: var(--radius-md);
-
+    padding: 0.72rem 1.45rem;
+    border-radius: 12px;
     font-weight: 600;
-
     font-size: 0.92rem;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+}
 
-    transition: transform var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 100%);
+    border-radius: 10px 10px 14px 14px / 10px 10px 4px 4px;
+    pointer-events: none;
+    z-index: 2;
+}
 
+.btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55), inset 0 -1.5px 2px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.btn > * {
+    position: relative;
+    z-index: 4;
 }
 
 .btn:hover {
+    transform: translateY(-3px) scale(1.02);
+}
 
-    transform: translateY(-2px);
-
+.btn:active {
+    transform: translateY(1.5px) scale(0.97) !important;
 }
 
 .btn-primary {
@@ -4493,35 +4519,137 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
+/* 3D Certificate Badge Luxury Emblem */
 .cert-badge-circle {
-
-    width: 44px;
-
-    height: 44px;
-
-    min-width: 44px;
-
-    border-radius: var(--radius-md);
-
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 14px;
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     flex-shrink: 0;
-
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: default;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.cert-badge-circle.cyan { background-color: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); }
+.cert-badge-circle::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 46%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+    border-radius: 12px 12px 16px 16px / 12px 12px 4px 4px;
+    pointer-events: none;
+    z-index: 2;
+}
 
-.cert-badge-circle.blue { background-color: rgba(43, 108, 184, 0.15); color: var(--primary-blue); }
+.cert-badge-circle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.65), inset 0 -1.5px 2px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    z-index: 3;
+}
 
-.cert-badge-circle.purple { background-color: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+.cert-badge-circle svg,
+.cert-badge-circle i {
+    width: 24px;
+    height: 24px;
+    font-size: 1.35rem;
+    position: relative;
+    z-index: 4;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 
-.cert-badge-circle.orange { background-color: rgba(196, 90, 50, 0.15); color: var(--accent-orange); }
+.cert-badge-circle:hover {
+    transform: translateY(-3px) scale(1.08);
+}
 
-.cert-badge-circle.green { background-color: rgba(30, 158, 85, 0.15); color: var(--status-green); }
+.cert-badge-circle:hover svg,
+.cert-badge-circle:hover i {
+    transform: scale(1.1);
+}
+
+.cert-badge-circle.cyan {
+    background: linear-gradient(145deg, rgba(6, 182, 212, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(6, 182, 212, 0.35);
+    color: var(--accent-cyan);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(6, 182, 212, 0.25);
+}
+.cert-badge-circle.cyan:hover {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.cert-badge-circle.blue {
+    background: linear-gradient(145deg, rgba(43, 108, 184, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(43, 108, 184, 0.35);
+    color: var(--primary-blue);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(43, 108, 184, 0.25);
+}
+.cert-badge-circle.blue:hover {
+    border-color: var(--primary-blue);
+    box-shadow: 0 6px 20px rgba(43, 108, 184, 0.45), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.cert-badge-circle.purple {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(139, 92, 246, 0.35);
+    color: var(--accent-purple);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(139, 92, 246, 0.25);
+}
+.cert-badge-circle.purple:hover {
+    border-color: var(--accent-purple);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.cert-badge-circle.orange {
+    background: linear-gradient(145deg, rgba(196, 90, 50, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(196, 90, 50, 0.35);
+    color: var(--accent-orange);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(196, 90, 50, 0.25);
+}
+.cert-badge-circle.orange:hover {
+    border-color: var(--accent-orange);
+    box-shadow: 0 6px 20px rgba(196, 90, 50, 0.45), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.cert-badge-circle.green {
+    background: linear-gradient(145deg, rgba(30, 158, 85, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(30, 158, 85, 0.35);
+    color: var(--status-green);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(30, 158, 85, 0.25);
+}
+.cert-badge-circle.green:hover {
+    border-color: var(--status-green);
+    box-shadow: 0 6px 20px rgba(30, 158, 85, 0.45), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .cert-badge-circle {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .cert-badge-circle::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 100%);
+}
+[data-theme="light"] .cert-badge-circle::after {
+    box-shadow: inset 0 1px 1.5px #ffffff, inset 0 -1.5px 2px rgba(0, 0, 0, 0.08);
+}
 
 .cert-issuer-badge {
 
@@ -4604,39 +4732,71 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .btn-cert-icon {
-
-    width: 38px;
-
-    height: 38px;
-
-    min-width: 38px;
-
-    border-radius: var(--radius-md);
-
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 12px;
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
-    background: var(--bg-card);
-
-    border: var(--border-card);
-
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     color: var(--text-main);
-
     cursor: pointer;
-
-    transition: all var(--transition-fast);
-
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
     padding: 0;
-
-    box-shadow: var(--shadow-sm);
-
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.5);
     flex-shrink: 0;
-
     text-decoration: none;
+}
 
+.btn-cert-icon::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 46%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.06) 60%, transparent 100%);
+    border-radius: 10px 10px 14px 14px / 10px 10px 3px 3px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.btn-cert-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.btn-cert-icon svg,
+.btn-cert-icon i {
+    position: relative;
+    z-index: 4;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-cert-icon:active {
+    transform: translateY(1.5px) scale(0.95) !important;
+}
+
+[data-theme="light"] .btn-cert-icon {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .btn-cert-icon::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 100%);
+}
+[data-theme="light"] .btn-cert-icon::after {
+    box-shadow: inset 0 1px 1px #ffffff, inset 0 -1.5px 2px rgba(0, 0, 0, 0.08);
 }
 
 .btn-cert-icon.btn-cert-view:hover {
@@ -4751,27 +4911,115 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
+/* 3D Education Degree/Institution Luxury Emblem */
 .edu-badge-circle {
-
-    width: 50px;
-
-    height: 50px;
-
-    border-radius: 50%;
-
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 16px;
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: default;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.edu-badge-circle.cyan { background-color: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); }
+.edu-badge-circle::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 46%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+    border-radius: 14px 14px 18px 18px / 14px 14px 5px 5px;
+    pointer-events: none;
+    z-index: 2;
+}
 
-.edu-badge-circle.blue { background-color: rgba(43, 108, 184, 0.15); color: var(--primary-blue); }
+.edu-badge-circle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    box-shadow: inset 0 1.2px 1.5px rgba(255, 255, 255, 0.7), inset 0 -2px 3px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    z-index: 3;
+}
 
-.edu-badge-circle.purple { background-color: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+.edu-badge-circle svg,
+.edu-badge-circle i {
+    width: 26px;
+    height: 26px;
+    font-size: 1.45rem;
+    position: relative;
+    z-index: 4;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.edu-badge-circle:hover {
+    transform: translateY(-3px) scale(1.08);
+}
+
+.edu-badge-circle:hover svg,
+.edu-badge-circle:hover i {
+    transform: scale(1.1);
+}
+
+.edu-badge-circle.cyan {
+    background: linear-gradient(145deg, rgba(6, 182, 212, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(6, 182, 212, 0.4);
+    color: var(--accent-cyan);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 0 18px rgba(6, 182, 212, 0.3);
+}
+.edu-badge-circle.cyan:hover {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 8px 24px rgba(6, 182, 212, 0.5), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.edu-badge-circle.blue {
+    background: linear-gradient(145deg, rgba(43, 108, 184, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(43, 108, 184, 0.4);
+    color: var(--primary-blue);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 0 18px rgba(43, 108, 184, 0.3);
+}
+.edu-badge-circle.blue:hover {
+    border-color: var(--primary-blue);
+    box-shadow: 0 8px 24px rgba(43, 108, 184, 0.5), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.edu-badge-circle.purple {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(139, 92, 246, 0.4);
+    color: var(--accent-purple);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 0 18px rgba(139, 92, 246, 0.3);
+}
+.edu-badge-circle.purple:hover {
+    border-color: var(--accent-purple);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .edu-badge-circle {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .edu-badge-circle::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 100%);
+}
+[data-theme="light"] .edu-badge-circle::after {
+    box-shadow: inset 0 1.2px 1.5px #ffffff, inset 0 -2px 3px rgba(0, 0, 0, 0.08);
+}
 
 .edu-main-content {
 
@@ -7622,33 +7870,50 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .btn-copy {
-
     font-family: var(--font-mono);
-
     font-size: 0.75rem;
-
     font-weight: 700;
-
     color: var(--primary-blue);
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 0.32rem 0.8rem;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
 
-    background-color: var(--bg-card);
-
-    border: var(--border-card);
-
-    padding: 0.25rem 0.65rem;
-
-    border-radius: var(--radius-sm);
-
-    transition: all var(--transition-fast);
-
+.btn-copy::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 100%);
+    border-radius: 7px 7px 10px 10px;
+    pointer-events: none;
 }
 
 .btn-copy:hover {
-
-    background-color: var(--primary-blue);
-
+    transform: translateY(-2px);
+    background: var(--primary-blue);
     color: #FFFFFF;
+    box-shadow: 0 4px 12px var(--primary-blue-glow);
+    border-color: var(--primary-blue);
+}
 
+.btn-copy:active {
+    transform: translateY(1px) scale(0.96);
+}
+
+[data-theme="light"] .btn-copy {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 #ffffff;
 }
 
 /* ==========================================================================

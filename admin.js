@@ -1279,7 +1279,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             document.getElementById('eduTimeline').value = edu.timeline || '';
             document.getElementById('eduStatus').value = edu.status || '';
             document.getElementById('eduGrade').value = edu.grade || '';
-            document.getElementById('eduColor').value = edu.color || 'cyan';
             document.getElementById('eduLink').value = edu.link || '';
             document.getElementById('eduDetails').value = edu.details || '';
 
@@ -1312,7 +1311,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     timeline: document.getElementById('eduTimeline').value.trim(),
                     status: document.getElementById('eduStatus').value.trim(),
                     grade: document.getElementById('eduGrade').value.trim(),
-                    color: document.getElementById('eduColor').value.trim(),
+                    color: (eduId && (PORTFOLIO_DATA.education || []).find(e => e.id === eduId)?.color) || 'cyan',
                     link: document.getElementById('eduLink').value.trim(),
                     details: document.getElementById('eduDetails').value.trim()
                 };
