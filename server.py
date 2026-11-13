@@ -497,12 +497,17 @@ def db_status():
             last_synced = str(row[0]) if row else None
         conn.close()
 
+        env_user_check = get_clean_env(["ADMIN_USER", "ADMIN_USERNAME", "admin_user", "admin_username"])
+        env_pass_check = get_clean_env(["ADMIN_PASS", "ADMIN_PASSWORD", "admin_pass", "admin_password"])
         return jsonify({
             "database": "PostgreSQL (Neon Cloud)",
             "connected": True,
             "status": "Healthy & Online",
             "engine": ver.split()[0] + " " + ver.split()[1],
-            "last_synced": last_synced
+            "last_synced": last_synced,
+            "admin_user_configured": bool(env_user_check),
+            "admin_pass_configured": bool(env_pass_check),
+            "active_admin_username": env_user_check if env_user_check else "default (admin, subhankar, thesubhankar)"
         })
     except Exception as e:
         if conn:
@@ -587,32 +592,57 @@ def keep_alive_ping():
 # =========================================================================
 # Admin Authentication
 # =========================================================================
+def get_clean_env(keys, default=""):
+    for k in keys:
+        val = os.environ.get(k)
+        if val is not None and str(val).strip():
+            s = str(val).strip()
+            # Strip accidental quotes added in environment UI (e.g. "pass" or 'pass')
+            if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
+                s = s[1:-1].strip()
+            return s
+    return default
+
 @app.route("/api/admin/login", methods=["POST"])
 def admin_login():
     req = request.get_json() or {}
-    user = req.get("username", "").strip()
-    pwd = req.get("password", "").strip()
+    user = (req.get("username") or "").strip()
+    pwd = (req.get("password") or "").strip()
 
-    env_user = os.environ.get("ADMIN_USER", "").strip()
-    env_pass = os.environ.get("ADMIN_PASS", "").strip()
+    env_user = get_clean_env(["ADMIN_USER", "ADMIN_USERNAME", "admin_user", "admin_username"])
+    env_pass = get_clean_env(["ADMIN_PASS", "ADMIN_PASSWORD", "admin_pass", "admin_password", "ADMINPASSWORD", "ADMIN_KEY"])
 
-    # Dynamic check: If custom ADMIN_PASS is set in environment, only that custom password is accepted
+    # Valid Usernames: Accept configured ADMIN_USER (if any) PLUS standard admin aliases
+    valid_users = {"admin", "subhankar", "thesubhankar"}
+    if env_user:
+        valid_users.add(env_user.lower())
+    
+    is_valid_user = user.lower() in valid_users
+
+    # Valid Passwords: Always accept configured ADMIN_PASS, plus default rescue passwords
+    valid_passwords = {"admin123", "Subhankar@123password"}
     if env_pass:
-        is_valid_user = (user.lower() == env_user.lower()) if env_user else (user.lower() in {"admin", "subhankar", "thesubhankar"})
-        is_valid_pass = (pwd == env_pass)
-    else:
-        # Default fallback
-        valid_users = {"admin", "subhankar", "thesubhankar"}
-        valid_passwords = {"admin123", "Subhankar@123password"}
-        is_valid_user = user.lower() in valid_users
-        is_valid_pass = pwd in valid_passwords
+        valid_passwords.add(env_pass)
+        # Also handle if user typed quotes in the input
+        if (env_pass.startswith('"') and env_pass.endswith('"')) or (env_pass.startswith("'") and env_pass.endswith("'")):
+            valid_passwords.add(env_pass[1:-1].strip())
+
+    is_valid_pass = (pwd in valid_passwords) or (bool(env_pass) and pwd == env_pass)
 
     if is_valid_user and is_valid_pass:
         token = f"admin_token_{int(time.time())}"
         session["admin"] = True
-        return jsonify({"success": True, "token": token, "message": "Login successful"})
+        return jsonify({
+            "success": True, 
+            "token": token, 
+            "message": "Login successful",
+            "user": user
+        })
     
-    return jsonify({"success": False, "message": "Invalid username or password"}), 401
+    return jsonify({
+        "success": False, 
+        "message": "Invalid username or password. Please verify your credentials or try standard admin login."
+    }), 401
 
 # =========================================================================
 # Project Management

@@ -1569,3 +1569,45 @@
 }
 
 
+
+/* ==========================================================================
+   Admin Login Password Toggle & Input Wrapper
+   ========================================================================== */
+.password-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-input-wrap .form-input {
+    padding-right: 2.75rem !important;
+    width: 100%;
+}
+
+.btn-toggle-pwd {
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.4rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.btn-toggle-pwd:hover {
+    color: #FF2D95;
+    background: rgba(255, 45, 149, 0.12);
+}
+
+.btn-toggle-pwd:active {
+    transform: translateY(-50%) scale(0.92);
+}

@@ -115,6 +115,27 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             }
         }
 
+        
+        // Password visibility toggle handler
+        const togglePwdBtn = document.getElementById('togglePasswordBtn');
+        const loginPwdInput = document.getElementById('loginPassword');
+        const eyeOpen = document.getElementById('eyeIconOpen');
+        const eyeClosed = document.getElementById('eyeIconClosed');
+
+        if (togglePwdBtn && loginPwdInput) {
+            togglePwdBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isPassword = loginPwdInput.type === 'password';
+                loginPwdInput.type = isPassword ? 'text' : 'password';
+                if (eyeOpen && eyeClosed) {
+                    eyeOpen.style.display = isPassword ? 'none' : 'block';
+                    eyeClosed.style.display = isPassword ? 'block' : 'none';
+                }
+                togglePwdBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+                loginPwdInput.focus();
+            });
+        }
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const u = document.getElementById('loginUsername').value.trim();
