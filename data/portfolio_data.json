@@ -250,8 +250,9 @@
   ],
   "resume": {
     "filePath": "assets/resume.pdf",
-    "driveUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-    "lastUpdated": "November 2026"
+    "driveUrl": "",
+    "lastUpdated": "",
+    "hasUploadedPdf": false
   },
   "skills": [
     {

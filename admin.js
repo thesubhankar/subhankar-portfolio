@@ -1398,7 +1398,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         </svg>
                     </div>
                     <div class="single-card-info">
-                        <div class="single-card-title" title="${resumeSelectedFile.name}">${resumeSelectedFile.name}</div>
+                        <div class="single-card-title" title="${escapeHtml(resumeSelectedFile.name)}">${escapeHtml(resumeSelectedFile.name)}</div>
                         <div class="single-card-meta">
                             <span class="preview-tag pdf-tag">PDF Document</span>
                             <span class="single-card-size">${formatFileSize(resumeSelectedFile.size)}</span>
@@ -1413,32 +1413,35 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 resumePdfPreviewRow.appendChild(card);
             } else {
                 const r = PORTFOLIO_DATA.resume || {};
-                const filePath = r.filePath || 'assets/resume.pdf';
-                const card = document.createElement('div');
-                card.className = 'admin-single-card pdf-card';
-                card.innerHTML = `
-                    <div class="single-card-thumb pdf-thumb">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                    </div>
-                    <div class="single-card-info">
-                        <div class="single-card-title" title="Live Resume (${filePath})">Live Portfolio Resume (${filePath})</div>
-                        <div class="single-card-meta">
-                            <span class="preview-tag existing-tag">Deployed PDF</span>
-                            <span class="single-card-size">Updated: ${r.lastUpdated || 'Current'}</span>
-                            <span class="single-card-status">✓ Active on Site</span>
+                // Only show active card if user has explicitly uploaded a custom resume PDF
+                if (r.hasUploadedPdf && r.filePath) {
+                    const filePath = r.filePath;
+                    const card = document.createElement('div');
+                    card.className = 'admin-single-card pdf-card';
+                    card.innerHTML = `
+                        <div class="single-card-thumb pdf-thumb">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
                         </div>
-                    </div>
-                    <a href="/${filePath}" target="_blank" class="btn-view-single" title="View Current PDF">
-                        <span>View &nearr;</span>
-                    </a>
-                `;
-                resumePdfPreviewRow.appendChild(card);
+                        <div class="single-card-info">
+                            <div class="single-card-title" title="Active Resume (${escapeHtml(filePath)})">Active Resume (${escapeHtml(filePath)})</div>
+                            <div class="single-card-meta">
+                                <span class="preview-tag existing-tag">Uploaded PDF</span>
+                                <span class="single-card-size">Updated: ${escapeHtml(r.lastUpdated || 'Current')}</span>
+                                <span class="single-card-status">✓ Active on Site</span>
+                            </div>
+                        </div>
+                        <a href="/${escapeHtml(filePath)}" target="_blank" class="btn-view-single" title="View Current PDF">
+                            <span>View &nearr;</span>
+                        </a>
+                    `;
+                    resumePdfPreviewRow.appendChild(card);
+                }
             }
         }
 
@@ -1461,8 +1464,11 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         function renderResume() {
             const r = PORTFOLIO_DATA.resume || {};
-            if (r.driveUrl) {
+            const defaultDriveUrl = "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link";
+            if (r.driveUrl && r.driveUrl !== defaultDriveUrl) {
                 document.getElementById('resumeDriveUrl').value = r.driveUrl;
+            } else {
+                document.getElementById('resumeDriveUrl').value = '';
             }
             renderResumePdfPreview();
         }

@@ -407,6 +407,11 @@ def load_data():
                 if row and row[0]:
                     conn.close()
                     data = row[0] if isinstance(row[0], dict) else json.loads(row[0])
+                    # Auto-clean legacy default drive link
+                    default_link = "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link"
+                    if data.get("resume", {}).get("driveUrl") == default_link:
+                        data["resume"]["driveUrl"] = ""
+                        save_data(data)
                     return data
             conn.close()
         except Exception as e:
@@ -869,11 +874,12 @@ def update_resume():
         primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
         file.save(primary_pdf)
         data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+        data.setdefault("resume", {})["hasUploadedPdf"] = True
 
-    if drive_url:
-        data.setdefault("resume", {})["driveUrl"] = drive_url
-
-    data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
+    # Save drive_url (empty string if user cleared it)
+    data.setdefault("resume", {})["driveUrl"] = drive_url
+    if drive_url or (file and file.filename):
+        data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
     save_data(data)
     return jsonify({"success": True, "message": "Resume updated successfully", "resume": data["resume"]})
 

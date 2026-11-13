@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=17">
-    <link rel="stylesheet" href="admin.css?v=20">
+    <link rel="stylesheet" href="admin.css?v=21">
 </head>
 
 <body data-theme="dark">
@@ -539,7 +539,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Upload New Resume PDF (assets/resume.pdf) *</label>
                                     <input type="file" id="resumePdf" class="form-input form-file-input" accept="application/pdf" />
-                                    <div id="resumePdfNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Upload new PDF to deploy immediately. Active card below:</div>
+                                    <div id="resumePdfNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Upload your Resume PDF to deploy it live.</div>
                                     <div id="resumePdfPreviewRow" class="admin-single-preview-wrap"></div>
                                 </div>
                             </div>
@@ -567,32 +567,7 @@
                     </div>
                 </div>
 
-                <!-- Active Resume Status Card -->
-                <div class="admin-panel-card" style="margin-top: 1.5rem;">
-                    <div class="admin-card-header">
-                        <h3 class="admin-card-title">📄 Active Resume Status</h3>
-                    </div>
-                    <div class="cell-output-card">
-                        <div class="summary-grid">
-                            <div class="summary-item">
-                                <span class="form-label" style="color: var(--color-cyan, #00F2FE);">Local PDF File</span>
-                                <span style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-main);">/assets/resume.pdf</span>
-                                <div style="margin-top: 0.5rem;">
-                                    <a href="/assets/resume.pdf" target="_blank" class="sidebar-admin-link">
-                                        <span>👁️ Preview Live PDF &nearr;</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="summary-item">
-                                <span class="form-label" style="color: #17A223;">System Status</span>
-                                <span style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-main);">Synchronized &amp; Ready</span>
-                                <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 0.35rem;">
-                                    Connected to Flask Dynamic Engine
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </section>
 
         </main>
@@ -661,6 +636,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-    <script src="admin.js?v=20"></script>
+    <script src="admin.js?v=21"></script>
 </body>
 </html>
