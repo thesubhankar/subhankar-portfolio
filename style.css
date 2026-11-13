@@ -3379,40 +3379,68 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
+/* 3D Tactile Project Filter Buttons (All, Python, Data Analysis, Data Science, AI/ML) */
 .filter-chip {
-
     display: inline-flex;
-
     align-items: center;
-
     gap: 0.6rem;
-
-    padding: 0.5rem 1.2rem;
-
-    border-radius: var(--radius-full);
-
-    background: var(--bg-card);
-
-    border: var(--border-card);
-
+    padding: 0.55rem 1.35rem;
+    border-radius: 9999px;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     font-family: var(--font-sans);
-
-    font-size: 0.86rem;
-
+    font-size: 0.88rem;
     font-weight: 600;
-
     color: var(--text-muted);
-
     cursor: pointer;
-
-    backdrop-filter: blur(8px);
-
-    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
-
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.5);
+    transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.24s ease, border-color 0.24s ease, background 0.24s ease, color 0.24s ease;
     box-sizing: border-box;
-
     white-space: nowrap;
+}
 
+.filter-chip::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 8px;
+    right: 8px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 100%);
+    border-radius: 9999px 9999px 8px 8px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.filter-chip::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    box-shadow: inset 0 1px 1.2px rgba(255, 255, 255, 0.55), inset 0 -1.5px 2px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.filter-chip > * {
+    position: relative;
+    z-index: 4;
+}
+
+.filter-chip:hover {
+    transform: translateY(-3px) scale(1.03);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 45, 149, 0.25);
+}
+
+.filter-chip:active {
+    transform: translateY(1.5px) scale(0.97) !important;
 }
 
 .filter-3d-icon {
@@ -3481,30 +3509,50 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
+/* 3D Filter Active States */
 [data-theme="dark"] .filter-chip.active,
-
 .filter-chip.active {
-
-    background: #FF2D95 !important;
-
+    background: linear-gradient(145deg, #FF2D95 0%, #D81B60 100%) !important;
     color: #FFFFFF !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 6px 20px rgba(255, 45, 149, 0.5), 0 0 18px rgba(255, 45, 149, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.6) !important;
+}
 
-    border-color: #FF2D95 !important;
+[data-theme="dark"] .filter-chip.active::before,
+.filter-chip.active::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.12) 60%, transparent 100%);
+}
 
-    box-shadow: 0 4px 16px rgba(255, 45, 149, 0.4) !important;
+[data-theme="light"] .filter-chip {
+    background: linear-gradient(145deg, #FFFFFF 0%, #F1F5F9 100%);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #64748B;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
 
+[data-theme="light"] .filter-chip::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 100%);
+}
+
+[data-theme="light"] .filter-chip::after {
+    box-shadow: inset 0 1px 1px #ffffff, inset 0 -1.5px 2px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .filter-chip:hover {
+    color: #0F172A;
+    border-color: rgba(0, 123, 167, 0.35);
+    box-shadow: 0 5px 16px rgba(0, 123, 167, 0.2);
 }
 
 [data-theme="light"] .filter-chip.active {
-
-    background: #007BA7 !important;
-
+    background: linear-gradient(145deg, #007BA7 0%, #005F83 100%) !important;
     color: #FFFFFF !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 6px 20px rgba(0, 123, 167, 0.4), 0 0 18px rgba(0, 123, 167, 0.25), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.7) !important;
+}
 
-    border-color: #007BA7 !important;
-
-    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.35) !important;
-
+[data-theme="light"] .filter-chip.active::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.15) 60%, transparent 100%);
 }
 
 .projects-grid {
@@ -5521,28 +5569,83 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
+/* 3D GitHub Brand Luxury Emblem */
 .github-logo-icon {
-
-    width: 38px;
-
-    height: 38px;
-
-    color: #FFFFFF;
-
-    display: flex;
-
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 14px;
+    display: inline-flex;
     align-items: center;
-
     justify-content: center;
-
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    color: #FFFFFF;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.98) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
 
+.github-logo-icon::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 46%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+    border-radius: 12px 12px 16px 16px / 12px 12px 4px 4px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.github-logo-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.65), inset 0 -1.5px 2px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.github-logo-icon svg {
+    width: 28px;
+    height: 28px;
+    position: relative;
+    z-index: 4;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.github-logo-icon:hover {
+    transform: translateY(-3px) scale(1.08);
+    border-color: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 18px rgba(255, 255, 255, 0.15);
+}
+
+.github-logo-icon:hover svg {
+    transform: scale(1.1);
 }
 
 [data-theme="light"] .github-logo-icon {
+    color: #0F172A;
+    background: linear-gradient(145deg, #FFFFFF 0%, #F1F5F9 100%);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
 
-    color: #0A0A0A;
+[data-theme="light"] .github-logo-icon::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 100%);
+}
 
+[data-theme="light"] .github-logo-icon::after {
+    box-shadow: inset 0 1px 1.5px #ffffff, inset 0 -1.5px 2px rgba(0, 0, 0, 0.08);
 }
 
 .github-handle-row {
@@ -5600,43 +5703,53 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .github-profile-pill-btn {
-
     font-family: var(--font-mono);
-
     font-size: 0.76rem;
-
-    font-weight: 600;
-
+    font-weight: 700;
     color: #8F9BBF;
-
-    background: #0A0A0A;
-
-    border: 1px solid #222228;
-
-    padding: 0.22rem 0.65rem;
-
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 0.28rem 0.75rem;
     border-radius: 9999px;
-
     text-decoration: none;
-
     display: inline-flex;
-
     align-items: center;
-
     gap: 4px;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
 
-    transition: all 0.2s ease;
+.github-profile-pill-btn::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    right: 4px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 100%);
+    border-radius: 9999px 9999px 6px 6px;
+    pointer-events: none;
+    z-index: 2;
+}
 
+.github-profile-pill-btn > * {
+    position: relative;
+    z-index: 3;
 }
 
 .github-profile-pill-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(145deg, #FF2D95 0%, #D81B60 100%);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 14px rgba(255, 45, 149, 0.45);
+}
 
-    background: rgba(255, 45, 149, 0.12);
-
-    color: #FF2D95;
-
-    border-color: #FF2D95;
-
+.github-profile-pill-btn:active {
+    transform: translateY(1px) scale(0.96);
 }
 
 [data-theme="light"] .github-profile-pill-btn {
@@ -5854,13 +5967,14 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .github-stat-card.card-repos .stat-card-icon-wrap {
-
     color: #00F2FE;
-
-    background: rgba(0, 242, 254, 0.12);
-
-    border: 1px solid rgba(0, 242, 254, 0.35);
-
+    background: linear-gradient(145deg, rgba(0, 242, 254, 0.24) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(0, 242, 254, 0.35);
+}
+.github-stat-card.card-repos:hover .stat-card-icon-wrap {
+    border-color: #00F2FE;
+    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.55), 0 0 22px rgba(0, 242, 254, 0.4);
 }
 
 .github-stat-card.card-repos:hover {
@@ -5882,13 +5996,14 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .github-stat-card.card-commits .stat-card-icon-wrap {
-
     color: #39D353;
-
-    background: rgba(57, 211, 83, 0.12);
-
-    border: 1px solid rgba(57, 211, 83, 0.35);
-
+    background: linear-gradient(145deg, rgba(57, 211, 83, 0.24) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(57, 211, 83, 0.45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(57, 211, 83, 0.35);
+}
+.github-stat-card.card-commits:hover .stat-card-icon-wrap {
+    border-color: #39D353;
+    box-shadow: 0 6px 20px rgba(57, 211, 83, 0.55), 0 0 22px rgba(57, 211, 83, 0.4);
 }
 
 .github-stat-card.card-commits:hover {
@@ -5910,13 +6025,14 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .github-stat-card.card-stars .stat-card-icon-wrap {
-
     color: #FBBF24;
-
-    background: rgba(251, 191, 36, 0.12);
-
-    border: 1px solid rgba(251, 191, 36, 0.35);
-
+    background: linear-gradient(145deg, rgba(251, 191, 36, 0.24) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(251, 191, 36, 0.35);
+}
+.github-stat-card.card-stars:hover .stat-card-icon-wrap {
+    border-color: #FBBF24;
+    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.55), 0 0 22px rgba(251, 191, 36, 0.4);
 }
 
 .github-stat-card.card-stars:hover {
@@ -5938,13 +6054,14 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .github-stat-card.card-followers .stat-card-icon-wrap {
-
     color: #C084FC;
-
-    background: rgba(192, 132, 252, 0.12);
-
-    border: 1px solid rgba(192, 132, 252, 0.35);
-
+    background: linear-gradient(145deg, rgba(192, 132, 252, 0.24) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(192, 132, 252, 0.45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 16px rgba(192, 132, 252, 0.35);
+}
+.github-stat-card.card-followers:hover .stat-card-icon-wrap {
+    border-color: #C084FC;
+    box-shadow: 0 6px 20px rgba(192, 132, 252, 0.55), 0 0 22px rgba(192, 132, 252, 0.4);
 }
 
 .github-stat-card.card-followers:hover {
@@ -5976,13 +6093,10 @@ body[data-theme="light"] .toggle-slider {
 }
 
 [data-theme="light"] .github-stat-card.card-repos .stat-card-icon-wrap {
-
     color: #007BA7 !important;
-
-    background: rgba(0, 123, 167, 0.08) !important;
-
-    border-color: rgba(0, 123, 167, 0.25) !important;
-
+    background: linear-gradient(145deg, #ffffff 0%, #e0f2fe 100%) !important;
+    border-color: rgba(0, 123, 167, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(0, 123, 167, 0.18) !important;
 }
 
 [data-theme="light"] .github-stat-card.card-repos:hover {
@@ -6002,13 +6116,10 @@ body[data-theme="light"] .toggle-slider {
 }
 
 [data-theme="light"] .github-stat-card.card-commits .stat-card-icon-wrap {
-
     color: #16A34A !important;
-
-    background: rgba(22, 163, 74, 0.08) !important;
-
-    border-color: rgba(22, 163, 74, 0.25) !important;
-
+    background: linear-gradient(145deg, #ffffff 0%, #dcfce7 100%) !important;
+    border-color: rgba(22, 163, 74, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.18) !important;
 }
 
 [data-theme="light"] .github-stat-card.card-commits:hover {
@@ -6028,13 +6139,10 @@ body[data-theme="light"] .toggle-slider {
 }
 
 [data-theme="light"] .github-stat-card.card-stars .stat-card-icon-wrap {
-
     color: #D97706 !important;
-
-    background: rgba(245, 158, 11, 0.1) !important;
-
-    border-color: rgba(217, 119, 6, 0.25) !important;
-
+    background: linear-gradient(145deg, #ffffff 0%, #fef3c7 100%) !important;
+    border-color: rgba(217, 119, 6, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.18) !important;
 }
 
 [data-theme="light"] .github-stat-card.card-stars:hover {
@@ -6054,13 +6162,10 @@ body[data-theme="light"] .toggle-slider {
 }
 
 [data-theme="light"] .github-stat-card.card-followers .stat-card-icon-wrap {
-
     color: #7C3AED !important;
-
-    background: rgba(124, 58, 237, 0.08) !important;
-
-    border-color: rgba(124, 58, 237, 0.25) !important;
-
+    background: linear-gradient(145deg, #ffffff 0%, #f3e8ff 100%) !important;
+    border-color: rgba(124, 58, 237, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.18) !important;
 }
 
 [data-theme="light"] .github-stat-card.card-followers:hover {
@@ -6073,30 +6178,66 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
+/* 3D GitHub Analytics Stat Card Logos (Repositories, Contributions, Stars, Followers) */
 .stat-card-icon-wrap {
-
-    width: 36px;
-
-    height: 36px;
-
-    border-radius: 9px;
-
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 13px;
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
+    margin-bottom: 0.35rem;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: default;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
 
-    margin-bottom: 0.2rem;
+.stat-card-icon-wrap::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 46%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+    border-radius: 11px 11px 14px 14px / 11px 11px 4px 4px;
+    pointer-events: none;
+    z-index: 2;
+}
 
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+.stat-card-icon-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 13px;
+    box-shadow: inset 0 1px 1.2px rgba(255, 255, 255, 0.65), inset 0 -1.5px 2px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    z-index: 3;
+}
 
+.stat-card-icon-wrap svg {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index: 4;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .github-stat-card:hover .stat-card-icon-wrap {
+    transform: translateY(-3px) scale(1.12);
+}
 
-    transform: scale(1.08);
-
+.github-stat-card:hover .stat-card-icon-wrap svg {
+    transform: scale(1.1);
 }
 
 .stat-number {
@@ -9992,66 +10133,90 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
+/* 3D Tactile Copyright & License Capsule Button */
 .btn-copyright-modal-trigger {
-
-    background: rgba(255, 45, 149, 0.1);
-
-    border: 1px solid rgba(255, 45, 149, 0.32);
-
+    background: linear-gradient(145deg, rgba(255, 45, 149, 0.2) 0%, rgba(30, 41, 59, 0.92) 100%);
+    border: 1px solid rgba(255, 45, 149, 0.45);
     color: #FF2D95;
-
     font-family: var(--font-mono);
-
-    font-size: 0.78rem;
-
-    font-weight: 600;
-
-    padding: 0.35rem 0.85rem;
-
-    border-radius: var(--radius-sm);
-
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.45rem 1.15rem;
+    border-radius: 9999px;
     cursor: pointer;
-
-    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
-
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
     display: inline-flex;
-
     align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 0 14px rgba(255, 45, 149, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.24s ease, border-color 0.24s ease, background 0.24s ease, color 0.24s ease;
+}
 
-    gap: 0.45rem;
+.btn-copyright-modal-trigger::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 6px;
+    right: 6px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.06) 60%, transparent 100%);
+    border-radius: 9999px 9999px 8px 8px;
+    pointer-events: none;
+    z-index: 2;
+}
 
+.btn-copyright-modal-trigger::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.btn-copyright-modal-trigger > * {
+    position: relative;
+    z-index: 4;
 }
 
 .btn-copyright-modal-trigger:hover {
-
-    background: #FF2D95;
-
+    background: linear-gradient(145deg, #FF2D95 0%, #D81B60 100%);
     color: #FFFFFF;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 6px 20px rgba(255, 45, 149, 0.55), 0 0 20px rgba(255, 45, 149, 0.35);
+    border-color: rgba(255, 255, 255, 0.4);
+}
 
-    transform: translateY(-2px);
-
-    box-shadow: 0 4px 16px rgba(255, 45, 149, 0.4);
-
+.btn-copyright-modal-trigger:active {
+    transform: translateY(1.5px) scale(0.97) !important;
 }
 
 [data-theme="light"] .btn-copyright-modal-trigger {
-
-    background: rgba(0, 123, 167, 0.08) !important;
-
-    border: 1px solid #007BA7 !important;
-
+    background: linear-gradient(145deg, #FFFFFF 0%, #E0F2FE 100%) !important;
+    border: 1px solid rgba(0, 123, 167, 0.35) !important;
     color: #007BA7 !important;
+    box-shadow: 0 4px 12px rgba(0, 123, 167, 0.18) !important;
+}
 
+[data-theme="light"] .btn-copyright-modal-trigger::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 100%);
+}
+
+[data-theme="light"] .btn-copyright-modal-trigger::after {
+    box-shadow: inset 0 1px 1.2px #ffffff, inset 0 -1.5px 2px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="light"] .btn-copyright-modal-trigger:hover {
-
-    background: #007BA7 !important;
-
+    background: linear-gradient(145deg, #007BA7 0%, #005F83 100%) !important;
     color: #FFFFFF !important;
-
-    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.35) !important;
-
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 6px 18px rgba(0, 123, 167, 0.45) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 .kernel-version-tag {
