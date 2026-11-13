@@ -469,8 +469,10 @@
       "status": "In Progress",
       "grade": "Current CGPA: 8.5/10",
       "details": "Affiliated with Biju Patnaik University of Technology (BPUT), Rourkela, Odisha. Deep focus on Algorithms, Data Structures, Database Systems, Artificial Intelligence, and Applied Machine Learning.",
-      "link": "https://github.com/thesubhankar",
-      "color": "cyan"
+      "link": "",
+      "color": "cyan",
+      "viewLink": "",
+      "downloadLink": ""
     },
     {
       "id": "edu_higher_secondary",
@@ -480,8 +482,10 @@
       "status": "Completed",
       "grade": "First Class with Distinction",
       "details": "Council of Higher Secondary Education (CHSE), Odisha. Major coursework in Physics, Chemistry, Mathematics, and Computer Science with foundational analytical problem-solving.",
-      "link": "https://github.com/thesubhankar",
-      "color": "pink"
+      "link": "",
+      "color": "pink",
+      "viewLink": "",
+      "downloadLink": ""
     },
     {
       "id": "edu_matriculation",
@@ -491,8 +495,10 @@
       "status": "Completed",
       "grade": "First Division",
       "details": "Board of Secondary Education (BSE), Odisha. Rigorous general secondary curriculum covering foundational Mathematics, Science, and Social Studies.",
-      "link": "https://github.com/thesubhankar",
-      "color": "green"
+      "link": "",
+      "color": "green",
+      "viewLink": "",
+      "downloadLink": ""
     }
   ]
 }

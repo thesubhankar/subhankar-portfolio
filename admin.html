@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=17">
-    <link rel="stylesheet" href="admin.css?v=21">
+    <link rel="stylesheet" href="admin.css?v=22">
 </head>
 
 <body data-theme="dark">
@@ -481,9 +481,15 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label">Verification / GitHub Link</label>
-                                <input type="url" id="eduLink" class="form-input" placeholder="https://github.com/thesubhankar" />
+                            <div class="admin-grid-2col">
+                                <div class="form-group">
+                                    <label class="form-label">View Document / Credential URL</label>
+                                    <input type="url" id="eduViewLink" class="form-input" placeholder="https://drive.google.com/file/... or website" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Download Document URL (Optional)</label>
+                                    <input type="url" id="eduDownloadLink" class="form-input" placeholder="Direct PDF download URL" />
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -636,6 +642,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-    <script src="admin.js?v=21"></script>
+    <script src="admin.js?v=22"></script>
 </body>
 </html>

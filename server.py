@@ -407,10 +407,23 @@ def load_data():
                 if row and row[0]:
                     conn.close()
                     data = row[0] if isinstance(row[0], dict) else json.loads(row[0])
-                    # Auto-clean legacy default drive link
+                    # Auto-clean legacy default links
                     default_link = "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link"
+                    needs_save = False
                     if data.get("resume", {}).get("driveUrl") == default_link:
                         data["resume"]["driveUrl"] = ""
+                        needs_save = True
+                    for e in data.get("education", []):
+                        if "github.com/thesubhankar" in (e.get("link") or ""):
+                            e["link"] = ""
+                            needs_save = True
+                        if "viewLink" not in e:
+                            e["viewLink"] = e.get("link") or ""
+                            needs_save = True
+                        if "downloadLink" not in e:
+                            e["downloadLink"] = ""
+                            needs_save = True
+                    if needs_save:
                         save_data(data)
                     return data
             conn.close()
@@ -1055,7 +1068,10 @@ def add_or_update_education():
     status = req.get("status", "Completed").strip()
     grade = req.get("grade", "").strip()
     details = req.get("details", "").strip()
-    link = req.get("link", "https://github.com/thesubhankar").strip()
+    view_link = req.get("viewLink", req.get("link", "")).strip()
+    if "github.com/thesubhankar" in view_link and not req.get("viewLink"):
+        view_link = ""
+    download_link = req.get("downloadLink", "").strip()
     color = req.get("color", "cyan").strip()
 
     new_edu = {
@@ -1066,7 +1082,9 @@ def add_or_update_education():
         "status": status,
         "grade": grade,
         "details": details,
-        "link": link,
+        "viewLink": view_link,
+        "downloadLink": download_link,
+        "link": view_link or download_link,
         "color": color
     }
 

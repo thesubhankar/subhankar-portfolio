@@ -1267,7 +1267,10 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     </div>
 
                     <div class="admin-card-footer" style="margin-top: 0.75rem;">
-                        ${edu.link ? `<a href="${edu.link}" target="_blank" rel="noopener noreferrer" class="sidebar-admin-link" style="font-size: 11px;">Credentials &nearr;</a>` : '<span></span>'}
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                            ${(edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '')) ? `<a href="${(edu.viewLink || edu.link)}" target="_blank" rel="noopener noreferrer" class="sidebar-admin-link" style="font-size: 11px;">👁️ View &nearr;</a>` : ''}
+                            ${(edu.downloadLink || (edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : ''))) ? `<a href="${(edu.downloadLink || edu.viewLink || edu.link)}" download target="_blank" rel="noopener noreferrer" class="sidebar-admin-link" style="font-size: 11px;">⬇️ Download &nearr;</a>` : ''}
+                        </div>
                         <div style="display: flex; gap: 6px; align-items: center;">
                             <button type="button" onclick="editEducation('${edu.id}')" class="btn-action-icon btn-edit-cyber" title="Edit Education Milestone" aria-label="Edit Education Milestone">
                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -1300,7 +1303,8 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             document.getElementById('eduTimeline').value = edu.timeline || '';
             document.getElementById('eduStatus').value = edu.status || '';
             document.getElementById('eduGrade').value = edu.grade || '';
-            document.getElementById('eduLink').value = edu.link || '';
+            document.getElementById('eduViewLink').value = edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '';
+            document.getElementById('eduDownloadLink').value = edu.downloadLink || '';
             document.getElementById('eduDetails').value = edu.details || '';
 
             const submitBtn = document.getElementById('eduSubmitBtn');
@@ -1333,7 +1337,9 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     status: document.getElementById('eduStatus').value.trim(),
                     grade: document.getElementById('eduGrade').value.trim(),
                     color: (eduId && (PORTFOLIO_DATA.education || []).find(e => e.id === eduId)?.color) || 'cyan',
-                    link: document.getElementById('eduLink').value.trim(),
+                    viewLink: document.getElementById('eduViewLink').value.trim(),
+                    downloadLink: document.getElementById('eduDownloadLink').value.trim(),
+                    link: document.getElementById('eduViewLink').value.trim() || document.getElementById('eduDownloadLink').value.trim(),
                     details: document.getElementById('eduDetails').value.trim()
                 };
 
