@@ -593,10 +593,21 @@ def admin_login():
     user = req.get("username", "").strip()
     pwd = req.get("password", "").strip()
 
-    valid_users = {ADMIN_USERNAME.lower(), "admin", "subhankar", "thesubhankar"}
-    valid_passwords = {ADMIN_PASSWORD, "admin123", "Subhankar@123password"}
+    env_user = os.environ.get("ADMIN_USER", "").strip()
+    env_pass = os.environ.get("ADMIN_PASS", "").strip()
 
-    if user.lower() in valid_users and (pwd in valid_passwords or pwd == ADMIN_PASSWORD):
+    # Dynamic check: If custom ADMIN_PASS is set in environment, only that custom password is accepted
+    if env_pass:
+        is_valid_user = (user.lower() == env_user.lower()) if env_user else (user.lower() in {"admin", "subhankar", "thesubhankar"})
+        is_valid_pass = (pwd == env_pass)
+    else:
+        # Default fallback
+        valid_users = {"admin", "subhankar", "thesubhankar"}
+        valid_passwords = {"admin123", "Subhankar@123password"}
+        is_valid_user = user.lower() in valid_users
+        is_valid_pass = pwd in valid_passwords
+
+    if is_valid_user and is_valid_pass:
         token = f"admin_token_{int(time.time())}"
         session["admin"] = True
         return jsonify({"success": True, "token": token, "message": "Login successful"})
