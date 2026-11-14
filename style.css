@@ -14843,3 +14843,227 @@ body[data-theme="light"] .toggle-slider {
     color: #FFFFFF !important;
     box-shadow: 0 6px 18px rgba(22, 163, 74, 0.4) !important;
 }
+
+/* ==========================================================================
+   Tactile 3D Contact Section Cards, Emblems & 3D Copy Buttons
+   ========================================================================== */
+.contact-method-card {
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    padding: 0.95rem 1.25rem;
+    background: linear-gradient(145deg, rgba(17, 24, 39, 0.78) 0%, rgba(15, 23, 42, 0.94) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+                border-color 0.25s ease,
+                box-shadow 0.28s ease,
+                background 0.25s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.contact-method-card:hover {
+    transform: translateY(-3px) scale(1.015);
+    border-color: rgba(0, 242, 254, 0.35);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(0, 242, 254, 0.14);
+}
+
+/* 3D Method Icon Box */
+.method-icon-box.method-icon-3d {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: default;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6), inset 0 -2px 3px rgba(0, 0, 0, 0.5);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.method-icon-box.method-icon-3d::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+    border-radius: 11px 11px 16px 16px / 11px 11px 4px 4px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.method-icon-box.method-icon-3d::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 13px;
+    box-shadow: inset 0 1px 1.2px rgba(255, 255, 255, 0.7), inset 0 -1.5px 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.method-icon-box.method-icon-3d svg {
+    position: relative;
+    z-index: 4;
+    transition: transform 0.25s ease, filter 0.25s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.contact-method-card:hover .method-icon-box.method-icon-3d {
+    transform: translateY(-2px) scale(1.08);
+}
+
+.contact-method-card:hover .method-icon-box.method-icon-3d svg {
+    transform: scale(1.12);
+}
+
+/* Email Emblem - Electric Cyan */
+.method-icon-cyan {
+    background: linear-gradient(145deg, #00F2FE 0%, #0369A1 100%);
+    border: 1px solid rgba(0, 242, 254, 0.7);
+    color: #FFFFFF;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 18px rgba(0, 242, 254, 0.45);
+}
+
+/* Phone Emblem - Emerald Green */
+.method-icon-emerald {
+    background: linear-gradient(145deg, #10B981 0%, #065F46 100%);
+    border: 1px solid rgba(16, 185, 129, 0.7);
+    color: #FFFFFF;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 18px rgba(16, 185, 129, 0.45);
+}
+
+/* Location Emblem - Vibrant Amber/Orange */
+.method-icon-amber {
+    background: linear-gradient(145deg, #F59E0B 0%, #9A3412 100%);
+    border: 1px solid rgba(245, 158, 11, 0.7);
+    color: #FFFFFF;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 18px rgba(245, 158, 11, 0.45);
+}
+
+/* 3D Tactile Copy Button */
+.btn-copy, .btn-copy-3d {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.38rem;
+    padding: 0.38rem 0.88rem;
+    border-radius: 9px;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #00F2FE;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.4);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 242, 254, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+}
+
+.btn-copy-3d::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 60%, transparent 100%);
+    border-radius: 7px 7px 10px 10px / 7px 7px 2px 2px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.btn-copy-3d::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -1.2px 1.5px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.btn-copy-3d > * {
+    position: relative;
+    z-index: 4;
+}
+
+.btn-copy-3d svg {
+    transition: transform 0.2s ease;
+}
+
+.btn-copy-3d:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: linear-gradient(145deg, #00F2FE 0%, #0284C7 100%);
+    color: #FFFFFF !important;
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 5px 16px rgba(0, 242, 254, 0.5), 0 0 14px rgba(0, 242, 254, 0.4);
+}
+
+.btn-copy-3d:hover svg {
+    transform: scale(1.15);
+}
+
+.btn-copy-3d:active {
+    transform: translateY(1.5px) scale(0.96) !important;
+}
+
+/* Light Mode Overrides for Contact 3D Elements */
+[data-theme="light"] .contact-method-card {
+    background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), inset 0 1px 0 #FFFFFF;
+}
+
+[data-theme="light"] .contact-method-card:hover {
+    border-color: rgba(0, 123, 167, 0.4);
+    box-shadow: 0 8px 22px rgba(0, 123, 167, 0.14);
+}
+
+[data-theme="light"] .method-icon-box.method-icon-3d {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 1px #FFFFFF, inset 0 -2px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .method-icon-cyan {
+    background: linear-gradient(145deg, #00C6FF 0%, #0072FF 100%);
+    border: 1px solid rgba(0, 114, 255, 0.5);
+    box-shadow: 0 4px 14px rgba(0, 114, 255, 0.3);
+}
+
+[data-theme="light"] .method-icon-emerald {
+    background: linear-gradient(145deg, #34D399 0%, #059669 100%);
+    border: 1px solid rgba(5, 150, 105, 0.5);
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+}
+
+[data-theme="light"] .method-icon-amber {
+    background: linear-gradient(145deg, #FBBF24 0%, #D97706 100%);
+    border: 1px solid rgba(217, 119, 6, 0.5);
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3);
+}
+
+[data-theme="light"] .btn-copy, [data-theme="light"] .btn-copy-3d {
+    background: linear-gradient(145deg, #FFFFFF 0%, #F1F5F9 100%);
+    color: #007BA7;
+    border-color: rgba(0, 123, 167, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 123, 167, 0.12), inset 0 1px 1px #FFFFFF;
+}
+
+[data-theme="light"] .btn-copy-3d:hover {
+    background: linear-gradient(145deg, #007BA7 0%, #005F83 100%);
+    color: #FFFFFF !important;
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 5px 14px rgba(0, 123, 167, 0.35);
+}

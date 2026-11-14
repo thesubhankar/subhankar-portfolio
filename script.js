@@ -3484,6 +3484,24 @@ function initCopyButtons() {
 
     }
 
+    const copyLocationBtn = document.getElementById('copyLocationBtn');
+    const copyLocationText = document.getElementById('copyLocationText');
+    if (copyLocationBtn) {
+        copyLocationBtn.addEventListener('click', () => {
+            const loc = copyLocationBtn.getAttribute('data-copy');
+            if (loc) {
+                navigator.clipboard.writeText(loc).then(() => {
+                    if (copyLocationText) copyLocationText.textContent = 'Copied!';
+                    copyLocationBtn.style.color = 'var(--status-green)';
+                    setTimeout(() => {
+                        if (copyLocationText) copyLocationText.textContent = 'Copy';
+                        copyLocationBtn.style.color = '';
+                    }, 2000);
+                });
+            }
+        });
+    }
+
 }
 
 /* --------------------------------------------------------------------------
@@ -4542,7 +4560,7 @@ async function initDynamicPortfolioSync() {
                             `;
                         }
 
-                        const credUrl = cert.credentialUrl || '#';
+                        const credUrl = cert.credentialUrl || cert.link || '#';
                         certCard.innerHTML = `
                             <div class="cert-top-header">
                                 <div class="cert-badge-circle cyan">

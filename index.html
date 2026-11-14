@@ -51,7 +51,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=25">
+    <link rel="stylesheet" href="style.css?v=26">
 </head>
 
 <body>
@@ -2294,33 +2294,62 @@
 
                                     <div class="contact-methods-list">
                                         <div class="contact-method-card">
-                                            <span class="method-icon-box">✉️</span>
+                                            <div class="method-icon-box method-icon-3d method-icon-cyan" aria-label="Email" title="Email">
+                                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                                </svg>
+                                            </div>
                                             <div class="method-meta">
                                                 <span class="method-lbl">Email</span>
                                                 <a href="mailto:thesubhankar.giri992@gmail.com" class="method-link">thesubhankar.giri992@gmail.com</a>
                                             </div>
-                                            <button class="btn-copy" id="copyEmailBtn" data-copy="thesubhankar.giri992@gmail.com" title="Copy Email">
+                                            <button class="btn-copy btn-copy-3d" id="copyEmailBtn" data-copy="thesubhankar.giri992@gmail.com" title="Copy Email Address" aria-label="Copy Email Address">
+                                                <svg class="copy-icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                                </svg>
                                                 <span id="copyBtnText">Copy</span>
                                             </button>
                                         </div>
 
                                         <div class="contact-method-card">
-                                            <span class="method-icon-box">📱</span>
+                                            <div class="method-icon-box method-icon-3d method-icon-emerald" aria-label="Phone" title="Phone">
+                                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                                </svg>
+                                            </div>
                                             <div class="method-meta">
                                                 <span class="method-lbl">Phone</span>
                                                 <a href="tel:+918984844103" class="method-link">+91 89848 44103</a>
                                             </div>
-                                            <button class="btn-copy" id="copyPhoneBtn" data-copy="+918984844103" title="Copy Phone">
+                                            <button class="btn-copy btn-copy-3d" id="copyPhoneBtn" data-copy="+918984844103" title="Copy Phone Number" aria-label="Copy Phone Number">
+                                                <svg class="copy-icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                                </svg>
                                                 <span id="copyPhoneText">Copy</span>
                                             </button>
                                         </div>
 
                                         <div class="contact-method-card">
-                                            <span class="method-icon-box">📍</span>
+                                            <div class="method-icon-box method-icon-3d method-icon-amber" aria-label="Location" title="Location">
+                                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                                    <circle cx="12" cy="10" r="3"></circle>
+                                                </svg>
+                                            </div>
                                             <div class="method-meta">
                                                 <span class="method-lbl">Location</span>
                                                 <span class="method-text">Odisha, India</span>
                                             </div>
+                                            <button class="btn-copy btn-copy-3d" id="copyLocationBtn" data-copy="Odisha, India" title="Copy Location" aria-label="Copy Location">
+                                                <svg class="copy-icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                                </svg>
+                                                <span id="copyLocationText">Copy</span>
+                                            </button>
                                         </div>
                                     </div>
 
@@ -2481,7 +2510,7 @@
     <!-- Script Assets -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" async defer></script>
     <script src="config.js?v=13"></script>
-    <script src="script.js?v=25"></script>
+    <script src="script.js?v=26"></script>
 </body>
 
 </html>

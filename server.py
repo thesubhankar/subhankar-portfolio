@@ -407,12 +407,37 @@ def load_data():
                 if row and row[0]:
                     conn.close()
                     data = row[0] if isinstance(row[0], dict) else json.loads(row[0])
-                    # Auto-clean legacy default links
-                    default_link = "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link"
+                    # Auto-clean legacy default links and sync accurate drive links
                     needs_save = False
-                    if data.get("resume", {}).get("driveUrl") == default_link:
-                        data["resume"]["driveUrl"] = ""
+                    # Ensure resume driveUrl is populated
+                    resume_drive = "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link"
+                    if not data.get("resume", {}).get("driveUrl"):
+                        if "resume" not in data: data["resume"] = {}
+                        data["resume"]["driveUrl"] = resume_drive
                         needs_save = True
+
+                    # Accurate certificate drive links
+                    cert_drive_map = {
+                        "cert-1": "https://drive.google.com/file/d/1cl2VigQ5hxvn8Rvf95aB_rDKcxp-DC7W/view?usp=drive_link",
+                        "cert-2": "https://drive.google.com/file/d/1_8l84tbuG8lmW_nmikiv928YXy97ercc/view?usp=drive_link",
+                        "cert-7": "https://drive.google.com/file/d/1PQYTXUosc0CQCNKmF9qnaavIedDubfzz/view?usp=drive_link",
+                        "cert-8": "https://drive.google.com/file/d/1BpAuz2XJxlBwAC32AYEE06Y6eAdSgT-x/view?usp=drive_link",
+                        "cert-9": "https://drive.google.com/file/d/1LoNw328xcCGA0xyt9pPcDW8ZatINjU4V/view?usp=drive_link"
+                    }
+                    for c in data.get("certificates", []):
+                        cid = c.get("id")
+                        if cid in cert_drive_map and c.get("credentialUrl") != cert_drive_map[cid]:
+                            c["credentialUrl"] = cert_drive_map[cid]
+                            c["link"] = cert_drive_map[cid]
+                            needs_save = True
+                        elif cid not in cert_drive_map and "1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P" in (c.get("credentialUrl") or ""):
+                            c["credentialUrl"] = ""
+                            c["link"] = ""
+                            needs_save = True
+
+                    data["moreCertificatesDriveUrl"] = "https://drive.google.com/drive/folders/1rhWWTwEuRvtgEDp8v48kL5W7qvmzBDaY?usp=drive_link"
+                    data["certificatesDriveFolder"] = "https://drive.google.com/drive/folders/1rhWWTwEuRvtgEDp8v48kL5W7qvmzBDaY?usp=drive_link"
+
                     for e in data.get("education", []):
                         if "github.com/thesubhankar" in (e.get("link") or ""):
                             e["link"] = ""

@@ -172,8 +172,9 @@
       "issuer": "Industry Academy",
       "date": "2024",
       "category": "Data Science",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Comprehensive training in Data Science, Machine Learning pipelines, exploratory data analysis, and model deployment."
+      "credentialUrl": "https://drive.google.com/file/d/1cl2VigQ5hxvn8Rvf95aB_rDKcxp-DC7W/view?usp=drive_link",
+      "description": "Comprehensive training in Data Science, Machine Learning pipelines, exploratory data analysis, and model deployment.",
+      "link": "https://drive.google.com/file/d/1cl2VigQ5hxvn8Rvf95aB_rDKcxp-DC7W/view?usp=drive_link"
     },
     {
       "id": "cert-2",
@@ -181,8 +182,9 @@
       "issuer": "Kaggle",
       "date": "2023",
       "category": "Programming",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Intensive hands-on programming with Python, data structures, algorithms, and modular coding."
+      "credentialUrl": "https://drive.google.com/file/d/1_8l84tbuG8lmW_nmikiv928YXy97ercc/view?usp=drive_link",
+      "description": "Intensive hands-on programming with Python, data structures, algorithms, and modular coding.",
+      "link": "https://drive.google.com/file/d/1_8l84tbuG8lmW_nmikiv928YXy97ercc/view?usp=drive_link"
     },
     {
       "id": "cert-3",
@@ -190,8 +192,9 @@
       "issuer": "DataCamp",
       "date": "2023",
       "category": "Databases",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Mastery of relational queries, CTEs, window functions, and business data extraction."
+      "credentialUrl": "",
+      "description": "Mastery of relational queries, CTEs, window functions, and business data extraction.",
+      "link": ""
     },
     {
       "id": "cert-4",
@@ -199,8 +202,9 @@
       "issuer": "Microsoft / Udemy",
       "date": "2023",
       "category": "Visualization",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Enterprise dashboard design, DAX measures, data modeling, and interactive storytelling."
+      "credentialUrl": "",
+      "description": "Enterprise dashboard design, DAX measures, data modeling, and interactive storytelling.",
+      "link": ""
     },
     {
       "id": "cert-5",
@@ -208,8 +212,9 @@
       "issuer": "Microsoft",
       "date": "2023",
       "category": "Analytics",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Advanced formulas, Pivot tables, financial modeling, and data cleansing."
+      "credentialUrl": "",
+      "description": "Advanced formulas, Pivot tables, financial modeling, and data cleansing.",
+      "link": ""
     },
     {
       "id": "cert-6",
@@ -217,8 +222,9 @@
       "issuer": "DeepLearning.AI",
       "date": "2024",
       "category": "AI & ML",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Neural network architectures, forward & backpropagation, CNNs, and optimization."
+      "credentialUrl": "",
+      "description": "Neural network architectures, forward & backpropagation, CNNs, and optimization.",
+      "link": ""
     },
     {
       "id": "cert-7",
@@ -226,8 +232,9 @@
       "issuer": "Google Cloud",
       "date": "2024",
       "category": "AI & ML",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Sequence-to-sequence neural architectures and attention mechanisms."
+      "credentialUrl": "https://drive.google.com/file/d/1PQYTXUosc0CQCNKmF9qnaavIedDubfzz/view?usp=drive_link",
+      "description": "Sequence-to-sequence neural architectures and attention mechanisms.",
+      "link": "https://drive.google.com/file/d/1PQYTXUosc0CQCNKmF9qnaavIedDubfzz/view?usp=drive_link"
     },
     {
       "id": "cert-8",
@@ -235,8 +242,9 @@
       "issuer": "Google Cloud",
       "date": "2024",
       "category": "GenAI",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Foundation models, generative concepts, and responsible AI practices."
+      "credentialUrl": "https://drive.google.com/file/d/1BpAuz2XJxlBwAC32AYEE06Y6eAdSgT-x/view?usp=drive_link",
+      "description": "Foundation models, generative concepts, and responsible AI practices.",
+      "link": "https://drive.google.com/file/d/1BpAuz2XJxlBwAC32AYEE06Y6eAdSgT-x/view?usp=drive_link"
     },
     {
       "id": "cert-9",
@@ -244,13 +252,14 @@
       "issuer": "Google Cloud",
       "date": "2024",
       "category": "GenAI",
-      "credentialUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
-      "description": "Prompt engineering, transformers, and practical LLM applications."
+      "credentialUrl": "https://drive.google.com/file/d/1LoNw328xcCGA0xyt9pPcDW8ZatINjU4V/view?usp=drive_link",
+      "description": "Prompt engineering, transformers, and practical LLM applications.",
+      "link": "https://drive.google.com/file/d/1LoNw328xcCGA0xyt9pPcDW8ZatINjU4V/view?usp=drive_link"
     }
   ],
   "resume": {
     "filePath": "assets/resume.pdf",
-    "driveUrl": "",
+    "driveUrl": "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link",
     "lastUpdated": "",
     "hasUploadedPdf": false
   },
@@ -500,5 +509,7 @@
       "viewLink": "",
       "downloadLink": ""
     }
-  ]
+  ],
+  "moreCertificatesDriveUrl": "https://drive.google.com/drive/folders/1rhWWTwEuRvtgEDp8v48kL5W7qvmzBDaY?usp=drive_link",
+  "certificatesDriveFolder": "https://drive.google.com/drive/folders/1rhWWTwEuRvtgEDp8v48kL5W7qvmzBDaY?usp=drive_link"
 }
