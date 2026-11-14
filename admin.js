@@ -319,6 +319,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             const keyMap = {
                 'pytorch': 'pytorch', 'torch': 'pytorch', 'python': 'python', 'tensorflow': 'tensorflow', 'tf': 'tensorflow',
                 'keras': 'keras', 'pandas': 'pandas', 'numpy': 'numpy', 'scikit': 'scikit-learn', 'scikitlearn': 'scikit-learn', 'sklearn': 'scikit-learn',
+                'knn': 'knn', 'knearestneighbors': 'knn', 'knearestneighbor': 'knn', 'nearestneighbors': 'knn',
                 'powerbi': 'powerbi', 'tableau': 'tableau', 'matplotlib': 'matplotlib', 'seaborn': 'seaborn',
                 'sql': 'sql', 'mysql': 'mysql', 'postgres': 'postgresql', 'postgresql': 'postgresql', 'sqlite': 'sqlite', 'tkinter': 'tkinter', 'tk': 'tkinter', 'scipy': 'scipy', 'tmdb': 'tmdb', 'tmdbapi': 'tmdb', 'oop': 'oop', 'datastruct': 'datastruct', 'datastructures': 'datastruct', 'reporting': 'reporting', 'automation': 'automation', 'cosinesim': 'cosinesim', 'cosinesimilarity': 'cosinesim', 'tfidf': 'tfidf', 'telematics': 'telematics', 'forecasting': 'forecasting', 'reportlab': 'reportlab', 'machinelearning': 'machinelearning', 'ml': 'machinelearning', 'scikitlearn': 'scikit-learn', 'sklearn': 'scikit-learn',
                 'mongodb': 'mongodb', 'docker': 'docker', 'fastapi': 'fastapi', 'flask': 'flask', 'streamlit': 'streamlit',
@@ -1117,10 +1118,10 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             items.forEach(name => {
                 const svg = getSkillLogoHtml(name);
                 html += `
-                    <span class="skill-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; font-size: 0.72rem; font-family: var(--font-mono); background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 6px; margin: 2px;">
-                        <span style="display: flex; align-items: center; width: 16px; height: 16px;">${svg}</span>
-                        <span class="skill-pill-text" style="color: var(--text-main); font-weight: 500;">${escapeHtml(name)}</span>
-                        <button type="button" onclick="removeSkillFromEdit(${catIdx}, '${escapeJs(name)}')" class="skill-delete-tag-btn" title="Remove ${escapeHtml(name)} from category" style="margin-left: 4px; cursor: pointer;">
+                    <span class="skill-pill">
+                        <span class="skill-icon-wrap">${svg}</span>
+                        <span class="skill-pill-text">${escapeHtml(name)}</span>
+                        <button type="button" onclick="removeSkillFromEdit(${catIdx}, '${escapeJs(name)}')" class="skill-delete-tag-btn" title="Remove ${escapeHtml(name)} from category">
                             &times;
                         </button>
                     </span>
@@ -1129,13 +1130,218 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             previewContainer.innerHTML = html;
         }
 
+        /* -------------------------------------------------------------
+           Inline Proficiency Percentage Helpers (Edit Mode)
+           ------------------------------------------------------------- */
+        function onInlinePctSliderChange(catIdx, val) {
+            const textInput = document.getElementById(`editCatBadge_${catIdx}`);
+            const displaySpan = document.getElementById(`editCatBadgeDisplay_${catIdx}`);
+            const formatted = `${val}%`;
+            if (textInput) textInput.value = formatted;
+            if (displaySpan) displaySpan.textContent = formatted;
+            highlightInlinePctChips(catIdx, val);
+        }
+
+        function onInlinePctInputChange(catIdx, val) {
+            const slider = document.getElementById(`editCatBadgeSlider_${catIdx}`);
+            const displaySpan = document.getElementById(`editCatBadgeDisplay_${catIdx}`);
+            if (displaySpan) displaySpan.textContent = val || '0%';
+            const num = parseInt(val);
+            if (!isNaN(num) && num >= 50 && num <= 100) {
+                if (slider) slider.value = num;
+                highlightInlinePctChips(catIdx, num);
+            }
+        }
+
+        function setInlinePctPreset(catIdx, val) {
+            const textInput = document.getElementById(`editCatBadge_${catIdx}`);
+            const slider = document.getElementById(`editCatBadgeSlider_${catIdx}`);
+            const displaySpan = document.getElementById(`editCatBadgeDisplay_${catIdx}`);
+            const formatted = `${val}%`;
+            if (textInput) textInput.value = formatted;
+            if (slider) slider.value = val;
+            if (displaySpan) displaySpan.textContent = formatted;
+            highlightInlinePctChips(catIdx, val);
+        }
+
+        function highlightInlinePctChips(catIdx, val) {
+            const container = document.getElementById(`editCatBadgePresets_${catIdx}`);
+            if (!container) return;
+            const chips = container.querySelectorAll('.pct-preset-chip');
+            chips.forEach(c => {
+                if (parseInt(c.textContent) === parseInt(val)) {
+                    c.classList.add('active');
+                } else {
+                    c.classList.remove('active');
+                }
+            });
+        }
+
+        /* -------------------------------------------------------------
+           Quick Skill Percentage Modal Helpers (Click Badge on Card)
+           ------------------------------------------------------------- */
+        let currentModalSkillCatIdx = null;
+
+        function openSkillPercentageModal(catIdx) {
+            const skills = PORTFOLIO_DATA.skills || [];
+            const cat = skills[catIdx];
+            if (!cat) return;
+
+            currentModalSkillCatIdx = catIdx;
+            const catName = cat.category || 'Custom Skills';
+            const catBrandSvg = getCategoryBrandSvg(catName);
+            const badge = cat.badge || '85%';
+            const num = parseInt(badge) || 85;
+
+            const modal = document.getElementById('skillPctModal');
+            const iconWrap = document.getElementById('modalPctCatIcon');
+            const nameSpan = document.getElementById('modalPctCatName');
+            const valDisplay = document.getElementById('modalPctValueDisplay');
+            const progressBar = document.getElementById('modalPctProgressBar');
+            const slider = document.getElementById('modalPctSlider');
+            const customInput = document.getElementById('modalPctCustomInput');
+
+            if (iconWrap) iconWrap.innerHTML = catBrandSvg;
+            if (nameSpan) nameSpan.textContent = `Category: ${catName}`;
+            if (valDisplay) valDisplay.textContent = num;
+            if (progressBar) progressBar.style.width = `${Math.min(100, Math.max(10, num))}%`;
+            if (slider) slider.value = num;
+            if (customInput) customInput.value = badge;
+
+            updateModalPresetChips(num);
+
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeSkillPercentageModal() {
+            const modal = document.getElementById('skillPctModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+            currentModalSkillCatIdx = null;
+        }
+
+        function onModalPctSliderChange(val) {
+            const valDisplay = document.getElementById('modalPctValueDisplay');
+            const progressBar = document.getElementById('modalPctProgressBar');
+            const customInput = document.getElementById('modalPctCustomInput');
+            const num = parseInt(val) || 85;
+
+            if (valDisplay) valDisplay.textContent = num;
+            if (progressBar) progressBar.style.width = `${num}%`;
+            if (customInput) customInput.value = `${num}%`;
+
+            updateModalPresetChips(num);
+        }
+
+        function setModalPctPreset(val) {
+            const slider = document.getElementById('modalPctSlider');
+            if (slider) slider.value = val;
+            onModalPctSliderChange(val);
+        }
+
+        function onModalPctCustomInputChange(val) {
+            const valDisplay = document.getElementById('modalPctValueDisplay');
+            const progressBar = document.getElementById('modalPctProgressBar');
+            const slider = document.getElementById('modalPctSlider');
+            const num = parseInt(val);
+
+            if (!isNaN(num)) {
+                if (valDisplay) valDisplay.textContent = num;
+                if (progressBar) progressBar.style.width = `${Math.min(100, Math.max(0, num))}%`;
+                if (slider && num >= 50 && num <= 100) slider.value = num;
+                updateModalPresetChips(num);
+            } else {
+                if (valDisplay) valDisplay.textContent = val || '0';
+            }
+        }
+
+        function updateModalPresetChips(val) {
+            const chips = document.querySelectorAll('#skillPctModal .pct-preset-chip');
+            chips.forEach(c => {
+                if (parseInt(c.textContent) === parseInt(val)) {
+                    c.classList.add('active');
+                } else {
+                    c.classList.remove('active');
+                }
+            });
+        }
+
+        async function saveSkillPercentageFromModal() {
+            if (currentModalSkillCatIdx === null) return;
+            const skills = PORTFOLIO_DATA.skills || [];
+            const cat = skills[currentModalSkillCatIdx];
+            if (!cat) return;
+
+            const customInput = document.getElementById('modalPctCustomInput');
+            const slider = document.getElementById('modalPctSlider');
+            let newBadge = customInput ? customInput.value.trim() : '';
+            if (!newBadge && slider) {
+                newBadge = `${slider.value}%`;
+            }
+            if (newBadge && /^\d+$/.test(newBadge)) {
+                newBadge = `${newBadge}%`;
+            }
+            if (!newBadge) newBadge = '85%';
+
+            const saveBtn = document.getElementById('saveModalPctBtn');
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<span>⏳ Saving...</span>';
+            }
+
+            try {
+                const res = await fetch('/api/admin/skill-category', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        oldCategory: cat.category,
+                        newCategory: cat.category,
+                        badge: newBadge,
+                        skills: cat.skills
+                    })
+                });
+                const d = await res.json();
+                if (d.success) {
+                    showNotify(`Updated "${cat.category}" percentage to ${newBadge}!`);
+                    closeSkillPercentageModal();
+                    await loadData();
+                } else {
+                    showNotify(d.message || 'Error updating percentage', false);
+                }
+            } catch (err) {
+                console.error('Error saving skill percentage:', err);
+                showNotify('Failed to save percentage', false);
+            } finally {
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<span>💾 Save Percentage</span>';
+                }
+            }
+        }
+
+        // Close modal on backdrop click
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('skillPctModal');
+            if (modal && e.target === modal) {
+                closeSkillPercentageModal();
+            }
+        });
+
         async function saveSkillCategoryEdit(catIdx, oldName) {
             const nameInput = document.getElementById(`editCatName_${catIdx}`);
             const badgeInput = document.getElementById(`editCatBadge_${catIdx}`);
             const skillsInput = document.getElementById(`editCatSkills_${catIdx}`);
 
             const newName = nameInput ? nameInput.value.trim() : oldName;
-            const badge = badgeInput ? badgeInput.value.trim() : '85%';
+            let badge = badgeInput ? badgeInput.value.trim() : '85%';
+            if (badge && /^\d+$/.test(badge)) {
+                badge = `${badge}%`;
+            }
             const skillsText = skillsInput ? skillsInput.value : '';
             const skillsList = skillsText.split(',').map(s => s.trim()).filter(Boolean);
 
@@ -1199,11 +1405,13 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     box.className = 'admin-item-card admin-card-editing';
                     const skillsStr = (cat.skills || []).map(s => typeof s === 'string' ? s : (s.name || '')).filter(Boolean).join(', ');
                     const skillsCount = (cat.skills || []).length;
+                    const currentBadge = cat.badge || '85%';
+                    const currentPctNum = parseInt(currentBadge) || 85;
 
                     box.innerHTML = `
                         <div class="admin-card-header" style="padding-bottom: 0.6rem; border-bottom: 1px solid rgba(0, 242, 254, 0.3);">
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="cat-card-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px; background: rgba(0, 242, 254, 0.15); flex-shrink: 0;">
+                                <span class="cat-card-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: rgba(0, 242, 254, 0.15); flex-shrink: 0;">
                                     ${catBrandSvg}
                                 </span>
                                 <h4 class="admin-card-title" style="color: var(--color-cyan, #00F2FE); font-size: 0.95rem; font-weight: 700; margin: 0;">
@@ -1218,8 +1426,8 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                             </button>
                         </div>
 
-                        <div style="display: flex; flex-direction: column; gap: 0.75rem; padding-top: 0.75rem;">
-                            <div class="admin-grid-2col" style="gap: 0.75rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.85rem; padding-top: 0.75rem;">
+                            <div class="admin-grid-2col" style="gap: 0.85rem;">
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label class="form-label" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 4px; display: block;">
                                         Category Name *
@@ -1227,11 +1435,30 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                                     <input type="text" id="editCatName_${catIdx}" class="form-input" value="${escapeHtml(catName)}" placeholder="e.g. Core Data Science & ML" style="padding: 0.5rem 0.7rem; font-size: 0.85rem;" required />
                                 </div>
 
+                                <!-- Proficiency Percentage Editor with Slider & Preset Chips -->
                                 <div class="form-group" style="margin-bottom: 0;">
-                                    <label class="form-label" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 4px; display: block;">
-                                        Mastery Badge
-                                    </label>
-                                    <input type="text" id="editCatBadge_${catIdx}" class="form-input" value="${escapeHtml(cat.badge || '85%')}" placeholder="e.g. 95%, PRO, ADVANCED" style="padding: 0.5rem 0.7rem; font-size: 0.85rem;" />
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <label class="form-label" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 0; display: block;">
+                                            Proficiency Percentage (%) *
+                                        </label>
+                                        <span id="editCatBadgeDisplay_${catIdx}" style="font-size: 0.85rem; font-weight: 800; font-family: var(--font-mono); color: #00F2FE;">
+                                            ${escapeHtml(currentBadge)}
+                                        </span>
+                                    </div>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="range" id="editCatBadgeSlider_${catIdx}" min="50" max="100" step="1" value="${currentPctNum}" style="flex: 1; accent-color: #00F2FE; cursor: pointer;" oninput="onInlinePctSliderChange(${catIdx}, this.value)" />
+                                        <input type="text" id="editCatBadge_${catIdx}" class="form-input" value="${escapeHtml(currentBadge)}" placeholder="e.g. 90%" style="width: 80px; padding: 0.45rem 0.6rem; font-size: 0.82rem; font-family: var(--font-mono); text-align: center;" oninput="onInlinePctInputChange(${catIdx}, this.value)" />
+                                    </div>
+                                    <div id="editCatBadgePresets_${catIdx}" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">
+                                        <button type="button" class="pct-preset-chip ${currentPctNum === 75 ? 'active' : ''}" onclick="setInlinePctPreset(${catIdx}, 75)">75%</button>
+                                        <button type="button" class="pct-preset-chip ${currentPctNum === 80 ? 'active' : ''}" onclick="setInlinePctPreset(${catIdx}, 80)">80%</button>
+                                        <button type="button" class="pct-preset-chip ${currentPctNum === 82 ? 'active' : ''}" onclick="setInlinePctPreset(${catIdx}, 82)">82%</button>
+                                        <button type="button" class="pct-preset-chip ${currentPctNum === 85 ? 'active' : ''}" onclick="setInlinePctPreset(${catIdx}, 85)">85%</button>
+                                        <button type="button" class="pct-preset-chip ${currentPctNum === 88 ? 'active' : ''}" onclick="setInlinePctPreset(${catIdx}, 88)">88%</button>
+                                        <button type="button" class="pct-preset-chip ${currentPctNum === 90 ? 'active' : ''}" onclick="setInlinePctPreset(${catIdx}, 90)">90%</button>
+                                        <button type="button" class="pct-preset-chip ${currentPctNum === 95 ? 'active' : ''}" onclick="setInlinePctPreset(${catIdx}, 95)">95%</button>
+                                        <button type="button" class="pct-preset-chip ${currentPctNum === 100 ? 'active' : ''}" onclick="setInlinePctPreset(${catIdx}, 100)">100%</button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1246,21 +1473,21 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                                 </div>
                                 <textarea id="editCatSkills_${catIdx}" class="form-input" rows="3" style="resize: vertical; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.4; padding: 0.5rem 0.7rem;" placeholder="e.g. Python, Pandas, NumPy, Scikit-Learn, Docker" oninput="updateEditSkillsPreview(${catIdx})">${escapeHtml(skillsStr)}</textarea>
                                 <span style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 3px; display: block;">
-                                    💡 Tip: Add, remove or edit skills separated by commas. Official vector SVGs auto-match live below!
+                                    💡 Tip: Add, remove or edit skills separated by commas. Official 3D vector SVGs auto-match live below!
                                 </span>
                             </div>
 
                             <!-- Live Preview of Vector SVGs -->
-                            <div style="padding: 0.65rem; border-radius: 8px; background: rgba(0, 242, 254, 0.04); border: 1px dashed rgba(0, 242, 254, 0.25);">
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                                    <span style="font-size: 0.72rem; color: var(--color-cyan, #00F2FE); font-family: var(--font-mono); font-weight: 600;">
-                                        👁️ Live Vector Logo Preview:
+                            <div style="padding: 0.75rem; border-radius: 12px; background: rgba(0, 242, 254, 0.04); border: 1px dashed rgba(0, 242, 254, 0.25);">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="font-size: 0.75rem; color: var(--color-cyan, #00F2FE); font-family: var(--font-mono); font-weight: 700;">
+                                        👁️ Live 3D Vector Logo Preview:
                                     </span>
-                                    <span style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                    <span style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">
                                         Updates as you type • Click &times; to remove
                                     </span>
                                 </div>
-                                <div id="editCatPreview_${catIdx}" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
+                                <div id="editCatPreview_${catIdx}" class="skill-pills-wrap"></div>
                             </div>
 
                             <!-- Action Buttons -->
@@ -1280,17 +1507,17 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     updateEditSkillsPreview(catIdx);
 
                 } else {
-                    // Normal Responsive Card View
+                    // Normal Responsive 3D Card View
                     box.className = 'admin-item-card skill-cat-admin-card';
 
                     let pillsHtml = '';
                     (cat.skills || []).forEach(s => {
                         const svgContent = s.svg || getSkillLogoHtml(s.name, AVAILABLE_LOGOS[s.key]);
                         pillsHtml += `
-                            <span class="skill-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; font-size: 0.72rem; font-family: var(--font-mono); margin: 3px; max-width: 100%; box-sizing: border-box;">
-                                <span style="display: flex; align-items: center; width: 16px; height: 16px; flex-shrink: 0;">${svgContent}</span>
-                                <span class="skill-pill-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(s.name)}</span>
-                                <button type="button" onclick="deleteSkill('${escapeJs(catName)}', '${escapeJs(s.name)}')" class="skill-delete-tag-btn" title="Remove Skill" style="flex-shrink: 0;">
+                            <span class="skill-pill">
+                                <span class="skill-icon-wrap">${svgContent}</span>
+                                <span class="skill-pill-text">${escapeHtml(s.name)}</span>
+                                <button type="button" onclick="deleteSkill('${escapeJs(catName)}', '${escapeJs(s.name)}')" class="skill-delete-tag-btn" title="Remove ${escapeHtml(s.name)}">
                                     &times;
                                 </button>
                             </span>
@@ -1298,15 +1525,23 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     });
 
                     box.innerHTML = `
-                        <div class="admin-card-header skill-cat-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding-bottom: 0.65rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); width: 100%;">
-                            <div class="skill-cat-header-title-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-width: 140px; flex: 1;">
-                                <span class="cat-card-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.2); flex-shrink: 0; box-shadow: 0 4px 10px rgba(0, 242, 254, 0.1);">
+                        <div class="admin-card-header skill-cat-card-header">
+                            <div class="skill-cat-header-title-group">
+                                <span class="cat-card-icon-wrap" title="${escapeHtml(catName)}">
                                     ${catBrandSvg}
                                 </span>
-                                <h4 class="admin-card-title" style="margin: 0; font-size: 1rem; line-height: 1.3;">${escapeHtml(catName)}</h4>
-                                <span class="tech-chip" style="color: var(--color-cyan, #00F2FE); font-size: 10px; font-weight: 700; padding: 2px 7px;">${escapeHtml(cat.badge || 'PRO')}</span>
+                                <h4 class="admin-card-title">${escapeHtml(catName)}</h4>
+                                <button type="button" class="cat-pct-badge-btn" onclick="openSkillPercentageModal(${catIdx})" title="Click to edit proficiency percentage (${escapeHtml(cat.badge || '85%')})">
+                                    <span class="pct-badge-label">${escapeHtml(cat.badge || '85%')}</span>
+                                    <span class="pct-badge-icon">
+                                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 20h9"></path>
+                                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                        </svg>
+                                    </span>
+                                </button>
                             </div>
-                            <div class="skill-cat-header-actions" style="display: flex; gap: 6px; align-items: center;">
+                            <div class="skill-cat-header-actions">
                                 <button type="button" onclick="openSkillCategoryEdit(${catIdx})" class="btn-3d btn-3d-edit" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" title="Edit Category" aria-label="Edit Category">
                                     <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -1323,7 +1558,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                                 </button>
                             </div>
                         </div>
-                        <div class="skill-pills-wrap" style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 0.75rem; flex: 1; align-content: flex-start; width: 100%;">
+                        <div class="skill-pills-wrap">
                             ${pillsHtml || '<span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">No skills added.</span>'}
                         </div>
                     `;
@@ -1339,6 +1574,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 openSkillCategoryEdit(catIdx);
             }
         }
+
 
         async function deleteSkillCategory(catName) {
             if (!confirm(`Are you sure you want to delete the whole category "${catName}" and all its skills?`)) return;

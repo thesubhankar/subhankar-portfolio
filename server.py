@@ -68,6 +68,10 @@ OFFICIAL_LOGOS = {
     "stats": """<svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M3 19h18" stroke="#64748B" stroke-width="1.5"/><path d="M4 16c3-1 5-11 8-11s5 10 8 11" stroke="#FACC15" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="5" r="1.8" fill="#00F2FE"/></svg>""",
     "neural": """<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#EC4899" stroke-width="1.8"><circle cx="5" cy="6" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><line x1="7.5" y1="6" x2="9.5" y2="12"/><line x1="7.5" y1="18" x2="9.5" y2="12"/><line x1="14.5" y1="12" x2="16.5" y2="6"/><line x1="14.5" y1="12" x2="16.5" y2="18"/></svg>""",
     "cnn": """<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00F2FE" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5" fill="#00F2FE"/><path d="M21 15l-5-5L5 21"/></svg>""",
+    "knn": """<svg class="skill-brand-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00F2FE" stroke-width="2"><circle cx="6" cy="6" r="3" fill="#00F2FE" fill-opacity="0.35"/><circle cx="18" cy="6" r="3" fill="#FFD43B" fill-opacity="0.35"/><circle cx="12" cy="18" r="3" fill="#00F2FE" fill-opacity="0.35"/><circle cx="12" cy="10" r="2.5" fill="#FF2D95"/><line x1="12" y1="10" x2="6" y2="6" stroke-dasharray="2 2" stroke="#FF2D95"/><line x1="12" y1="10" x2="18" y2="6" stroke-dasharray="2 2" stroke="#FF2D95"/><line x1="12" y1="10" x2="12" y2="18" stroke-dasharray="2 2" stroke="#FF2D95"/></svg>""",
+    "clustering": """<svg class="skill-brand-svg" viewBox="0 0 24 24" width="22" height="22" fill="none"><circle cx="7" cy="8" r="3" fill="#00F2FE" fill-opacity="0.4" stroke="#00F2FE" stroke-width="1.8"/><circle cx="17" cy="7" r="3" fill="#FFD43B" fill-opacity="0.4" stroke="#FFD43B" stroke-width="1.8"/><circle cx="12" cy="17" r="3" fill="#EC4899" fill-opacity="0.4" stroke="#EC4899" stroke-width="1.8"/></svg>""",
+    "regression": """<svg class="skill-brand-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00F2FE" stroke-width="2"><line x1="4" y1="20" x2="20" y2="4"/><circle cx="7" cy="13" r="1.5" fill="#FFD43B"/><circle cx="11" cy="10" r="1.5" fill="#FFD43B"/><circle cx="16" cy="6" r="1.5" fill="#FFD43B"/><circle cx="9" cy="17" r="1.5" fill="#FF2D95"/><circle cx="14" cy="12" r="1.5" fill="#FF2D95"/><circle cx="18" cy="9" r="1.5" fill="#FF2D95"/></svg>""",
+    "classification": """<svg class="skill-brand-svg" viewBox="0 0 24 24" width="22" height="22" fill="none"><rect x="3" y="12" width="4" height="8" rx="1" fill="#22D3EE"/><rect x="9.5" y="7" width="4" height="13" rx="1" fill="#38BDF8"/><rect x="16" y="3" width="4" height="17" rx="1" fill="#A855F7"/><path d="M4 10 L11 5 L18 2" stroke="#FACC15" stroke-width="1.8" stroke-linecap="round"/></svg>""",
     # Mathematics & Statistics
     "math": """<svg class="skill-brand-svg" data-brand="math" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7c3 0 5 11 8 11s5-11 8-11"/><path d="M9 17l6-10"/></svg>""",
     "mathematics": """<svg class="skill-brand-svg" data-brand="mathematics" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 7c3 0 5 11 8 11s5-11 8-11"/><path d="M9 17l6-10"/></svg>""",
@@ -214,10 +218,16 @@ def match_skill_key(skill_name):
         "azure": "azure",
         "gcp": "gcp",
         "eda": "eda",
-        "classification": "eda",
+        "classification": "classification",
         "neuralnetworks": "neural",
         "neural": "neural",
         "cnn": "cnn",
+        "knn": "knn",
+        "knearestneighbors": "knn",
+        "knearestneighbor": "knn",
+        "nearestneighbors": "knn",
+        "clustering": "clustering",
+        "regression": "regression",
 
         # Mathematics & Statistics
         "math": "math",
@@ -1120,6 +1130,9 @@ def add_skill():
     req = request.get_json() or {}
     category_name = req.get("category", "").strip()
     skill_name = req.get("name", "").strip()
+    badge = req.get("badge", "").strip()
+    if badge and badge.isdigit():
+        badge = f"{badge}%"
 
     if not category_name or not skill_name:
         return jsonify({"error": "Category and Skill Name are required"}), 400
@@ -1139,10 +1152,12 @@ def add_skill():
         # Create new category if not existing
         target_cat = {
             "category": category_name,
-            "badge": "85%",
+            "badge": badge or "85%",
             "skills": []
         }
         cats.append(target_cat)
+    elif badge:
+        target_cat["badge"] = badge
 
     # Check if skill already exists in that category
     if not any(s.get("name", "").lower() == skill_name.lower() for s in target_cat.get("skills", [])):
@@ -1185,6 +1200,8 @@ def update_skill_category():
     old_cat = req.get("oldCategory", "").strip()
     new_cat = req.get("newCategory", "").strip()
     badge = req.get("badge", "").strip()
+    if badge and badge.isdigit():
+        badge = f"{badge}%"
 
     if not old_cat and not new_cat:
         return jsonify({"error": "Category name is required"}), 400
