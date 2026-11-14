@@ -308,6 +308,135 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         }
 
         // =========================================================================
+        // Unified Brand Logos Library for Categories, Certificates & Education
+        // (Guarantees 100% visual parity between Portfolio and Admin Studio)
+        // =========================================================================
+        const CATEGORY_BRAND_ICONS = {
+            'programming': `<svg class="cat-brand-svg" viewBox="0 0 128 128" width="28" height="28">
+                <defs>
+                    <linearGradient id="py-hdr-sync-b-adm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A9FD4"/><stop offset="100%" stop-color="#306998"/></linearGradient>
+                    <linearGradient id="py-hdr-sync-y-adm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD43B"/><stop offset="100%" stop-color="#FFE873"/></linearGradient>
+                </defs>
+                <path fill="url(#py-hdr-sync-b-adm)" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"/>
+                <path fill="url(#py-hdr-sync-y-adm)" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"/>
+            </svg>`,
+            'data analysis': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00F2FE" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>`,
+            'data visualization': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00F2FE" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>`,
+            'machine learning': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00F2FE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.5 2A2.5 2.5 0 0 0 7 4.5v.7A4 4 0 0 0 4 9c0 1.4.7 2.6 1.8 3.3A4 4 0 0 0 5 15c0 1.9 1.3 3.5 3.1 3.9A3 3 0 0 0 11 22h2a3 3 0 0 0 2.9-3.1 4 4 0 0 0 3.1-3.9 4 4 0 0 0-.8-2.7 4 4 0 0 0 1.8-3.3 4 4 0 0 0-3-3.8v-.7A2.5 2.5 0 0 0 14.5 2h-5z" stroke="#00F2FE" stroke-width="1.8" fill="rgba(0,242,254,0.1)"/>
+                <path d="M12 2v20" stroke="#8B5CF6" stroke-width="1.8"/><circle cx="8" cy="8" r="1.3" fill="#00F2FE" stroke="none"/><circle cx="16" cy="8" r="1.3" fill="#00F2FE" stroke="none"/>
+            </svg>`,
+            'deep learning': `<svg class="cat-brand-svg" viewBox="58 50 150 168" width="26" height="26">
+                <defs>
+                    <linearGradient id="tf-hdr-sync-l-adm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFA000"/><stop offset="100%" stop-color="#FF6F00"/></linearGradient>
+                    <linearGradient id="tf-hdr-sync-r-adm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF6F00"/><stop offset="100%" stop-color="#E65100"/></linearGradient>
+                </defs>
+                <polygon points="66.03 95.86 130.5 59.02 130.5 210 104.74 195.04 104.74 106.85 65.94 129.27 66.03 95.86" fill="url(#tf-hdr-sync-l-adm)"/>
+                <polygon points="200.76 95.86 136.29 59.02 136.29 210 162.05 195.04 162.05 152.57 181.5 163.82 181.39 134.77 162.05 123.72 162.05 106.85 200.85 129.27 200.76 95.86" fill="url(#tf-hdr-sync-r-adm)"/>
+            </svg>`,
+            'databases': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00F2FE" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>`,
+            'tools': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00F2FE" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>`,
+            'version control': `<svg class="cat-brand-svg" viewBox="0 0 128 128" width="26" height="26">
+                <path fill="#F05032" d="M124.7 58.4L69.6 3.3c-3.2-3.2-8.3-3.2-11.5 0L46.7 14.7l14.5 14.5c3.4-1.1 7.2-.4 9.9 2.3 2.7 2.7 3.5 6.6 2.3 10l14 14c3.4-1.2 7.3-.4 10 2.3 3.8 3.8 3.8 9.9 0 13.7a9.7 9.7 0 01-13.7 0 9.7 9.7 0 01-2.1-10.5L68.6 47.9v34.3a9.7 9.7 0 012.6 1.8c3.8 3.8 3.8 9.9 0 13.7s-9.9 3.8-13.7 0-3.8-9.9 0-13.7a9.7 9.7 0 013.2-2.1V47.3a9.6 9.6 0 01-3.2-2.1c-2.9-2.9-3.6-7.1-2.1-10.6L41.1 20.3 3.3 58.1a8.1 8.1 0 000 11.5l55.1 55.1c3.2 3.2 8.3 3.2 11.5 0l54.8-54.8a8.1 8.1 0 000-11.5z"/>
+            </svg>`,
+            'deployment & web frameworks': `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="26" height="26">
+                <circle cx="12" cy="12" r="10" fill="#009688"/><path d="M12.5 4L6.5 13.5h5L10.5 20l7-10.5h-5.5L12.5 4z" fill="#FFFFFF"/>
+            </svg>`
+        };
+
+        function getCategoryBrandSvg(catName) {
+            const key = (catName || '').trim().toLowerCase();
+            if (CATEGORY_BRAND_ICONS[key]) return CATEGORY_BRAND_ICONS[key];
+            for (const k in CATEGORY_BRAND_ICONS) {
+                if (key.includes(k) || k.includes(key)) return CATEGORY_BRAND_ICONS[k];
+            }
+            return `<svg class="cat-brand-svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00F2FE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline>
+            </svg>`;
+        }
+
+        const OFFICIAL_CERT_ICONS = {
+            'medal': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>` },
+            'python': { color: 'blue', svg: `<svg viewBox="0 0 128 128" width="22" height="22" style="flex-shrink:0;"><path fill="#38BDF8" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"/><path fill="#FFD43B" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"/></svg>` },
+            'sql': { color: 'blue', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>` },
+            'powerbi': { color: 'orange', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="8" rx="1"></rect><rect x="10" y="8" width="4" height="12" rx="1"></rect><rect x="17" y="4" width="4" height="16" rx="1"></rect></svg>` },
+            'excel': { color: 'green', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M8 13l3 4m0-4l-3 4"></path><line x1="14" y1="13" x2="17" y2="13"></line></svg>` },
+            'deeplearning': { color: 'purple', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M3 9a9 9 0 0 1 9-9 9 9 0 0 1 9 9"></path><path d="M3 15a9 9 0 0 0 9 9 9 9 0 0 0 9-9"></path></svg>` },
+            'encoderdecoder': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>` },
+            'genai': { color: 'orange', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>` },
+            'llm': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>` }
+        };
+        // 1-to-1 Aliases
+        OFFICIAL_CERT_ICONS['cert-1'] = OFFICIAL_CERT_ICONS['medal'];
+        OFFICIAL_CERT_ICONS['cert-2'] = OFFICIAL_CERT_ICONS['python'];
+        OFFICIAL_CERT_ICONS['cert-3'] = OFFICIAL_CERT_ICONS['sql'];
+        OFFICIAL_CERT_ICONS['cert-4'] = OFFICIAL_CERT_ICONS['powerbi'];
+        OFFICIAL_CERT_ICONS['cert-5'] = OFFICIAL_CERT_ICONS['excel'];
+        OFFICIAL_CERT_ICONS['cert-6'] = OFFICIAL_CERT_ICONS['deeplearning'];
+        OFFICIAL_CERT_ICONS['cert-7'] = OFFICIAL_CERT_ICONS['encoderdecoder'];
+        OFFICIAL_CERT_ICONS['cert-8'] = OFFICIAL_CERT_ICONS['genai'];
+        OFFICIAL_CERT_ICONS['cert-9'] = OFFICIAL_CERT_ICONS['llm'];
+
+        function getCertificateIconData(cert, idx) {
+            if (cert && cert.image) {
+                return {
+                    color: 'cyan',
+                    html: `<img src="/${escapeHtml(cert.image)}" alt="${escapeHtml(cert.title)}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`
+                };
+            }
+            if (cert && cert.iconKey && OFFICIAL_CERT_ICONS[cert.iconKey]) {
+                return {
+                    color: cert.iconColor || OFFICIAL_CERT_ICONS[cert.iconKey].color,
+                    html: OFFICIAL_CERT_ICONS[cert.iconKey].svg
+                };
+            }
+            const id = (cert && cert.id) || `cert-${(idx !== undefined ? idx : 0) + 1}`;
+            if (OFFICIAL_CERT_ICONS[id]) {
+                return { color: OFFICIAL_CERT_ICONS[id].color, html: OFFICIAL_CERT_ICONS[id].svg };
+            }
+            const clean = ((cert && cert.title || '') + ' ' + (cert && cert.category || '')).toLowerCase();
+            if (clean.includes('python')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['python'].svg };
+            if (clean.includes('sql') || clean.includes('database')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['sql'].svg };
+            if (clean.includes('power bi') || clean.includes('tableau') || clean.includes('bi')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['powerbi'].svg };
+            if (clean.includes('excel')) return { color: 'green', html: OFFICIAL_CERT_ICONS['excel'].svg };
+            if (clean.includes('deep learning') || clean.includes('neural')) return { color: 'purple', html: OFFICIAL_CERT_ICONS['deeplearning'].svg };
+            if (clean.includes('encoder') || clean.includes('architecture')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['encoderdecoder'].svg };
+            if (clean.includes('generative ai') || clean.includes('genai')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['genai'].svg };
+            if (clean.includes('llm') || clean.includes('large language')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['llm'].svg };
+            return { color: 'cyan', html: OFFICIAL_CERT_ICONS['medal'].svg };
+        }
+
+        function getEducationIconSvg(degreeName, idx) {
+            const clean = (degreeName || '').toLowerCase();
+            if (clean.includes('b.tech') || clean.includes('btech') || clean.includes('engineering') || clean.includes('computer science') || clean.includes('college')) {
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>`;
+            }
+            if (clean.includes('+2') || clean.includes('higher secondary') || clean.includes('science') || clean.includes('chse')) {
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>`;
+            }
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>`;
+        }
+
+        // =========================================================================
         // 1. Projects Management (with Edit, 3-5 Images & Free-Text Category)
         // =========================================================================
         function renderProjects() {
@@ -670,20 +799,18 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 return;
             }
 
-            certs.forEach(c => {
+            certs.forEach((c, idx) => {
                 const card = document.createElement('div');
                 card.className = 'admin-item-card';
+
+                const certIcon = getCertificateIconData(c, idx);
 
                 card.innerHTML = `
                     <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                         <div class="admin-card-header" style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
-                            <!-- Left: 3D Certificate Logo Emblem in place of Year -->
-                            <div class="cert-logo-3d" title="Verified Certificate Credential">
-                                ${c.image ? `<img src="/${escapeHtml(c.image)}" alt="${escapeHtml(c.title)}" style="width: 26px; height: 26px; object-fit: contain; border-radius: 6px;" />` : `
-                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="8" r="6"></circle>
-                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                                </svg>`}
+                            <!-- Left: 3D Certificate Logo Emblem matching Portfolio 1:1 -->
+                            <div class="cert-logo-3d cert-badge-circle ${certIcon.color}" title="${escapeHtml(c.title)} Official Credential Logo" style="display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25); flex-shrink: 0; box-shadow: 0 4px 12px rgba(0, 242, 254, 0.15);">
+                                ${certIcon.html}
                             </div>
 
                             <!-- Right: Year & Role Badges -->
@@ -1023,6 +1150,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             const skills = PORTFOLIO_DATA.skills || [];
             skills.forEach((cat, catIdx) => {
                 const catName = cat.category || 'Custom Skills';
+                const catBrandSvg = getCategoryBrandSvg(catName);
                 
                 // Add to datalist
                 if (datalist) {
@@ -1041,12 +1169,9 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
                     box.innerHTML = `
                         <div class="admin-card-header" style="padding-bottom: 0.6rem; border-bottom: 1px solid rgba(0, 242, 254, 0.3);">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: rgba(0, 242, 254, 0.15); color: #00F2FE;">
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                    </svg>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="cat-card-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px; background: rgba(0, 242, 254, 0.15); flex-shrink: 0;">
+                                    ${catBrandSvg}
                                 </span>
                                 <h4 class="admin-card-title" style="color: var(--color-cyan, #00F2FE); font-size: 0.95rem; font-weight: 700; margin: 0;">
                                     Editing Category: <span style="color: var(--text-main);">${escapeHtml(catName)}</span>
@@ -1141,7 +1266,10 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
                     box.innerHTML = `
                         <div class="admin-card-header skill-cat-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding-bottom: 0.65rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); width: 100%;">
-                            <div class="skill-cat-header-title-group" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 140px; flex: 1;">
+                            <div class="skill-cat-header-title-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-width: 140px; flex: 1;">
+                                <span class="cat-card-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.2); flex-shrink: 0; box-shadow: 0 4px 10px rgba(0, 242, 254, 0.1);">
+                                    ${catBrandSvg}
+                                </span>
                                 <h4 class="admin-card-title" style="margin: 0; font-size: 1rem; line-height: 1.3;">${escapeHtml(catName)}</h4>
                                 <span class="tech-chip" style="color: var(--color-cyan, #00F2FE); font-size: 10px; font-weight: 700; padding: 2px 7px;">${escapeHtml(cat.badge || 'PRO')}</span>
                             </div>
@@ -1285,7 +1413,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 return;
             }
 
-            eduList.forEach(edu => {
+            eduList.forEach((edu, idx) => {
                 const card = document.createElement('div');
                 card.className = 'admin-item-card';
 
@@ -1297,13 +1425,19 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     green: '#10B981'
                 };
                 const dotColor = colorDotMap[edu.color] || '#00F2FE';
+                const eduIconSvg = getEducationIconSvg(edu.degree, idx);
 
                 card.innerHTML = `
                     <div style="display: flex; flex-direction: column; gap: 0.65rem; flex: 1 1 auto;">
-                        <div class="admin-card-header">
-                            <span class="tech-chip" style="color: ${dotColor}; border-color: ${dotColor}55;">
-                                ${edu.timeline || '2023 - 2027'}
-                            </span>
+                        <div class="admin-card-header" style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="edu-badge-circle ${edu.color || 'cyan'}" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25); color: ${dotColor}; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0, 242, 254, 0.1);">
+                                    ${eduIconSvg}
+                                </div>
+                                <span class="tech-chip" style="color: ${dotColor}; border-color: ${dotColor}55;">
+                                    ${edu.timeline || '2023 - 2027'}
+                                </span>
+                            </div>
                             <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
                                 ${edu.status || 'Completed'}
                             </span>

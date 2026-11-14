@@ -175,6 +175,8 @@
       "credentialUrl": "https://drive.google.com/file/d/1cl2VigQ5hxvn8Rvf95aB_rDKcxp-DC7W/view?usp=drive_link",
       "description": "Successfully completed Full Stack Data Science & AIML training, including data science, data analysis, machine learning, and AI/ML concepts. Completed end-to-end industry project.",
       "image": null,
+      "iconKey": "medal",
+      "iconColor": "cyan",
       "verifyUrl": "https://drive.google.com/file/d/1cl2VigQ5hxvn8Rvf95aB_rDKcxp-DC7W/view?usp=drive_link"
     },
     {
@@ -186,6 +188,8 @@
       "credentialUrl": "https://drive.google.com/file/d/1_8l84tbuG8lmW_nmikiv928YXy97ercc/view?usp=drive_link",
       "description": "Comprehensive 30-day intensive program mastering Python core fundamentals, object-oriented programming (OOP), data structures, scripting, algorithms, and real-world implementation.",
       "image": null,
+      "iconKey": "python",
+      "iconColor": "blue",
       "verifyUrl": "https://drive.google.com/file/d/1_8l84tbuG8lmW_nmikiv928YXy97ercc/view?usp=drive_link"
     },
     {
@@ -197,6 +201,8 @@
       "credentialUrl": "https://github.com/thesubhankar",
       "description": "Detailed learning of relational database structures, schema validation, window functions, CTEs, subqueries, and database performance optimization.",
       "image": null,
+      "iconKey": "sql",
+      "iconColor": "blue",
       "verifyUrl": "https://github.com/thesubhankar"
     },
     {
@@ -208,6 +214,8 @@
       "credentialUrl": "https://github.com/thesubhankar",
       "description": "Proficient modeling of DAX variables, star-schemas, cleaning processes in Power Query, and formatting premium UX analytics report dashboards.",
       "image": null,
+      "iconKey": "powerbi",
+      "iconColor": "orange",
       "verifyUrl": "https://github.com/thesubhankar"
     },
     {
@@ -219,6 +227,8 @@
       "credentialUrl": "https://github.com/thesubhankar",
       "description": "Advanced data analysis, complex business modeling with XLOOKUP &amp; INDEX/MATCH, PivotTables, Power Query transformation, and automated interactive executive reporting.",
       "image": null,
+      "iconKey": "excel",
+      "iconColor": "green",
       "verifyUrl": "https://github.com/thesubhankar"
     },
     {
@@ -230,6 +240,8 @@
       "credentialUrl": "https://github.com/thesubhankar",
       "description": "Built neural network architectures, optimization algorithms, hyperparameter tuning, PyTorch implementations, and computer vision models.",
       "image": null,
+      "iconKey": "deeplearning",
+      "iconColor": "purple",
       "verifyUrl": "https://github.com/thesubhankar"
     },
     {
@@ -241,6 +253,8 @@
       "credentialUrl": "https://drive.google.com/file/d/1PQYTXUosc0CQCNKmF9qnaavIedDubfzz/view?usp=drive_link",
       "description": "Gained foundational knowledge of sequence-to-sequence models and their applications in Natural Language Processing (NLP) and modern deep learning.",
       "image": null,
+      "iconKey": "encoderdecoder",
+      "iconColor": "cyan",
       "verifyUrl": "https://drive.google.com/file/d/1PQYTXUosc0CQCNKmF9qnaavIedDubfzz/view?usp=drive_link"
     },
     {
@@ -252,6 +266,8 @@
       "credentialUrl": "https://drive.google.com/file/d/1BpAuz2XJxlBwAC32AYEE06Y6eAdSgT-x/view?usp=drive_link",
       "description": "Foundation in Generative AI, Large Language Models (LLMs), attention mechanisms, and applied machine learning techniques for enterprise applications.",
       "image": null,
+      "iconKey": "genai",
+      "iconColor": "orange",
       "verifyUrl": "https://www.coursera.org/account/accomplishments/verify/DEFVJX3WOXGL"
     },
     {
@@ -263,6 +279,8 @@
       "credentialUrl": "https://drive.google.com/file/d/1LoNw328xcCGA0xyt9pPcDW8ZatINjU4V/view?usp=drive_link",
       "description": "Foundational knowledge of Large Language Models, Generative AI capabilities, transformer architectures, and real-world AI applications.",
       "image": null,
+      "iconKey": "llm",
+      "iconColor": "cyan",
       "verifyUrl": "https://drive.google.com/file/d/1LoNw328xcCGA0xyt9pPcDW8ZatINjU4V/view?usp=drive_link"
     }
   ],

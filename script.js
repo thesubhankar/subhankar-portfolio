@@ -4244,38 +4244,54 @@ function getCategoryBrandSvg(catName) {
 }
 
 const OFFICIAL_CERT_ICONS = {
-    'cert-1': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>` },
-    'cert-2': { color: 'blue', svg: `<svg viewBox="0 0 128 128" width="22" height="22" style="flex-shrink:0;"><path fill="#38BDF8" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"/><path fill="#FFD43B" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"/></svg>` },
-    'cert-3': { color: 'blue', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>` },
-    'cert-4': { color: 'orange', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="8" rx="1"></rect><rect x="10" y="8" width="4" height="12" rx="1"></rect><rect x="17" y="4" width="4" height="16" rx="1"></rect></svg>` },
-    'cert-5': { color: 'green', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M8 13l3 4m0-4l-3 4"></path><line x1="14" y1="13" x2="17" y2="13"></line></svg>` },
-    'cert-6': { color: 'purple', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M3 9a9 9 0 0 1 9-9 9 9 0 0 1 9 9"></path><path d="M3 15a9 9 0 0 0 9 9 9 9 0 0 0 9-9"></path></svg>` },
-    'cert-7': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>` },
-    'cert-8': { color: 'orange', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>` },
-    'cert-9': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>` }
+    'medal': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>` },
+    'python': { color: 'blue', svg: `<svg viewBox="0 0 128 128" width="22" height="22" style="flex-shrink:0;"><path fill="#38BDF8" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"/><path fill="#FFD43B" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"/></svg>` },
+    'sql': { color: 'blue', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>` },
+    'powerbi': { color: 'orange', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="8" rx="1"></rect><rect x="10" y="8" width="4" height="12" rx="1"></rect><rect x="17" y="4" width="4" height="16" rx="1"></rect></svg>` },
+    'excel': { color: 'green', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M8 13l3 4m0-4l-3 4"></path><line x1="14" y1="13" x2="17" y2="13"></line></svg>` },
+    'deeplearning': { color: 'purple', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M3 9a9 9 0 0 1 9-9 9 9 0 0 1 9 9"></path><path d="M3 15a9 9 0 0 0 9 9 9 9 0 0 0 9-9"></path></svg>` },
+    'encoderdecoder': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>` },
+    'genai': { color: 'orange', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>` },
+    'llm': { color: 'cyan', svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>` }
 };
+// 1-to-1 Aliases
+OFFICIAL_CERT_ICONS['cert-1'] = OFFICIAL_CERT_ICONS['medal'];
+OFFICIAL_CERT_ICONS['cert-2'] = OFFICIAL_CERT_ICONS['python'];
+OFFICIAL_CERT_ICONS['cert-3'] = OFFICIAL_CERT_ICONS['sql'];
+OFFICIAL_CERT_ICONS['cert-4'] = OFFICIAL_CERT_ICONS['powerbi'];
+OFFICIAL_CERT_ICONS['cert-5'] = OFFICIAL_CERT_ICONS['excel'];
+OFFICIAL_CERT_ICONS['cert-6'] = OFFICIAL_CERT_ICONS['deeplearning'];
+OFFICIAL_CERT_ICONS['cert-7'] = OFFICIAL_CERT_ICONS['encoderdecoder'];
+OFFICIAL_CERT_ICONS['cert-8'] = OFFICIAL_CERT_ICONS['genai'];
+OFFICIAL_CERT_ICONS['cert-9'] = OFFICIAL_CERT_ICONS['llm'];
 
 function getCertificateIconData(cert, idx) {
-    if (cert.image) {
+    if (cert && cert.image) {
         return {
             color: 'cyan',
             html: `<img src="/${escapeHtml(cert.image)}" alt="${escapeHtml(cert.title)}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`
         };
     }
-    const id = cert.id || `cert-${idx + 1}`;
+    if (cert && cert.iconKey && OFFICIAL_CERT_ICONS[cert.iconKey]) {
+        return {
+            color: cert.iconColor || OFFICIAL_CERT_ICONS[cert.iconKey].color,
+            html: OFFICIAL_CERT_ICONS[cert.iconKey].svg
+        };
+    }
+    const id = (cert && cert.id) || `cert-${(idx !== undefined ? idx : 0) + 1}`;
     if (OFFICIAL_CERT_ICONS[id]) {
         return { color: OFFICIAL_CERT_ICONS[id].color, html: OFFICIAL_CERT_ICONS[id].svg };
     }
-    const clean = (cert.title + ' ' + (cert.category || '')).toLowerCase();
-    if (clean.includes('python')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['cert-2'].svg };
-    if (clean.includes('sql') || clean.includes('database')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['cert-3'].svg };
-    if (clean.includes('power bi') || clean.includes('tableau') || clean.includes('bi')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['cert-4'].svg };
-    if (clean.includes('excel')) return { color: 'green', html: OFFICIAL_CERT_ICONS['cert-5'].svg };
-    if (clean.includes('deep learning') || clean.includes('neural')) return { color: 'purple', html: OFFICIAL_CERT_ICONS['cert-6'].svg };
-    if (clean.includes('encoder') || clean.includes('architecture')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['cert-7'].svg };
-    if (clean.includes('generative ai') || clean.includes('genai')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['cert-8'].svg };
-    if (clean.includes('llm') || clean.includes('large language')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['cert-9'].svg };
-    return { color: 'cyan', html: OFFICIAL_CERT_ICONS['cert-1'].svg };
+    const clean = ((cert && cert.title || '') + ' ' + (cert && cert.category || '')).toLowerCase();
+    if (clean.includes('python')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['python'].svg };
+    if (clean.includes('sql') || clean.includes('database')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['sql'].svg };
+    if (clean.includes('power bi') || clean.includes('tableau') || clean.includes('bi')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['powerbi'].svg };
+    if (clean.includes('excel')) return { color: 'green', html: OFFICIAL_CERT_ICONS['excel'].svg };
+    if (clean.includes('deep learning') || clean.includes('neural')) return { color: 'purple', html: OFFICIAL_CERT_ICONS['deeplearning'].svg };
+    if (clean.includes('encoder') || clean.includes('architecture')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['encoderdecoder'].svg };
+    if (clean.includes('generative ai') || clean.includes('genai')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['genai'].svg };
+    if (clean.includes('llm') || clean.includes('large language')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['llm'].svg };
+    return { color: 'cyan', html: OFFICIAL_CERT_ICONS['medal'].svg };
 }
 
 async function initDynamicPortfolioSync(isForced = false) {
