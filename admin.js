@@ -1499,6 +1499,24 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     driveLink.style.display = 'none';
                 }
             }
+
+            // Update Active Deployed Resume Status Card
+            const activePath = document.getElementById('activeResumePathText');
+            if (activePath) activePath.textContent = '/' + (r.filePath || 'assets/resume.pdf');
+            const driveText = document.getElementById('activeResumeDriveText');
+            const driveBtn = document.getElementById('activeResumeDriveBtn');
+            if (driveText) {
+                driveText.textContent = r.driveUrl || 'No Google Drive URL connected';
+            }
+            if (driveBtn) {
+                if (r.driveUrl) {
+                    driveBtn.href = r.driveUrl;
+                    driveBtn.style.display = 'inline-flex';
+                } else {
+                    driveBtn.style.display = 'none';
+                }
+            }
+
             renderResumePdfPreview();
         }
 

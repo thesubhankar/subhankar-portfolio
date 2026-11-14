@@ -15527,3 +15527,179 @@ body[data-theme="light"] .toggle-slider {
     background: linear-gradient(145deg, #16A34A 0%, #15803D 100%);
     box-shadow: 0 5px 16px rgba(22, 163, 74, 0.35);
 }
+
+
+/* ==========================================================================
+   Resume Sheet Preview Typography, Logo & Content Styling
+   ========================================================================== */
+.resume-sheet-header {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    position: relative;
+    z-index: 4;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.resume-sheet-logo {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.resume-sheet-status-dot {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10B981;
+    border: 2px solid #0F172A;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+}
+
+.resume-doc-name {
+    font-family: var(--font-display, var(--font-sans));
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.resume-doc-role {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #00F2FE !important;
+    margin-top: 0.2rem;
+}
+
+.resume-sheet-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    position: relative;
+    z-index: 4;
+    margin-top: 0.85rem;
+}
+
+.resume-pill-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.resume-mini-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.22rem 0.65rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.badge-cyan {
+    background: rgba(0, 242, 254, 0.15) !important;
+    color: #00F2FE !important;
+    border: 1px solid rgba(0, 242, 254, 0.35) !important;
+}
+
+.badge-green {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #10B981 !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+}
+
+.resume-skills-snippet {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+}
+
+.resume-snippet-lbl {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-muted, #94A3B8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.resume-snippet-val {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-main, #E2E8F0) !important;
+    margin: 0.25rem 0 0 0;
+    line-height: 1.4;
+}
+
+.resume-doc-footer-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.resume-pdf-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: #F43F5E !important;
+}
+
+.resume-badge-verified {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #10B981 !important;
+    background: rgba(16, 185, 129, 0.15) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+}
+
+.overlay-hint {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-cyan, #00F2FE);
+    margin-top: 0.25rem;
+}
+
+/* Light Theme Overrides for Resume Document Content */
+[data-theme="light"] .resume-doc-name {
+    color: #0F172A !important;
+}
+
+[data-theme="light"] .resume-doc-role {
+    color: #007BA7 !important;
+}
+
+[data-theme="light"] .resume-skills-snippet {
+    background: rgba(241, 245, 249, 0.85) !important;
+    border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+[data-theme="light"] .resume-snippet-val {
+    color: #1E293B !important;
+}
+
+[data-theme="light"] .resume-sheet-status-dot {
+    border-color: #FFFFFF !important;
+}
+
+[data-theme="light"] .resume-sheet-header,
+[data-theme="light"] .resume-doc-footer-meta {
+    border-color: rgba(0, 0, 0, 0.08) !important;
+}
