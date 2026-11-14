@@ -1,3 +1,4 @@
+import shutil
 import os
 import json
 import time
@@ -922,38 +923,174 @@ def update_certs_drive_folder():
         "folderUrl": folder_url
     })
 
-@app.route("/api/admin/resume", methods=["POST", "DELETE"])
-def update_resume():
+# =========================================================================
+# Multi-Resume Library Management
+# =========================================================================
+@app.route("/api/admin/resumes", methods=["GET", "POST"])
+def manage_resumes():
     data = load_data()
-    resume_data = data.setdefault("resume", {})
+    resumes = data.setdefault("resumes", [])
 
-    if request.method == "DELETE":
+    if request.method == "GET":
+        return jsonify({"success": True, "resumes": resumes, "active": data.get("resume", {})})
+
+    # POST (Add or Update)
+    resume_id = request.form.get("id", "").strip()
+    title = request.form.get("title", "").strip() or "Subhankar Giri — Official CV / Resume"
+    is_active = request.form.get("isActive", "true").lower() in ("true", "1", "yes")
+
+    file = request.files.get("resume")
+    file_path = None
+    file_size_str = None
+    file_name = None
+
+    if file and file.filename:
+        safe_filename = secure_filename(file.filename) or "resume.pdf"
+        timestamp = int(time.time())
+        unique_name = f"resume_{timestamp}_{safe_filename}"
+        abs_dest = os.path.join(UPLOAD_RESUME, unique_name)
+        file.save(abs_dest)
+        file_path = f"assets/uploads/resume/{unique_name}"
+        file_name = safe_filename
+        sz_bytes = os.path.getsize(abs_dest)
+        file_size_str = f"{sz_bytes / 1024:.1f} KB" if sz_bytes < 1048576 else f"{sz_bytes / (1024*1024):.2f} MB"
+
+    if resume_id:
+        # Edit existing resume
+        existing = next((r for r in resumes if r.get("id") == resume_id), None)
+        if not existing:
+            return jsonify({"error": "Resume not found"}), 404
+        existing["title"] = title
+        if file_path:
+            old_path = existing.get("filePath")
+            if old_path and old_path.startswith("assets/uploads/resume/"):
+                old_abs = os.path.join(BASE_DIR, old_path.replace("/", os.sep))
+                if os.path.exists(old_abs):
+                    try:
+                        os.remove(old_abs)
+                    except Exception:
+                        pass
+            existing["filePath"] = file_path
+            existing["fileName"] = file_name
+            existing["fileSize"] = file_size_str
+            existing["uploadedAt"] = time.strftime("%d %b %Y")
+        
+        if is_active:
+            for r in resumes:
+                r["isActive"] = (r.get("id") == resume_id)
+            active_src = os.path.join(BASE_DIR, existing["filePath"].replace("/", os.sep))
+            primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
+            if os.path.exists(active_src) and active_src != primary_pdf:
+                shutil.copyfile(active_src, primary_pdf)
+            data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+            data.setdefault("resume", {})["hasUploadedPdf"] = True
+            data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
+        save_data(data)
+        return jsonify({"success": True, "message": "Resume updated successfully", "resume": existing})
+
+    # Add new resume
+    if not file_path:
+        return jsonify({"error": "Please select a PDF file to upload"}), 400
+
+    new_id = f"resume_{int(time.time())}"
+    new_resume = {
+        "id": new_id,
+        "title": title,
+        "fileName": file_name,
+        "filePath": file_path,
+        "fileSize": file_size_str,
+        "uploadedAt": time.strftime("%d %b %Y"),
+        "isActive": is_active
+    }
+
+    if is_active or len(resumes) == 0:
+        new_resume["isActive"] = True
+        for r in resumes:
+            r["isActive"] = False
+        active_src = os.path.join(BASE_DIR, file_path.replace("/", os.sep))
         primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-        if os.path.exists(primary_pdf):
+        if os.path.exists(active_src):
+            shutil.copyfile(active_src, primary_pdf)
+        data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+        data.setdefault("resume", {})["hasUploadedPdf"] = True
+        data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
+
+    resumes.insert(0, new_resume)
+    save_data(data)
+    return jsonify({"success": True, "message": "Resume uploaded successfully", "resume": new_resume})
+
+
+@app.route("/api/admin/resumes/<resume_id>", methods=["DELETE"])
+def delete_resume_item(resume_id):
+    data = load_data()
+    resumes = data.setdefault("resumes", [])
+    target = next((r for r in resumes if r.get("id") == resume_id), None)
+    if not target:
+        return jsonify({"error": "Resume not found"}), 404
+
+    was_active = target.get("isActive", False)
+    fpath = target.get("filePath", "")
+    if fpath and fpath.startswith("assets/uploads/resume/"):
+        abs_p = os.path.join(BASE_DIR, fpath.replace("/", os.sep))
+        if os.path.exists(abs_p):
             try:
-                os.remove(primary_pdf)
+                os.remove(abs_p)
             except Exception:
                 pass
-        resume_data["filePath"] = ""
-        resume_data["hasUploadedPdf"] = False
-        resume_data["driveUrl"] = ""
-        resume_data["lastUpdated"] = time.strftime("%B %Y")
-        save_data(data)
-        return jsonify({"success": True, "message": "Resume deleted successfully", "resume": resume_data})
 
-    # POST (File upload)
-    file = request.files.get("resume")
-    if file and file.filename:
+    resumes = [r for r in resumes if r.get("id") != resume_id]
+    data["resumes"] = resumes
+
+    if was_active and len(resumes) > 0:
+        resumes[0]["isActive"] = True
+        active_src = os.path.join(BASE_DIR, resumes[0]["filePath"].replace("/", os.sep))
         primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-        os.makedirs(os.path.dirname(primary_pdf), exist_ok=True)
-        file.save(primary_pdf)
-        resume_data["filePath"] = "assets/resume.pdf"
-        resume_data["hasUploadedPdf"] = True
-        resume_data["lastUpdated"] = time.strftime("%B %Y")
-        save_data(data)
-        return jsonify({"success": True, "message": "Resume deployed successfully", "resume": resume_data})
+        if os.path.exists(active_src) and active_src != primary_pdf:
+            shutil.copyfile(active_src, primary_pdf)
+        data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+        data.setdefault("resume", {})["hasUploadedPdf"] = True
+    elif len(resumes) == 0:
+        data.setdefault("resume", {})["filePath"] = ""
+        data.setdefault("resume", {})["hasUploadedPdf"] = False
 
-    return jsonify({"success": False, "message": "Please select a valid PDF file"}), 400
+    save_data(data)
+    return jsonify({"success": True, "message": "Resume deleted successfully"})
+
+
+@app.route("/api/admin/resumes/<resume_id>/activate", methods=["POST"])
+def activate_resume_item(resume_id):
+    data = load_data()
+    resumes = data.setdefault("resumes", [])
+    target = next((r for r in resumes if r.get("id") == resume_id), None)
+    if not target:
+        return jsonify({"error": "Resume not found"}), 404
+
+    for r in resumes:
+        r["isActive"] = (r.get("id") == resume_id)
+
+    fpath = target.get("filePath", "")
+    active_src = os.path.join(BASE_DIR, fpath.replace("/", os.sep))
+    primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
+    if os.path.exists(active_src) and active_src != primary_pdf:
+        shutil.copyfile(active_src, primary_pdf)
+    data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+    data.setdefault("resume", {})["hasUploadedPdf"] = True
+    data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
+
+    save_data(data)
+    return jsonify({"success": True, "message": "Resume activated successfully", "resume": target})
+
+
+# Backward compatible route
+@app.route("/api/admin/resume", methods=["POST", "DELETE"])
+def update_resume():
+    if request.method == "DELETE":
+        data = load_data()
+        resumes = data.get("resumes", [])
+        if resumes:
+            return delete_resume_item(resumes[0]["id"])
+        return jsonify({"success": True, "message": "No resume to delete"})
+    return manage_resumes()
 
 # =========================================================================
 # Skills Management (With Official SVG Matching)

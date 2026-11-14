@@ -1399,53 +1399,19 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         // 5. Resume Management
         // =========================================================================
         // ============================================================
-        // Resume Manager Logic (Single Card: View, Edit, Delete)
+        // Multi-Resume Library Manager Logic (Upload + Individual Cards with View, Edit, Delete)
         // ============================================================
         let resumeSelectedFile = null;
         const resumePdfInput = document.getElementById('resumePdf');
-        const resumeEditToggleBtn = document.getElementById('resumeEditToggleBtn');
-        const resumeCancelEditBtn = document.getElementById('resumeCancelEditBtn');
-        const resumeEditDrawer = document.getElementById('resumeEditDrawer');
-        const resumeDeleteBtn = document.getElementById('resumeDeleteBtn');
-
-        if (resumeEditToggleBtn && resumeEditDrawer) {
-            resumeEditToggleBtn.addEventListener('click', () => {
-                const isHidden = resumeEditDrawer.style.display === 'none' || !resumeEditDrawer.style.display;
-                resumeEditDrawer.style.display = isHidden ? 'block' : 'none';
-                if (isHidden && resumePdfInput) {
-                    resumePdfInput.focus();
-                }
-            });
-        }
-
-        if (resumeCancelEditBtn && resumeEditDrawer) {
-            resumeCancelEditBtn.addEventListener('click', () => {
-                resumeEditDrawer.style.display = 'none';
-                resumeSelectedFile = null;
-                if (resumePdfInput) resumePdfInput.value = '';
-                renderResumePdfPreview();
-            });
-        }
-
-        if (resumeDeleteBtn) {
-            resumeDeleteBtn.addEventListener('click', async () => {
-                if (!confirm('Are you sure you want to delete the active portfolio resume PDF?')) {
-                    return;
-                }
-                try {
-                    const res = await fetch('/api/admin/resume', { method: 'DELETE' });
-                    const d = await res.json();
-                    if (d.success) {
-                        showNotify('Resume deleted successfully!');
-                        loadData();
-                    } else {
-                        showNotify(d.message || 'Failed to delete resume', false);
-                    }
-                } catch (err) {
-                    showNotify('Error deleting resume', false);
-                }
-            });
-        }
+        const resumePdfPreviewRow = document.getElementById('resumePdfPreviewRow');
+        const resumeForm = document.getElementById('resumeForm');
+        const resumeIdInput = document.getElementById('resumeId');
+        const resumeTitleInput = document.getElementById('resumeTitle');
+        const resumeIsActiveInput = document.getElementById('resumeIsActive');
+        const resumeCancelBtn = document.getElementById('resumeCancelBtn');
+        const resumeFormTitle = document.getElementById('resumeFormTitle');
+        const resumeSubmitBtnText = document.getElementById('resumeSubmitBtnText');
+        const resumeFileReqText = document.getElementById('resumeFileReqText');
 
         if (resumePdfInput) {
             resumePdfInput.addEventListener('change', (e) => {
@@ -1459,6 +1425,10 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         return;
                     }
                     resumeSelectedFile = file;
+                    if (resumeTitleInput && !resumeTitleInput.value.trim()) {
+                        const baseName = file.name.replace(/\.pdf$/i, '').replace(/[-_]/g, ' ');
+                        resumeTitleInput.value = baseName;
+                    }
                 } else {
                     resumeSelectedFile = null;
                 }
@@ -1467,9 +1437,8 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         }
 
         function renderResumePdfPreview() {
-            const previewRow = document.getElementById('resumePdfPreviewRow');
-            if (!previewRow) return;
-            previewRow.innerHTML = '';
+            if (!resumePdfPreviewRow) return;
+            resumePdfPreviewRow.innerHTML = '';
 
             if (resumeSelectedFile) {
                 const item = document.createElement('div');
@@ -1490,78 +1459,230 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     if (resumePdfInput) resumePdfInput.value = '';
                     renderResumePdfPreview();
                 });
-                previewRow.appendChild(item);
+                resumePdfPreviewRow.appendChild(item);
             }
         }
 
-        function renderResume() {
-            const r = PORTFOLIO_DATA.resume || {};
-            const activePath = document.getElementById('activeResumePathText');
-            const badge = document.getElementById('resumeStatusBadge');
-            const viewBtn = document.getElementById('resumeViewBtn');
-            const deleteBtn = document.getElementById('resumeDeleteBtn');
+        if (resumeCancelBtn) {
+            resumeCancelBtn.addEventListener('click', () => {
+                resetResumeForm();
+            });
+        }
 
-            const hasFile = !!(r.filePath && r.hasUploadedPdf !== false);
-
-            if (activePath) {
-                activePath.textContent = hasFile ? ('/' + r.filePath) : 'No resume file uploaded yet';
+        function resetResumeForm() {
+            if (resumeIdInput) resumeIdInput.value = '';
+            if (resumeTitleInput) resumeTitleInput.value = '';
+            if (resumePdfInput) {
+                resumePdfInput.value = '';
+                resumePdfInput.required = true;
             }
-            if (badge) {
-                if (hasFile) {
-                    badge.textContent = '● Active Live';
-                    badge.style.color = '#10B981';
-                    badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-                } else {
-                    badge.textContent = '○ No Resume';
-                    badge.style.color = '#F59E0B';
-                    badge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
-                }
-            }
-            if (viewBtn) {
-                if (hasFile) {
-                    viewBtn.href = '/' + r.filePath;
-                    viewBtn.style.pointerEvents = 'auto';
-                    viewBtn.style.opacity = '1';
-                } else {
-                    viewBtn.href = '#';
-                    viewBtn.style.pointerEvents = 'none';
-                    viewBtn.style.opacity = '0.5';
-                }
-            }
-            if (deleteBtn) {
-                deleteBtn.disabled = !hasFile;
-                deleteBtn.style.opacity = hasFile ? '1' : '0.5';
-            }
-
+            if (resumeIsActiveInput) resumeIsActiveInput.checked = true;
+            if (resumeCancelBtn) resumeCancelBtn.style.display = 'none';
+            if (resumeFormTitle) resumeFormTitle.textContent = '🚀 Upload New Resume PDF';
+            if (resumeSubmitBtnText) resumeSubmitBtnText.textContent = '🚀 Upload & Add Resume';
+            if (resumeFileReqText) resumeFileReqText.textContent = 'Required *';
+            resumeSelectedFile = null;
             renderResumePdfPreview();
         }
 
-        const resumeForm = document.getElementById('resumeForm');
+        function renderResume() {
+            const grid = document.getElementById('resumeCardsList');
+            const badge = document.getElementById('resumeCountBadge');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            let resumes = PORTFOLIO_DATA.resumes || [];
+            if (!Array.isArray(resumes) || resumes.length === 0) {
+                const legacy = PORTFOLIO_DATA.resume || {};
+                resumes = [{
+                    id: 'resume_default',
+                    title: 'Subhankar Giri — Official CV / Resume',
+                    fileName: 'resume.pdf',
+                    filePath: legacy.filePath || 'assets/resume.pdf',
+                    fileSize: '1.1 KB',
+                    uploadedAt: legacy.lastUpdated || 'November 2026',
+                    isActive: true
+                }];
+            }
+
+            if (badge) {
+                badge.textContent = `${resumes.length} Resume${resumes.length === 1 ? '' : 's'} Available`;
+            }
+
+            resumes.forEach(r => {
+                const card = document.createElement('div');
+                card.className = 'admin-item-card';
+                card.style.padding = '1.35rem';
+                card.style.display = 'flex';
+                card.style.flexDirection = 'column';
+                card.style.justifyContent = 'space-between';
+                card.style.gap = '1.1rem';
+                card.style.background = 'var(--bg-card)';
+                card.style.border = r.isActive ? '1.5px solid rgba(16, 185, 129, 0.45)' : 'var(--border-card)';
+                card.style.borderRadius = '14px';
+                card.style.boxShadow = r.isActive ? '0 10px 25px rgba(16, 185, 129, 0.12)' : 'var(--shadow-sm)';
+
+                card.innerHTML = `
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <div class="method-icon-box method-icon-3d ${r.isActive ? 'method-icon-emerald' : 'method-icon-cyan'}" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 4px;">
+                                <span class="tech-chip" style="${r.isActive ? 'color: #10B981; border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1);' : 'color: var(--text-muted); border-color: rgba(255, 255, 255, 0.15);'}">
+                                    ${r.isActive ? '● Active Live' : '○ Standby'}
+                                </span>
+                                <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(r.fileSize || 'PDF')}</span>
+                            </div>
+                            <h4 class="admin-card-title" style="margin: 0; font-size: 1.02rem; line-height: 1.35;" title="${escapeHtml(r.title)}">${escapeHtml(r.title)}</h4>
+                            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cyan, #00F2FE); display: block; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                /${escapeHtml(r.filePath || 'assets/resume.pdf')}
+                            </span>
+                            <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 3px;">
+                                Uploaded: ${escapeHtml(r.uploadedAt || 'Current')}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 3 Buttons: View, Edit, Delete -->
+                    <div style="display: flex; gap: 0.5rem; align-items: center; justify-content: space-between; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
+                        <div>
+                            ${!r.isActive ? `
+                                <button type="button" onclick="activateResume('${escapeHtml(r.id)}')" class="btn btn-outline btn-xs" style="font-size: 0.76rem; padding: 0.35rem 0.75rem; border-color: rgba(16, 185, 129, 0.4); color: #10B981;" title="Make this the live portfolio resume">
+                                    <span>⭐ Set Active</span>
+                                </button>
+                            ` : `
+                                <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #10B981; font-weight: 700;">✓ Live on Site</span>
+                            `}
+                        </div>
+
+                        <div style="display: flex; gap: 0.45rem; align-items: center;">
+                            <!-- 1. View Button -->
+                            <a href="/${escapeHtml(r.filePath || 'assets/resume.pdf')}" target="_blank" class="btn btn-outline btn-xs" style="padding: 0.35rem 0.75rem; font-size: 0.76rem;" title="View PDF">
+                                <span>👁️ View</span>
+                            </a>
+
+                            <!-- 2. Edit Button -->
+                            <button type="button" onclick="editResume('${escapeHtml(r.id)}')" class="btn btn-secondary btn-xs" style="padding: 0.35rem 0.75rem; font-size: 0.76rem;" title="Edit Resume">
+                                <span>✏️ Edit</span>
+                            </button>
+
+                            <!-- 3. Delete Button -->
+                            <button type="button" onclick="deleteResume('${escapeHtml(r.id)}')" class="btn btn-danger btn-xs" style="padding: 0.35rem 0.75rem; font-size: 0.76rem; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #EF4444;" title="Delete Resume">
+                                <span>🗑️ Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        window.editResume = function(id) {
+            const resumes = PORTFOLIO_DATA.resumes || [];
+            const r = resumes.find(item => item.id === id);
+            if (!r) return;
+
+            if (resumeIdInput) resumeIdInput.value = r.id;
+            if (resumeTitleInput) resumeTitleInput.value = r.title || '';
+            if (resumeIsActiveInput) resumeIsActiveInput.checked = !!r.isActive;
+            if (resumePdfInput) {
+                resumePdfInput.value = '';
+                resumePdfInput.required = false;
+            }
+            if (resumeCancelBtn) resumeCancelBtn.style.display = 'inline-flex';
+            if (resumeFormTitle) resumeFormTitle.textContent = `✏️ Edit Resume: ${r.title}`;
+            if (resumeSubmitBtnText) resumeSubmitBtnText.textContent = '💾 Update Resume';
+            if (resumeFileReqText) resumeFileReqText.textContent = 'Optional (leave blank to keep current)';
+
+            resumeSelectedFile = null;
+            renderResumePdfPreview();
+
+            const formCard = document.getElementById('page-resume');
+            if (formCard) formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        window.activateResume = async function(id) {
+            try {
+                const res = await fetch(`/api/admin/resumes/${encodeURIComponent(id)}/activate`, { method: 'POST' });
+                const d = await res.json();
+                if (d.success) {
+                    showNotify('Resume set as active live portfolio resume!');
+                    loadData();
+                } else {
+                    showNotify(d.message || 'Failed to activate resume', false);
+                }
+            } catch (err) {
+                showNotify('Error activating resume', false);
+            }
+        };
+
+        window.deleteResume = async function(id) {
+            const resumes = PORTFOLIO_DATA.resumes || [];
+            const r = resumes.find(item => item.id === id);
+            const title = r ? r.title : 'this resume';
+
+            if (!confirm(`Are you sure you want to delete "${title}"?`)) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/admin/resumes/${encodeURIComponent(id)}`, { method: 'DELETE' });
+                const d = await res.json();
+                if (d.success) {
+                    showNotify('Resume deleted successfully!');
+                    resetResumeForm();
+                    loadData();
+                } else {
+                    showNotify(d.message || 'Failed to delete resume', false);
+                }
+            } catch (err) {
+                showNotify('Error deleting resume', false);
+            }
+        };
+
         if (resumeForm) {
             resumeForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                if (!resumeSelectedFile) {
-                    showNotify('Please select a PDF file first!', false);
+                const id = resumeIdInput ? resumeIdInput.value.trim() : '';
+                const title = resumeTitleInput ? resumeTitleInput.value.trim() : '';
+                const isActive = resumeIsActiveInput ? resumeIsActiveInput.checked : true;
+
+                if (!title) {
+                    showNotify('Please enter a resume title / label!', false);
                     return;
                 }
+
+                if (!id && !resumeSelectedFile) {
+                    showNotify('Please select a PDF file to upload!', false);
+                    return;
+                }
+
                 const form = new FormData();
-                form.append('resume', resumeSelectedFile);
+                if (id) form.append('id', id);
+                form.append('title', title);
+                form.append('isActive', isActive ? 'true' : 'false');
+                if (resumeSelectedFile) {
+                    form.append('resume', resumeSelectedFile);
+                }
 
                 try {
-                    const res = await fetch('/api/admin/resume', { method: 'POST', body: form });
+                    const res = await fetch('/api/admin/resumes', { method: 'POST', body: form });
                     const d = await res.json();
                     if (d.success) {
-                        showNotify('Resume deployed successfully!');
-                        resumeSelectedFile = null;
-                        if (resumePdfInput) resumePdfInput.value = '';
-                        if (resumeEditDrawer) resumeEditDrawer.style.display = 'none';
-                        renderResumePdfPreview();
+                        showNotify(id ? 'Resume updated successfully!' : 'Resume uploaded & added successfully!');
+                        resetResumeForm();
                         loadData();
                     } else {
-                        showNotify(d.message || 'Error deploying resume', false);
+                        showNotify(d.message || 'Error saving resume', false);
                     }
                 } catch (err) {
-                    showNotify('Failed to deploy resume', false);
+                    showNotify('Failed to save resume', false);
                 }
             });
         }
