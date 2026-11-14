@@ -6,13 +6,27 @@
     <script>
         (function () {
             try {
+                // 1. Consistent Zero-Flicker Dark Theme Default
                 var savedTheme = localStorage.getItem('sg_portfolio_theme');
-                if (!savedTheme) {
-                    var hour = new Date().getHours();
-                    savedTheme = (hour >= 6 && hour < 18) ? 'light' : 'dark';
+                if (savedTheme !== 'light' && savedTheme !== 'dark') {
+                    savedTheme = 'dark';
                 }
                 document.documentElement.setAttribute('data-theme', savedTheme);
                 if (document.body) document.body.setAttribute('data-theme', savedTheme);
+
+                // 2. Instant Deep-Link Hash Activator (Prevents jump on direct section links)
+                var hash = window.location.hash.replace('#', '');
+                var validAdminPages = ['projects', 'certificates', 'skills', 'education', 'resume'];
+                if (hash && validAdminPages.indexOf(hash) !== -1 && hash !== 'projects') {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var defaultPage = document.querySelector('.notebook-page.active');
+                        var targetPage = document.getElementById('page-' + hash);
+                        if (defaultPage && targetPage && defaultPage !== targetPage) {
+                            defaultPage.classList.remove('active');
+                            targetPage.classList.add('active');
+                        }
+                    });
+                }
             } catch (e) {}
         })();
     </script>
@@ -24,7 +38,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=17">
-    <link rel="stylesheet" href="admin.css?v=29">
+    <link rel="stylesheet" href="admin.css?v=31">
 </head>
 
 <body data-theme="dark">
@@ -675,6 +689,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-    <script src="admin.js?v=30"></script>
+    <script src="admin.js?v=31"></script>
 </body>
 </html>

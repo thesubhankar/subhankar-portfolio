@@ -12,13 +12,9 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             const themeLabel = document.getElementById('themeLabel');
             const themeContainers = document.querySelectorAll('.theme-switch-container');
 
-            function getTimeBasedTheme() {
-                const hour = new Date().getHours();
-                return (hour >= 6 && hour < 18) ? 'light' : 'dark';
-            }
-
+            // Default theme is strictly DARK, respecting saved explicit user toggle
             const savedTheme = localStorage.getItem('sg_portfolio_theme');
-            const initialTheme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : getTimeBasedTheme();
+            const initialTheme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
 
             setTheme(initialTheme);
 
@@ -29,7 +25,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 if (e && typeof e.stopPropagation === 'function') {
                     e.stopPropagation();
                 }
-                const current = document.documentElement.getAttribute('data-theme') || getTimeBasedTheme();
+                const current = document.documentElement.getAttribute('data-theme') || 'dark';
                 const next = current === 'dark' ? 'light' : 'dark';
                 localStorage.setItem('sg_portfolio_theme', next);
                 localStorage.setItem('sg_portfolio_theme_manual', 'true');
@@ -93,11 +89,9 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             }
         }
 
-        // Clear any old persistent tokens immediately upon opening admin
-        localStorage.removeItem('sg_admin_token');
-        sessionStorage.removeItem('sg_admin_token');
-
-        let isKernelAuthenticated = false;
+        // Restore active session token if present; do not kick user out on refresh
+        const existingSessionToken = sessionStorage.getItem('sg_admin_token');
+        let isKernelAuthenticated = Boolean(existingSessionToken && existingSessionToken.length > 10);
 
         // --- Authentication Handler ---
         function checkAuth() {

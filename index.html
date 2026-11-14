@@ -5,13 +5,27 @@
     <script>
         (function () {
             try {
+                // 1. Consistent Zero-Flicker Dark Theme Default
                 var savedTheme = localStorage.getItem('sg_portfolio_theme');
-                if (!savedTheme) {
-                    var hour = new Date().getHours();
-                    savedTheme = (hour >= 6 && hour < 18) ? 'light' : 'dark';
+                if (savedTheme !== 'light' && savedTheme !== 'dark') {
+                    savedTheme = 'dark';
                 }
                 document.documentElement.setAttribute('data-theme', savedTheme);
                 if (document.body) document.body.setAttribute('data-theme', savedTheme);
+
+                // 2. Instant Deep-Link Hash Activator (Prevents jump from Intro to target page)
+                var hash = window.location.hash.replace('#', '');
+                var validPages = ['intro', 'about', 'skills', 'projects', 'certificates', 'education', 'experience', 'achievements', 'github', 'resume', 'contact'];
+                if (hash && validPages.indexOf(hash) !== -1 && hash !== 'intro') {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var defaultPage = document.querySelector('.notebook-page.active');
+                        var targetPage = document.getElementById('page-' + hash);
+                        if (defaultPage && targetPage && defaultPage !== targetPage) {
+                            defaultPage.classList.remove('active');
+                            targetPage.classList.add('active');
+                        }
+                    });
+                }
             } catch (e) {}
         })();
     </script>
@@ -51,7 +65,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=31">
+    <link rel="stylesheet" href="style.css?v=32">
 </head>
 
 <body>
@@ -1684,7 +1698,7 @@
                                         <div class="edu-action-box">
                                             <a href="#" target="_blank" rel="noopener noreferrer" class="btn-edu-3d btn-edu-view" title="View Education Document">
                                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                     <circle cx="12" cy="12" r="3"></circle>
                                                 </svg>
                                                 <span>View</span>
@@ -1724,7 +1738,7 @@
                                         <div class="edu-action-box">
                                             <a href="#" target="_blank" rel="noopener noreferrer" class="btn-edu-3d btn-edu-view" title="View Education Document">
                                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                     <circle cx="12" cy="12" r="3"></circle>
                                                 </svg>
                                                 <span>View</span>
@@ -1764,7 +1778,7 @@
                                         <div class="edu-action-box">
                                             <a href="#" target="_blank" rel="noopener noreferrer" class="btn-edu-3d btn-edu-view" title="View Education Document">
                                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                     <circle cx="12" cy="12" r="3"></circle>
                                                 </svg>
                                                 <span>View</span>
@@ -2519,7 +2533,7 @@
 
     <!-- Script Assets -->
     <script src="config.js?v=13"></script>
-    <script src="script.js?v=31"></script>
+    <script src="script.js?v=32"></script>
 </body>
 
 </html>

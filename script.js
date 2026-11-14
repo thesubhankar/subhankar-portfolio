@@ -178,15 +178,9 @@ function initTheme() {
     const themeLabel = document.getElementById('themeLabel');
     const themeContainers = document.querySelectorAll('.theme-switch-container');
 
-    function getTimeBasedTheme() {
-        const hour = new Date().getHours();
-        return (hour >= 6 && hour < 18) ? 'light' : 'dark';
-    }
-
-    // Determine initial theme:
-    // Respect saved theme from localStorage, or default to time-based
+    // Default theme is strictly DARK, respecting saved explicit user toggle
     const savedTheme = localStorage.getItem('sg_portfolio_theme');
-    const initialTheme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : getTimeBasedTheme();
+    const initialTheme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
 
     setTheme(initialTheme);
 
@@ -197,7 +191,7 @@ function initTheme() {
         if (e && typeof e.stopPropagation === 'function') {
             e.stopPropagation();
         }
-        const current = document.documentElement.getAttribute('data-theme') || getTimeBasedTheme();
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
         const next = current === 'dark' ? 'light' : 'dark';
         localStorage.setItem('sg_portfolio_theme', next);
         localStorage.setItem('sg_portfolio_theme_manual', 'true');
@@ -4246,6 +4240,9 @@ function getCategoryBrandSvg(catName) {
 }
 
 async function initDynamicPortfolioSync() {
+    // Prevent dual concurrent sync runs
+    if (window._isPortfolioSyncing) return;
+    window._isPortfolioSyncing = true;
     try {
         let response = null;
         try {
@@ -4260,6 +4257,14 @@ async function initDynamicPortfolioSync() {
 
         if (!response || !response.ok) return;
         const data = await response.json();
+
+        // Data Checksum Guard: If identical data was already synced, NEVER wipe or re-render DOM!
+        const dataHash = JSON.stringify(data);
+        if (window._LAST_SYNCED_PORTFOLIO_DATA === dataHash) {
+            window._isPortfolioSyncing = false;
+            return;
+        }
+        window._LAST_SYNCED_PORTFOLIO_DATA = dataHash;
 
         // 1. Sync Resume Links
         if (data.resume) {
@@ -4528,7 +4533,7 @@ async function initDynamicPortfolioSync() {
                                 <div class="edu-action-box">
                                     <a href="${(edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#')}" ${((edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '')) ? 'target="_blank" rel="noopener noreferrer"' : '')} class="btn-edu-3d btn-edu-view" title="View Education Document">
                                         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                             <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
                                         <span>View</span>
@@ -4551,6 +4556,8 @@ async function initDynamicPortfolioSync() {
         }
     } catch (err) {
         // Silent fallback
+    } finally {
+        window._isPortfolioSyncing = false;
     }
 }
 
