@@ -354,24 +354,38 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         <p class="admin-card-desc">${p.description || ''}</p>
                     </div>
 
-                    <div class="admin-card-footer">
-                        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;">
-                            ${skillsText}
+                    <div class="admin-card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 0.65rem; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
+                        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;" title="${escapeHtml(skillsText)}">
+                            ${escapeHtml(skillsText)}
                         </span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <button type="button" onclick="editProject('${p.id}')" class="btn-action-icon btn-edit-cyber" title="Edit Project" aria-label="Edit Project">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <div style="display: flex; gap: 0.45rem; align-items: center;">
+                            <!-- 1. 3D View Button -->
+                            <a href="${p.demoUrl || p.codeUrl || '#'}" target="_blank" class="btn-3d btn-3d-view" title="View Project Live / Source Code">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <span>View</span>
+                            </a>
+
+                            <!-- 2. 3D Edit Button -->
+                            <button type="button" onclick="editProject('${p.id}')" class="btn-3d btn-3d-edit" title="Edit Project">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                 </svg>
+                                <span>Edit</span>
                             </button>
-                            <button type="button" onclick="deleteProject('${p.id}')" class="btn-action-icon btn-delete-cyber" title="Delete Project" aria-label="Delete Project">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+
+                            <!-- 3. 3D Delete Button -->
+                            <button type="button" onclick="deleteProject('${p.id}')" class="btn-3d btn-3d-delete" title="Delete Project">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="3 6 5 6 21 6"></polyline>
                                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                     <line x1="10" y1="11" x2="10" y2="17"></line>
                                     <line x1="14" y1="11" x2="14" y2="17"></line>
                                 </svg>
+                                <span>Delete</span>
                             </button>
                         </div>
                     </div>
@@ -683,24 +697,35 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         <p class="admin-card-desc">${c.description || ''}</p>
                     </div>
 
-                    <div class="admin-card-footer">
-                        ${c.credentialUrl ? `<a href="${c.credentialUrl}" target="_blank" class="sidebar-admin-link" style="font-size: 10px;">Verify &nearr;</a>` : '<span></span>'}
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <button type="button" onclick="editCert('${c.id}')" class="btn-action-icon btn-edit-cyber" title="Edit Certificate" aria-label="Edit Certificate">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                            </button>
-                            <button type="button" onclick="deleteCert('${c.id}')" class="btn-action-icon btn-delete-cyber" title="Delete Certificate" aria-label="Delete Certificate">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                                </svg>
-                            </button>
-                        </div>
+                    <div class="admin-card-footer" style="display: flex; justify-content: flex-end; align-items: center; gap: 0.45rem; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
+                        <!-- 1. 3D View Button (Replaced old Verify link) -->
+                        <a href="${c.credentialUrl || '#'}" target="_blank" class="btn-3d btn-3d-view" title="View Certificate Document">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span>View</span>
+                        </a>
+
+                        <!-- 2. 3D Edit Button -->
+                        <button type="button" onclick="editCert('${c.id}')" class="btn-3d btn-3d-edit" title="Edit Certificate">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            <span>Edit</span>
+                        </button>
+
+                        <!-- 3. 3D Delete Button -->
+                        <button type="button" onclick="deleteCert('${c.id}')" class="btn-3d btn-3d-delete" title="Delete Certificate">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                            <span>Delete</span>
+                        </button>
                     </div>
                 `;
                 list.appendChild(card);
@@ -1282,27 +1307,35 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         <p class="admin-card-desc" style="margin-top: 0.25rem;">${edu.details || ''}</p>
                     </div>
 
-                    <div class="admin-card-footer" style="margin-top: 0.75rem;">
-                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                            ${(edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '')) ? `<a href="${(edu.viewLink || edu.link)}" target="_blank" rel="noopener noreferrer" class="sidebar-admin-link" style="font-size: 11px;">👁️ View &nearr;</a>` : ''}
-                            ${(edu.downloadLink || (edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : ''))) ? `<a href="${(edu.downloadLink || edu.viewLink || edu.link)}" download target="_blank" rel="noopener noreferrer" class="sidebar-admin-link" style="font-size: 11px;">⬇️ Download &nearr;</a>` : ''}
-                        </div>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <button type="button" onclick="editEducation('${edu.id}')" class="btn-action-icon btn-edit-cyber" title="Edit Education Milestone" aria-label="Edit Education Milestone">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                            </button>
-                            <button type="button" onclick="deleteEducation('${edu.id}')" class="btn-action-icon btn-delete-cyber" title="Delete Education Milestone" aria-label="Delete Education Milestone">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                                </svg>
-                            </button>
-                        </div>
+                    <div class="admin-card-footer" style="display: flex; justify-content: flex-end; align-items: center; gap: 0.45rem; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
+                        <!-- 1. 3D View Button -->
+                        <a href="${edu.viewLink || edu.downloadLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#'}" target="_blank" class="btn-3d btn-3d-view" title="View Education Credential">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span>View</span>
+                        </a>
+
+                        <!-- 2. 3D Edit Button -->
+                        <button type="button" onclick="editEducation('${edu.id}')" class="btn-3d btn-3d-edit" title="Edit Education Milestone">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            <span>Edit</span>
+                        </button>
+
+                        <!-- 3. 3D Delete Button -->
+                        <button type="button" onclick="deleteEducation('${edu.id}')" class="btn-3d btn-3d-delete" title="Delete Education Milestone">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                            <span>Delete</span>
+                        </button>
                     </div>
                 `;
                 list.appendChild(card);
