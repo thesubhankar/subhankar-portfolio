@@ -583,6 +583,10 @@ def index():
 def admin_page():
     return send_from_directory(BASE_DIR, "admin.html")
 
+@app.route("/assets/<path:filename>")
+def serve_assets(filename):
+    return send_from_directory(os.path.join(BASE_DIR, "assets"), filename)
+
 # =========================================================================
 # Public API Routes
 # =========================================================================
