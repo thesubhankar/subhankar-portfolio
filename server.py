@@ -918,26 +918,38 @@ def update_certs_drive_folder():
         "folderUrl": folder_url
     })
 
-@app.route("/api/admin/resume", methods=["POST"])
+@app.route("/api/admin/resume", methods=["POST", "DELETE"])
 def update_resume():
     data = load_data()
-    drive_url = request.form.get("driveUrl", "").strip()
+    resume_data = data.setdefault("resume", {})
 
-    # File upload handling
+    if request.method == "DELETE":
+        primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
+        if os.path.exists(primary_pdf):
+            try:
+                os.remove(primary_pdf)
+            except Exception:
+                pass
+        resume_data["filePath"] = ""
+        resume_data["hasUploadedPdf"] = False
+        resume_data["driveUrl"] = ""
+        resume_data["lastUpdated"] = time.strftime("%B %Y")
+        save_data(data)
+        return jsonify({"success": True, "message": "Resume deleted successfully", "resume": resume_data})
+
+    # POST (File upload)
     file = request.files.get("resume")
     if file and file.filename:
-        # Save directly as primary assets/resume.pdf so standard links download immediately
         primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
+        os.makedirs(os.path.dirname(primary_pdf), exist_ok=True)
         file.save(primary_pdf)
-        data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
-        data.setdefault("resume", {})["hasUploadedPdf"] = True
+        resume_data["filePath"] = "assets/resume.pdf"
+        resume_data["hasUploadedPdf"] = True
+        resume_data["lastUpdated"] = time.strftime("%B %Y")
+        save_data(data)
+        return jsonify({"success": True, "message": "Resume deployed successfully", "resume": resume_data})
 
-    # Save drive_url (empty string if user cleared it)
-    data.setdefault("resume", {})["driveUrl"] = drive_url
-    if drive_url or (file and file.filename):
-        data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
-    save_data(data)
-    return jsonify({"success": True, "message": "Resume updated successfully", "resume": data["resume"]})
+    return jsonify({"success": False, "message": "Please select a valid PDF file"}), 400
 
 # =========================================================================
 # Skills Management (With Official SVG Matching)

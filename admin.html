@@ -553,110 +553,84 @@
                     <span class="md-tag">📄 Resume Manager</span>
                 </div>
 
-                <!-- Update Resume Form Card -->
-                <div class="admin-panel-card">
+                <!-- Single Unified Resume Management Card -->
+                <div class="admin-panel-card" id="adminResumeCard">
                     <div class="admin-card-header">
-                        <h3 class="admin-card-title">🚀 Upload &amp; Deploy Resume PDF</h3>
+                        <h3 class="admin-card-title">📄 Portfolio Resume (CV / RESUME)</h3>
+                        <span id="resumeStatusBadge" class="tech-chip" style="color: #10B981; border-color: rgba(16, 185, 129, 0.4);">● Synchronized Live</span>
                     </div>
                     <div class="cell-output-card">
-                        <form id="resumeForm" class="admin-form-panel">
-                            <div class="admin-grid-2col">
-                                <div class="form-group">
-                                    <label class="form-label">Google Drive Shareable Link (Live Portfolio Resume)</label>
-                                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                        <input type="url" id="resumeDriveUrl" class="form-input" style="flex: 1;" placeholder="https://drive.google.com/file/d/.../view" />
-                                        <a id="resumeDrivePreviewLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="display: none; padding: 0.45rem 0.8rem; font-size: 0.78rem; white-space: nowrap;">
-                                            <span>Open Drive ↗</span>
-                                        </a>
-                                    </div>
+                        <!-- Main Item Display -->
+                        <div class="admin-item-card" style="padding: 1.35rem; display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap;">
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <div class="method-icon-box method-icon-3d method-icon-cyan" style="width: 50px; height: 50px; min-width: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    </svg>
                                 </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <h4 class="admin-card-title" style="margin: 0; font-size: 1.02rem;">Subhankar Giri — CV / Resume</h4>
+                                    <span id="activeResumePathText" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 4px;">
+                                        /assets/resume.pdf
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- 3 Buttons: View, Edit, Delete -->
+                            <div class="resume-actions-group" style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
+                                <!-- 1. View Button -->
+                                <a id="resumeViewBtn" href="/assets/resume.pdf" target="_blank" class="btn btn-outline btn-xs" style="padding: 0.5rem 1rem; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.45rem;">
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    <span>View</span>
+                                </a>
+
+                                <!-- 2. Edit Button -->
+                                <button type="button" id="resumeEditToggleBtn" class="btn btn-secondary btn-xs" style="padding: 0.5rem 1rem; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.45rem;">
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    <span>Edit</span>
+                                </button>
+
+                                <!-- 3. Delete Button -->
+                                <button type="button" id="resumeDeleteBtn" class="btn btn-danger btn-xs" style="padding: 0.5rem 1rem; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.45rem; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #EF4444;">
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Edit Drawer / Panel (Shown when Edit is clicked) -->
+                        <div id="resumeEditDrawer" style="display: none; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed var(--border-card);">
+                            <form id="resumeForm" class="admin-form-panel">
                                 <div class="form-group">
                                     <label class="form-label">Upload New Resume PDF (assets/resume.pdf) *</label>
                                     <input type="file" id="resumePdf" class="form-input form-file-input" accept="application/pdf" />
-                                    <div id="resumePdfNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Upload your Resume PDF to deploy it live.</div>
+                                    <div id="resumePdfNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Select your updated Resume PDF to deploy it live across the portfolio.</div>
                                     <div id="resumePdfPreviewRow" class="admin-single-preview-wrap"></div>
                                 </div>
-                            </div>
 
-                            <div class="skill-live-matcher">
-                                <div class="skill-logo-box" style="border-color: #ff477e;">
-                                    <span style="font-size: 20px;">📄</span>
+                                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+                                    <button type="button" id="resumeCancelEditBtn" class="btn btn-outline btn-xs">
+                                        <span>Cancel</span>
+                                    </button>
+                                    <button type="submit" id="resumeSubmitBtn" class="btn btn-primary btn-xs">
+                                        <span>🚀 Save &amp; Deploy Resume</span>
+                                    </button>
                                 </div>
-                                <div style="display: flex; flex-direction: column; gap: 2px;">
-                                    <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #ff477e; font-weight: 700;">
-                                        Live Resume Engine
-                                    </span>
-                                    <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
-                                        Uploading a new PDF immediately replaces the live resume served across the portfolio.
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div style="display: flex; justify-content: flex-end; margin-top: 0.5rem;">
-                                <button type="submit" id="resumeSubmitBtn" class="btn btn-primary">
-                                    <span>🚀 Deploy Updated Resume</span>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-
-                            <!-- Active / Existing Resume Status Card -->
-                <div class="admin-panel-card" style="margin-top: 1.5rem;">
-                    <div class="admin-card-header">
-                        <h3 class="admin-card-title">📄 Active Deployed Resume Status</h3>
-                        <span class="tech-chip" style="color: #10B981; border-color: rgba(16, 185, 129, 0.4);">● Synchronized Live</span>
-                    </div>
-                    <div class="cell-output-card">
-                        <div class="admin-grid-2col" style="gap: 1.25rem;">
-                            <!-- PDF Card -->
-                            <div class="admin-item-card" style="padding: 1.15rem;">
-                                <div style="display: flex; gap: 0.95rem; align-items: center;">
-                                    <div class="method-icon-box method-icon-3d method-icon-cyan" style="width: 44px; height: 44px; min-width: 44px; border-radius: 11px;">
-                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                                        </svg>
-                                    </div>
-                                    <div style="flex: 1; min-width: 0;">
-                                        <h4 class="admin-card-title" style="margin: 0; font-size: 0.92rem;">Local Active PDF</h4>
-                                        <span id="activeResumePathText" style="font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-muted); display: block; margin-top: 2px;">/assets/resume.pdf</span>
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
-                                    <a id="activeResumePreviewBtn" href="/assets/resume.pdf" target="_blank" class="btn btn-outline btn-xs">
-                                        <span>👁️ Preview Live PDF ↗</span>
-                                    </a>
-                                    <a id="activeResumeDownloadBtn" href="/assets/resume.pdf" download="Subhankar_Giri_Resume.pdf" class="btn btn-outline btn-xs">
-                                        <span>⬇️ Download PDF</span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Google Drive Card -->
-                            <div class="admin-item-card" style="padding: 1.15rem;">
-                                <div style="display: flex; gap: 0.95rem; align-items: center;">
-                                    <div class="method-icon-box method-icon-3d method-icon-emerald" style="width: 44px; height: 44px; min-width: 44px; border-radius: 11px;">
-                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                                            <line x1="12" y1="11" x2="12" y2="17"></line>
-                                            <polyline points="9 14 12 17 15 14"></polyline>
-                                        </svg>
-                                    </div>
-                                    <div style="flex: 1; min-width: 0;">
-                                        <h4 class="admin-card-title" style="margin: 0; font-size: 0.92rem;">Google Drive Shareable Link</h4>
-                                        <span id="activeResumeDriveText" style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-cyan, #00F2FE); display: block; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Loading...</span>
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
-                                    <a id="activeResumeDriveBtn" href="#" target="_blank" class="btn btn-outline btn-xs">
-                                        <span>🔗 Open in Google Drive ↗</span>
-                                    </a>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -728,6 +702,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-    <script src="admin.js?v=24"></script>
+    <script src="admin.js?v=25"></script>
 </body>
 </html>

@@ -1398,85 +1398,67 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         // =========================================================================
         // 5. Resume Management
         // =========================================================================
+        // ============================================================
+        // Resume Manager Logic (Single Card: View, Edit, Delete)
+        // ============================================================
         let resumeSelectedFile = null;
         const resumePdfInput = document.getElementById('resumePdf');
-        const resumePdfPreviewRow = document.getElementById('resumePdfPreviewRow');
+        const resumeEditToggleBtn = document.getElementById('resumeEditToggleBtn');
+        const resumeCancelEditBtn = document.getElementById('resumeCancelEditBtn');
+        const resumeEditDrawer = document.getElementById('resumeEditDrawer');
+        const resumeDeleteBtn = document.getElementById('resumeDeleteBtn');
 
-        function renderResumePdfPreview() {
-            if (!resumePdfPreviewRow) return;
-            resumePdfPreviewRow.innerHTML = '';
-
-            if (resumeSelectedFile) {
-                const card = document.createElement('div');
-                card.className = 'admin-single-card pdf-card';
-                card.innerHTML = `
-                    <div class="single-card-thumb pdf-thumb">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                    </div>
-                    <div class="single-card-info">
-                        <div class="single-card-title" title="${escapeHtml(resumeSelectedFile.name)}">${escapeHtml(resumeSelectedFile.name)}</div>
-                        <div class="single-card-meta">
-                            <span class="preview-tag pdf-tag">PDF Document</span>
-                            <span class="single-card-size">${formatFileSize(resumeSelectedFile.size)}</span>
-                            <span class="single-card-status">✓ Ready to deploy</span>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-remove-single" title="Remove selected PDF" onclick="removeResumePdf()">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        <span>Remove</span>
-                    </button>
-                `;
-                resumePdfPreviewRow.appendChild(card);
-            } else {
-                const r = PORTFOLIO_DATA.resume || {};
-                // Only show active card if user has explicitly uploaded a custom resume PDF
-                if (r.hasUploadedPdf && r.filePath) {
-                    const filePath = r.filePath;
-                    const card = document.createElement('div');
-                    card.className = 'admin-single-card pdf-card';
-                    card.innerHTML = `
-                        <div class="single-card-thumb pdf-thumb">
-                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </div>
-                        <div class="single-card-info">
-                            <div class="single-card-title" title="Active Resume (${escapeHtml(filePath)})">Active Resume (${escapeHtml(filePath)})</div>
-                            <div class="single-card-meta">
-                                <span class="preview-tag existing-tag">Uploaded PDF</span>
-                                <span class="single-card-size">Updated: ${escapeHtml(r.lastUpdated || 'Current')}</span>
-                                <span class="single-card-status">✓ Active on Site</span>
-                            </div>
-                        </div>
-                        <a href="/${escapeHtml(filePath)}" target="_blank" class="btn-view-single" title="View Current PDF">
-                            <span>View &nearr;</span>
-                        </a>
-                    `;
-                    resumePdfPreviewRow.appendChild(card);
+        if (resumeEditToggleBtn && resumeEditDrawer) {
+            resumeEditToggleBtn.addEventListener('click', () => {
+                const isHidden = resumeEditDrawer.style.display === 'none' || !resumeEditDrawer.style.display;
+                resumeEditDrawer.style.display = isHidden ? 'block' : 'none';
+                if (isHidden && resumePdfInput) {
+                    resumePdfInput.focus();
                 }
-            }
+            });
         }
 
-        window.removeResumePdf = function() {
-            resumeSelectedFile = null;
-            if (resumePdfInput) resumePdfInput.value = '';
-            renderResumePdfPreview();
-        };
+        if (resumeCancelEditBtn && resumeEditDrawer) {
+            resumeCancelEditBtn.addEventListener('click', () => {
+                resumeEditDrawer.style.display = 'none';
+                resumeSelectedFile = null;
+                if (resumePdfInput) resumePdfInput.value = '';
+                renderResumePdfPreview();
+            });
+        }
+
+        if (resumeDeleteBtn) {
+            resumeDeleteBtn.addEventListener('click', async () => {
+                if (!confirm('Are you sure you want to delete the active portfolio resume PDF?')) {
+                    return;
+                }
+                try {
+                    const res = await fetch('/api/admin/resume', { method: 'DELETE' });
+                    const d = await res.json();
+                    if (d.success) {
+                        showNotify('Resume deleted successfully!');
+                        loadData();
+                    } else {
+                        showNotify(d.message || 'Failed to delete resume', false);
+                    }
+                } catch (err) {
+                    showNotify('Error deleting resume', false);
+                }
+            });
+        }
 
         if (resumePdfInput) {
-            resumePdfInput.addEventListener('change', () => {
-                if (resumePdfInput.files && resumePdfInput.files[0]) {
-                    resumeSelectedFile = resumePdfInput.files[0];
+            resumePdfInput.addEventListener('change', (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (file) {
+                    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                        showNotify('Please select a valid PDF file!', false);
+                        resumePdfInput.value = '';
+                        resumeSelectedFile = null;
+                        renderResumePdfPreview();
+                        return;
+                    }
+                    resumeSelectedFile = file;
                 } else {
                     resumeSelectedFile = null;
                 }
@@ -1484,66 +1466,106 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             });
         }
 
+        function renderResumePdfPreview() {
+            const previewRow = document.getElementById('resumePdfPreviewRow');
+            if (!previewRow) return;
+            previewRow.innerHTML = '';
+
+            if (resumeSelectedFile) {
+                const item = document.createElement('div');
+                item.className = 'admin-preview-item';
+                item.style.padding = '0.5rem 0.75rem';
+                item.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <span style="font-size:1.2rem;">📄</span>
+                        <div style="display:flex; flex-direction:column;">
+                            <span style="font-size:0.75rem; font-weight:600; color:var(--text-main);">${escapeHtml(resumeSelectedFile.name)}</span>
+                            <span style="font-size:0.7rem; color:var(--text-muted);">${(resumeSelectedFile.size / 1024).toFixed(1)} KB</span>
+                        </div>
+                    </div>
+                    <button type="button" class="admin-preview-remove" title="Remove PDF" style="background:none; border:none; color:#EF4444; font-size:1.1rem; cursor:pointer;">&times;</button>
+                `;
+                item.querySelector('.admin-preview-remove').addEventListener('click', () => {
+                    resumeSelectedFile = null;
+                    if (resumePdfInput) resumePdfInput.value = '';
+                    renderResumePdfPreview();
+                });
+                previewRow.appendChild(item);
+            }
+        }
+
         function renderResume() {
             const r = PORTFOLIO_DATA.resume || {};
-            const driveInput = document.getElementById('resumeDriveUrl');
-            const driveLink = document.getElementById('resumeDrivePreviewLink');
-            if (driveInput) {
-                driveInput.value = r.driveUrl || '';
-            }
-            if (driveLink) {
-                if (r.driveUrl) {
-                    driveLink.href = r.driveUrl;
-                    driveLink.style.display = 'inline-flex';
-                } else {
-                    driveLink.style.display = 'none';
-                }
-            }
-
-            // Update Active Deployed Resume Status Card
             const activePath = document.getElementById('activeResumePathText');
-            if (activePath) activePath.textContent = '/' + (r.filePath || 'assets/resume.pdf');
-            const driveText = document.getElementById('activeResumeDriveText');
-            const driveBtn = document.getElementById('activeResumeDriveBtn');
-            if (driveText) {
-                driveText.textContent = r.driveUrl || 'No Google Drive URL connected';
+            const badge = document.getElementById('resumeStatusBadge');
+            const viewBtn = document.getElementById('resumeViewBtn');
+            const deleteBtn = document.getElementById('resumeDeleteBtn');
+
+            const hasFile = !!(r.filePath && r.hasUploadedPdf !== false);
+
+            if (activePath) {
+                activePath.textContent = hasFile ? ('/' + r.filePath) : 'No resume file uploaded yet';
             }
-            if (driveBtn) {
-                if (r.driveUrl) {
-                    driveBtn.href = r.driveUrl;
-                    driveBtn.style.display = 'inline-flex';
+            if (badge) {
+                if (hasFile) {
+                    badge.textContent = '● Active Live';
+                    badge.style.color = '#10B981';
+                    badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
                 } else {
-                    driveBtn.style.display = 'none';
+                    badge.textContent = '○ No Resume';
+                    badge.style.color = '#F59E0B';
+                    badge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
                 }
+            }
+            if (viewBtn) {
+                if (hasFile) {
+                    viewBtn.href = '/' + r.filePath;
+                    viewBtn.style.pointerEvents = 'auto';
+                    viewBtn.style.opacity = '1';
+                } else {
+                    viewBtn.href = '#';
+                    viewBtn.style.pointerEvents = 'none';
+                    viewBtn.style.opacity = '0.5';
+                }
+            }
+            if (deleteBtn) {
+                deleteBtn.disabled = !hasFile;
+                deleteBtn.style.opacity = hasFile ? '1' : '0.5';
             }
 
             renderResumePdfPreview();
         }
 
-        document.getElementById('resumeForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const form = new FormData();
-            form.append('driveUrl', document.getElementById('resumeDriveUrl').value);
-            if (resumeSelectedFile) {
-                form.append('resume', resumeSelectedFile);
-            }
-
-            try {
-                const res = await fetch('/api/admin/resume', { method: 'POST', body: form });
-                const d = await res.json();
-                if (d.success) {
-                    showNotify('Resume deployed successfully!');
-                    resumeSelectedFile = null;
-                    if (resumePdfInput) resumePdfInput.value = '';
-                    renderResumePdfPreview();
-                    loadData();
-                } else {
-                    showNotify(d.message || 'Error deploying resume', false);
+        const resumeForm = document.getElementById('resumeForm');
+        if (resumeForm) {
+            resumeForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!resumeSelectedFile) {
+                    showNotify('Please select a PDF file first!', false);
+                    return;
                 }
-            } catch (err) {
-                showNotify('Failed to deploy resume', false);
-            }
-        });
+                const form = new FormData();
+                form.append('resume', resumeSelectedFile);
+
+                try {
+                    const res = await fetch('/api/admin/resume', { method: 'POST', body: form });
+                    const d = await res.json();
+                    if (d.success) {
+                        showNotify('Resume deployed successfully!');
+                        resumeSelectedFile = null;
+                        if (resumePdfInput) resumePdfInput.value = '';
+                        if (resumeEditDrawer) resumeEditDrawer.style.display = 'none';
+                        renderResumePdfPreview();
+                        loadData();
+                    } else {
+                        showNotify(d.message || 'Error deploying resume', false);
+                    }
+                } catch (err) {
+                    showNotify('Failed to deploy resume', false);
+                }
+            });
+        }
+
 
         // --- Mobile Drawer Handlers ---
         const drawerOpenBtn = document.getElementById('mobileDrawerOpenBtn');
