@@ -900,6 +900,24 @@ def delete_certificate(cert_id):
 # =========================================================================
 # Resume Management
 # =========================================================================
+
+@app.route("/api/admin/certificates/drive-folder", methods=["POST"])
+def update_certs_drive_folder():
+    data = load_data()
+    req = request.get_json(silent=True) or request.form
+    folder_url = req.get("url", "").strip() if req else ""
+    if not folder_url:
+        folder_url = req.get("driveFolder", "").strip() if req else ""
+
+    data["moreCertificatesDriveUrl"] = folder_url
+    data["certificatesDriveFolder"] = folder_url
+    save_data(data)
+    return jsonify({
+        "success": True,
+        "message": "More certificates drive folder URL saved successfully!",
+        "folderUrl": folder_url
+    })
+
 @app.route("/api/admin/resume", methods=["POST"])
 def update_resume():
     data = load_data()

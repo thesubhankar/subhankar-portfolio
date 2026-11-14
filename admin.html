@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=17">
-    <link rel="stylesheet" href="admin.css?v=22">
+    <link rel="stylesheet" href="admin.css?v=23">
 </head>
 
 <body data-theme="dark">
@@ -364,6 +364,29 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- More Certificates Google Drive Folder URL Card -->
+                <div class="admin-panel-card" style="margin-top: 1.25rem;">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">📁 More Certificates Google Drive Folder Link</h3>
+                    </div>
+                    <div class="cell-output-card">
+                        <form id="moreCertsFolderForm" class="admin-form-panel">
+                            <div class="form-group">
+                                <label class="form-label">Google Drive Folder URL (Used for "View All Verified Certificates & Folders" button)</label>
+                                <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                    <input type="url" id="moreCertsFolderUrl" class="form-input" style="flex: 1; min-width: 260px;" placeholder="https://drive.google.com/drive/folders/..." />
+                                    <a id="moreCertsDrivePreviewLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="display: none; padding: 0.45rem 0.8rem; font-size: 0.78rem; white-space: nowrap;">
+                                        <span>Open Folder ↗</span>
+                                    </a>
+                                    <button type="submit" id="saveMoreCertsFolderBtn" class="btn btn-primary" style="white-space: nowrap;">
+                                        <span>💾 Save Folder URL</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </section>
 
             <!-- ============================================================
@@ -539,8 +562,13 @@
                         <form id="resumeForm" class="admin-form-panel">
                             <div class="admin-grid-2col">
                                 <div class="form-group">
-                                    <label class="form-label">Google Drive Shareable Link (Optional)</label>
-                                    <input type="url" id="resumeDriveUrl" class="form-input" placeholder="https://drive.google.com/file/d/.../view" />
+                                    <label class="form-label">Google Drive Shareable Link (Live Portfolio Resume)</label>
+                                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                        <input type="url" id="resumeDriveUrl" class="form-input" style="flex: 1;" placeholder="https://drive.google.com/file/d/.../view" />
+                                        <a id="resumeDrivePreviewLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="display: none; padding: 0.45rem 0.8rem; font-size: 0.78rem; white-space: nowrap;">
+                                            <span>Open Drive ↗</span>
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Upload New Resume PDF (assets/resume.pdf) *</label>
@@ -642,6 +670,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-    <script src="admin.js?v=22"></script>
+    <script src="admin.js?v=23"></script>
 </body>
 </html>

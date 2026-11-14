@@ -640,6 +640,22 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             if (!list) return;
             list.innerHTML = '';
 
+            // Populate More Certificates Drive Folder URL
+            const folderInput = document.getElementById('moreCertsFolderUrl');
+            const folderLink = document.getElementById('moreCertsDrivePreviewLink');
+            const folderUrl = PORTFOLIO_DATA.moreCertificatesDriveUrl || PORTFOLIO_DATA.certificatesDriveFolder || '';
+            if (folderInput) {
+                folderInput.value = folderUrl;
+            }
+            if (folderLink) {
+                if (folderUrl) {
+                    folderLink.href = folderUrl;
+                    folderLink.style.display = 'inline-flex';
+                } else {
+                    folderLink.style.display = 'none';
+                }
+            }
+
             const certs = PORTFOLIO_DATA.certificates || [];
             if (certs.length === 0) {
                 list.innerHTML = '<div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); padding: 1rem;">No certificates yet.</div>';
@@ -1470,11 +1486,18 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         function renderResume() {
             const r = PORTFOLIO_DATA.resume || {};
-            const defaultDriveUrl = "https://drive.google.com/file/d/1vtCEfBZiPKz9CQ8ARMHXGsyeW9zrHi7P/view?usp=drive_link";
-            if (r.driveUrl && r.driveUrl !== defaultDriveUrl) {
-                document.getElementById('resumeDriveUrl').value = r.driveUrl;
-            } else {
-                document.getElementById('resumeDriveUrl').value = '';
+            const driveInput = document.getElementById('resumeDriveUrl');
+            const driveLink = document.getElementById('resumeDrivePreviewLink');
+            if (driveInput) {
+                driveInput.value = r.driveUrl || '';
+            }
+            if (driveLink) {
+                if (r.driveUrl) {
+                    driveLink.href = r.driveUrl;
+                    driveLink.style.display = 'inline-flex';
+                } else {
+                    driveLink.style.display = 'none';
+                }
             }
             renderResumePdfPreview();
         }
@@ -1528,4 +1551,45 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 switchPage(hash);
             }
             checkAuth();
-        });
+        
+        // Handle More Certificates Drive Folder Form Submission
+        const moreCertsForm = document.getElementById('moreCertsFolderForm');
+        if (moreCertsForm) {
+            moreCertsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const folderUrl = document.getElementById('moreCertsFolderUrl').value.trim();
+                const saveBtn = document.getElementById('saveMoreCertsFolderBtn');
+                if (saveBtn) saveBtn.innerHTML = '<span>Saving...</span>';
+
+                try {
+                    const res = await fetch('/api/admin/certificates/drive-folder', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: folderUrl })
+                    });
+                    const d = await res.json();
+                    if (d.success) {
+                        showNotify('Certificates Drive Folder link saved successfully!');
+                        PORTFOLIO_DATA.moreCertificatesDriveUrl = folderUrl;
+                        PORTFOLIO_DATA.certificatesDriveFolder = folderUrl;
+                        const folderLink = document.getElementById('moreCertsDrivePreviewLink');
+                        if (folderLink) {
+                            if (folderUrl) {
+                                folderLink.href = folderUrl;
+                                folderLink.style.display = 'inline-flex';
+                            } else {
+                                folderLink.style.display = 'none';
+                            }
+                        }
+                    } else {
+                        showNotify(d.message || 'Error saving folder URL', false);
+                    }
+                } catch (err) {
+                    showNotify('Failed to connect to server: ' + err.message, false);
+                } finally {
+                    if (saveBtn) saveBtn.innerHTML = '<span>💾 Save Folder URL</span>';
+                }
+            });
+        }
+
+});

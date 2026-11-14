@@ -3520,22 +3520,6 @@ function initContactForm() {
 
     if (!form) return;
 
-    // Initialize EmailJS Browser SDK if available
-
-    if (window.emailjs && typeof EMAILJS_CONFIG !== 'undefined' && EMAILJS_CONFIG.PUBLIC_KEY) {
-
-        try {
-
-            emailjs.init({ publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
-
-        } catch (e) {
-
-            console.warn('EmailJS initialization note:', e);
-
-        }
-
-    }
-
     const successOverlay = document.getElementById('contactSuccessOverlay');
 
     let autoHideTimer = null;
@@ -3682,141 +3666,51 @@ function initContactForm() {
 
         let sentSuccessfully = false;
 
-        // 1. Primary Attempt: Send via EmailJS SDK or direct EmailJS REST API
-
-        if (typeof EMAILJS_CONFIG !== 'undefined' && EMAILJS_CONFIG.SERVICE_ID && EMAILJS_CONFIG.TEMPLATE_ID) {
-
-            try {
-
-                if (window.emailjs && typeof window.emailjs.send === 'function') {
-
-                    const res = await emailjs.send(
-
-                        EMAILJS_CONFIG.SERVICE_ID,
-
-                        EMAILJS_CONFIG.TEMPLATE_ID,
-
-                        templateParams,
-
-                        EMAILJS_CONFIG.PUBLIC_KEY
-
-                    );
-
-                    if (res && (res.status === 200 || res.text === 'OK')) {
-
-                        sentSuccessfully = true;
-
-                    }
-
-                } else {
-
-                    // Direct EmailJS REST API fallback
-
-                    const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-
-                        method: 'POST',
-
-                        headers: { 'Content-Type': 'application/json' },
-
-                        body: JSON.stringify({
-
-                            service_id: EMAILJS_CONFIG.SERVICE_ID,
-
-                            template_id: EMAILJS_CONFIG.TEMPLATE_ID,
-
-                            user_id: EMAILJS_CONFIG.PUBLIC_KEY,
-
-                            template_params: templateParams
-
-                        })
-
-                    });
-
-                    if (res.ok) {
-
-                        sentSuccessfully = true;
-
-                    }
-
-                }
-
-            } catch (emailJsErr) {
-
-                console.warn('EmailJS attempt encountered an issue:', emailJsErr);
-
-            }
-
-        }
-
-        // 2. Secondary Attempt (Fallback): FormSubmit API directly delivering to Subhankar's Gmail
-
-        if (!sentSuccessfully) {
-
-            try {
-
-                const fsRes = await fetch('https://formsubmit.co/ajax/thesubhankar.giri992@gmail.com', {
-
-                    method: 'POST',
-
-                    headers: {
-
-                        'Content-Type': 'application/json',
-
-                        'Accept': 'application/json'
-
-                    },
-
-                    body: JSON.stringify({
-
-                        name: name,
-
-                        email: email,
-
-                        subject: subject,
-
-                        message: message,
-
-                        _subject: `New Portfolio Message from ${name}: ${subject}`,
-
-                        _template: 'table',
-
-                        _captcha: 'false'
-
-                    })
-
-                });
-
-                if (fsRes.ok) {
-
-                    sentSuccessfully = true;
-
-                }
-
-            } catch (fsErr) {
-
-                console.warn('FormSubmit fallback note:', fsErr);
-
-            }
-
-        }
-
-        // 3. Concurrently log to Netlify Forms if hosted on Netlify
-
+        // Primary Delivery: FormSubmit AJAX API directly delivering to Subhankar's Gmail
         try {
-
-            const formData = new FormData(form);
-
-            fetch('/', {
-
+            const fsRes = await fetch('https://formsubmit.co/ajax/thesubhankar.giri992@gmail.com', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    subject: subject,
+                    message: message,
+                    _subject: `New Portfolio Message from ${name}: ${subject}`,
+                    _template: 'table',
+                    _captcha: 'false'
+                })
+            });
 
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            if (fsRes.ok) {
+                sentSuccessfully = true;
+            } else {
+                const fsData = await fsRes.json().catch(() => ({}));
+                if (fsData && fsData.success === "true") {
+                    sentSuccessfully = true;
+                }
+            }
+        } catch (fsErr) {
+            console.warn('FormSubmit primary delivery notice:', fsErr);
+        }
 
-                body: new URLSearchParams(formData).toString()
-
-            }).catch(() => {});
-
-        } catch (_) {}
+        // Secondary Backup: Netlify Forms if hosted on Netlify
+        if (!sentSuccessfully) {
+            try {
+                const formData = new FormData(form);
+                const netlifyRes = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(formData).toString()
+                });
+                if (netlifyRes.ok) {
+                    sentSuccessfully = true;
+                }
+            } catch (_) {}
+        }
 
         if (sentSuccessfully) {
 
@@ -4583,6 +4477,13 @@ async function initDynamicPortfolioSync() {
                         certGrid.appendChild(certCard);
                     });
                 }
+            }
+        }
+        // Sync More Certificates Drive Folder Button
+        if (data.moreCertificatesDriveUrl || data.certificatesDriveFolder) {
+            const moreBtn = document.querySelector('.more-certs-drive-footer a.btn-drive-all');
+            if (moreBtn) {
+                moreBtn.href = data.moreCertificatesDriveUrl || data.certificatesDriveFolder;
             }
         }
 
