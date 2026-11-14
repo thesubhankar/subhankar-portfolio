@@ -692,18 +692,13 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                                 </svg>`}
                             </div>
 
-                            <!-- Right: Year & Role written clearly -->
-                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
-                                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; justify-content: flex-end;">
-                                    <span class="tech-chip" style="color: #00F2FE; border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.08); font-size: 0.72rem; padding: 0.18rem 0.55rem; font-weight: 700;">
-                                        📅 ${escapeHtml(c.date || '2024')}
-                                    </span>
-                                    <span class="tech-chip" style="color: #FF2D95; border-color: rgba(255, 45, 149, 0.4); background: rgba(255, 45, 149, 0.08); font-size: 0.72rem; padding: 0.18rem 0.55rem; font-weight: 700;">
-                                        🎯 ${escapeHtml(c.category || 'General')}
-                                    </span>
-                                </div>
-                                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">
-                                    Year: <strong style="color: var(--color-cyan, #00F2FE); font-weight: 700;">${escapeHtml(c.date || '2024')}</strong> &nbsp;|&nbsp; Role: <strong style="color: #FF2D95; font-weight: 700;">${escapeHtml(c.category || 'General')}</strong>
+                            <!-- Right: Year & Role Badges -->
+                            <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; justify-content: flex-end;">
+                                <span class="tech-chip" style="color: #00F2FE; border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.08); font-size: 0.74rem; padding: 0.2rem 0.6rem; font-weight: 700; box-shadow: 0 2px 6px rgba(0, 242, 254, 0.15);">
+                                    📅 ${escapeHtml(c.date || '2024')}
+                                </span>
+                                <span class="tech-chip" style="color: #FF2D95; border-color: rgba(255, 45, 149, 0.4); background: rgba(255, 45, 149, 0.08); font-size: 0.74rem; padding: 0.2rem 0.6rem; font-weight: 700; box-shadow: 0 2px 6px rgba(255, 45, 149, 0.15);">
+                                    🎯 ${escapeHtml(c.category || 'General')}
                                 </span>
                             </div>
                         </div>
