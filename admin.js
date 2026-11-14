@@ -1549,32 +1549,51 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         </div>
                     </div>
 
-                    <!-- 3 Buttons: View, Edit, Delete -->
+                    <!-- 3D Buttons: View, Edit, Delete, Set Active -->
                     <div style="display: flex; gap: 0.5rem; align-items: center; justify-content: space-between; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
                         <div>
                             ${!r.isActive ? `
-                                <button type="button" onclick="activateResume('${escapeHtml(r.id)}')" class="btn btn-outline btn-xs" style="font-size: 0.76rem; padding: 0.35rem 0.75rem; border-color: rgba(16, 185, 129, 0.4); color: #10B981;" title="Make this the live portfolio resume">
-                                    <span>⭐ Set Active</span>
+                                <button type="button" onclick="activateResume('${escapeHtml(r.id)}')" class="btn-3d btn-3d-activate" title="Make this the live portfolio resume">
+                                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    <span>Set Active</span>
                                 </button>
                             ` : `
-                                <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #10B981; font-weight: 700;">✓ Live on Site</span>
+                                <div style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.38rem 0.75rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px;">
+                                    <span style="font-family: var(--font-mono); font-size: 0.74rem; color: #10B981; font-weight: 700;">✓ Live on Site</span>
+                                </div>
                             `}
                         </div>
 
                         <div style="display: flex; gap: 0.45rem; align-items: center;">
-                            <!-- 1. View Button -->
-                            <a href="/${escapeHtml(r.filePath || 'assets/resume.pdf')}" target="_blank" class="btn btn-outline btn-xs" style="padding: 0.35rem 0.75rem; font-size: 0.76rem;" title="View PDF">
-                                <span>👁️ View</span>
+                            <!-- 1. 3D View Button -->
+                            <a href="/${escapeHtml(r.filePath || 'assets/resume.pdf')}" target="_blank" class="btn-3d btn-3d-view" title="Preview Resume PDF">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <span>View</span>
                             </a>
 
-                            <!-- 2. Edit Button -->
-                            <button type="button" onclick="editResume('${escapeHtml(r.id)}')" class="btn btn-secondary btn-xs" style="padding: 0.35rem 0.75rem; font-size: 0.76rem;" title="Edit Resume">
-                                <span>✏️ Edit</span>
+                            <!-- 2. 3D Edit Button -->
+                            <button type="button" onclick="editResume('${escapeHtml(r.id)}')" class="btn-3d btn-3d-edit" title="Edit Resume Details or Replace PDF">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                <span>Edit</span>
                             </button>
 
-                            <!-- 3. Delete Button -->
-                            <button type="button" onclick="deleteResume('${escapeHtml(r.id)}')" class="btn btn-danger btn-xs" style="padding: 0.35rem 0.75rem; font-size: 0.76rem; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #EF4444;" title="Delete Resume">
-                                <span>🗑️ Delete</span>
+                            <!-- 3. 3D Delete Button -->
+                            <button type="button" onclick="deleteResume('${escapeHtml(r.id)}')" class="btn-3d btn-3d-delete" title="Delete Resume">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                                <span>Delete</span>
                             </button>
                         </div>
                     </div>

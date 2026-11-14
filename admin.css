@@ -1611,3 +1611,116 @@
 .btn-toggle-pwd:active {
     transform: translateY(-50%) scale(0.92);
 }
+
+
+/* ==========================================================================
+   AUTHENTIC 3D TACTILE BUTTONS FOR RESUME LIBRARY (VIEW, EDIT, DELETE, ACTIVATE)
+   ========================================================================== */
+.btn-3d {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.42rem;
+    padding: 0.46rem 0.95rem;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1;
+    border-radius: 9px;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.16s ease,
+                background 0.16s ease,
+                border-color 0.16s ease;
+    box-sizing: border-box;
+    white-space: nowrap;
+    outline: none;
+}
+
+.btn-3d svg {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+    flex-shrink: 0;
+}
+
+/* 1. 3D View Button (Electric Sky Cyan) */
+.btn-3d-view {
+    color: #FFFFFF !important;
+    background: linear-gradient(180deg, #0284C7 0%, #0369A1 100%);
+    border: 1px solid #38BDF8;
+    box-shadow: 0 4px 0 #075985, 0 6px 14px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.btn-3d-view:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, #0EA5E9 0%, #0284C7 100%);
+    box-shadow: 0 6px 0 #075985, 0 8px 18px rgba(14, 165, 233, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.65);
+    border-color: #7DD3FC;
+}
+
+.btn-3d-view:active {
+    transform: translateY(3px) !important;
+    box-shadow: 0 1px 0 #075985, 0 2px 6px rgba(2, 132, 199, 0.3), inset 0 1.5px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 2. 3D Edit Button (Vibrant Indigo / Violet) */
+.btn-3d-edit {
+    color: #FFFFFF !important;
+    background: linear-gradient(180deg, #6366F1 0%, #4F46E5 100%);
+    border: 1px solid #818CF8;
+    box-shadow: 0 4px 0 #3730A3, 0 6px 14px rgba(99, 102, 241, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.btn-3d-edit:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, #818CF8 0%, #6366F1 100%);
+    box-shadow: 0 6px 0 #3730A3, 0 8px 18px rgba(99, 102, 241, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.65);
+    border-color: #A5B4FC;
+}
+
+.btn-3d-edit:active {
+    transform: translateY(3px) !important;
+    box-shadow: 0 1px 0 #3730A3, 0 2px 6px rgba(99, 102, 241, 0.3), inset 0 1.5px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 3. 3D Delete Button (Crimson Rose Danger) */
+.btn-3d-delete {
+    color: #FFFFFF !important;
+    background: linear-gradient(180deg, #E11D48 0%, #BE123C 100%);
+    border: 1px solid #FB7185;
+    box-shadow: 0 4px 0 #881337, 0 6px 14px rgba(225, 29, 72, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.btn-3d-delete:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, #F43F5E 0%, #E11D48 100%);
+    box-shadow: 0 6px 0 #881337, 0 8px 18px rgba(244, 63, 94, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.65);
+    border-color: #FDA4AF;
+}
+
+.btn-3d-delete:active {
+    transform: translateY(3px) !important;
+    box-shadow: 0 1px 0 #881337, 0 2px 6px rgba(225, 29, 72, 0.35), inset 0 1.5px 3px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* 4. 3D Set Active Button (Emerald Green) */
+.btn-3d-activate {
+    color: #FFFFFF !important;
+    background: linear-gradient(180deg, #059669 0%, #047857 100%);
+    border: 1px solid #34D399;
+    box-shadow: 0 4px 0 #065F46, 0 6px 14px rgba(5, 150, 105, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.btn-3d-activate:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, #10B981 0%, #059669 100%);
+    box-shadow: 0 6px 0 #065F46, 0 8px 18px rgba(16, 185, 129, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.65);
+    border-color: #6EE7B7;
+}
+
+.btn-3d-activate:active {
+    transform: translateY(3px) !important;
+    box-shadow: 0 1px 0 #065F46, 0 2px 6px rgba(5, 150, 105, 0.3), inset 0 1.5px 3px rgba(0, 0, 0, 0.4) !important;
+}
