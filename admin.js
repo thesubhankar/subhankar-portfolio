@@ -1106,11 +1106,11 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                             </div>
 
                             <!-- Action Buttons -->
-                            <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center; margin-top: 0.25rem;">
-                                <button type="button" onclick="cancelSkillCategoryEdit()" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.8rem;">
+                            <div class="skill-edit-action-row" style="display: flex; gap: 8px; justify-content: flex-end; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; width: 100%;">
+                                <button type="button" onclick="cancelSkillCategoryEdit()" class="btn-3d btn-3d-delete" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
                                     <span>✕ Cancel</span>
                                 </button>
-                                <button type="button" onclick="saveSkillCategoryEdit(${catIdx}, '${escapeJs(catName)}')" class="btn btn-primary" style="padding: 0.45rem 1.1rem; font-size: 0.8rem;">
+                                <button type="button" onclick="saveSkillCategoryEdit(${catIdx}, '${escapeJs(catName)}')" class="btn-3d btn-3d-view" style="padding: 0.5rem 1.25rem; font-size: 0.8rem; background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%); color: #040812; font-weight: 700;">
                                     <span>💾 Save Category Changes</span>
                                 </button>
                             </div>
@@ -1122,17 +1122,17 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     updateEditSkillsPreview(catIdx);
 
                 } else {
-                    // Normal Card View
-                    box.className = 'admin-item-card';
+                    // Normal Responsive Card View
+                    box.className = 'admin-item-card skill-cat-admin-card';
 
                     let pillsHtml = '';
                     (cat.skills || []).forEach(s => {
                         const svgContent = s.svg || getSkillLogoHtml(s.name, AVAILABLE_LOGOS[s.key]);
                         pillsHtml += `
-                            <span class="skill-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; font-size: 0.72rem; font-family: var(--font-mono); margin: 3px;">
-                                <span style="display: flex; align-items: center; width: 16px; height: 16px;">${svgContent}</span>
-                                <span class="skill-pill-text">${escapeHtml(s.name)}</span>
-                                <button onclick="deleteSkill('${escapeJs(catName)}', '${escapeJs(s.name)}')" class="skill-delete-tag-btn" title="Remove Skill">
+                            <span class="skill-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; font-size: 0.72rem; font-family: var(--font-mono); margin: 3px; max-width: 100%; box-sizing: border-box;">
+                                <span style="display: flex; align-items: center; width: 16px; height: 16px; flex-shrink: 0;">${svgContent}</span>
+                                <span class="skill-pill-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(s.name)}</span>
+                                <button type="button" onclick="deleteSkill('${escapeJs(catName)}', '${escapeJs(s.name)}')" class="skill-delete-tag-btn" title="Remove Skill" style="flex-shrink: 0;">
                                     &times;
                                 </button>
                             </span>
@@ -1140,29 +1140,29 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     });
 
                     box.innerHTML = `
-                        <div class="admin-card-header" style="padding-bottom: 0.5rem; border-bottom: var(--border-card);">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <h4 class="admin-card-title">${escapeHtml(catName)}</h4>
-                                <span class="tech-chip" style="color: var(--color-cyan, #00F2FE); font-size: 10px;">${escapeHtml(cat.badge || 'PRO')}</span>
+                        <div class="admin-card-header skill-cat-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding-bottom: 0.65rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); width: 100%;">
+                            <div class="skill-cat-header-title-group" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 140px; flex: 1;">
+                                <h4 class="admin-card-title" style="margin: 0; font-size: 1rem; line-height: 1.3;">${escapeHtml(catName)}</h4>
+                                <span class="tech-chip" style="color: var(--color-cyan, #00F2FE); font-size: 10px; font-weight: 700; padding: 2px 7px;">${escapeHtml(cat.badge || 'PRO')}</span>
                             </div>
-                            <div style="display: flex; gap: 6px; align-items: center;">
-                                <button type="button" onclick="openSkillCategoryEdit(${catIdx})" class="btn-action-icon btn-edit-cyber" title="Edit Category" aria-label="Edit Category">
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="skill-cat-header-actions" style="display: flex; gap: 6px; align-items: center;">
+                                <button type="button" onclick="openSkillCategoryEdit(${catIdx})" class="btn-3d btn-3d-edit" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" title="Edit Category" aria-label="Edit Category">
+                                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                     </svg>
+                                    <span>Edit</span>
                                 </button>
-                                <button type="button" onclick="deleteSkillCategory('${escapeJs(catName)}')" class="btn-action-icon btn-delete-cyber" title="Delete Category" aria-label="Delete Category">
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <button type="button" onclick="deleteSkillCategory('${escapeJs(catName)}')" class="btn-3d btn-3d-delete" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" title="Delete Category" aria-label="Delete Category">
+                                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="3 6 5 6 21 6"></polyline>
                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                        <line x1="10" y1="11" x2="10" y2="17"></line>
-                                        <line x1="14" y1="11" x2="14" y2="17"></line>
                                     </svg>
+                                    <span>Delete</span>
                                 </button>
                             </div>
                         </div>
-                        <div style="display: flex; flex-wrap: wrap; gap: 4px; padding-top: 0.5rem;">
+                        <div class="skill-pills-wrap" style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 0.75rem; flex: 1; align-content: flex-start; width: 100%;">
                             ${pillsHtml || '<span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">No skills added.</span>'}
                         </div>
                     `;

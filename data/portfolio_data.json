@@ -169,92 +169,101 @@
     {
       "id": "cert-1",
       "title": "Full Stack Data Science & AIML",
-      "issuer": "Industry Academy",
+      "issuer": "PythonSoft LLP",
       "date": "2024",
       "category": "Data Science",
       "credentialUrl": "https://drive.google.com/file/d/1cl2VigQ5hxvn8Rvf95aB_rDKcxp-DC7W/view?usp=drive_link",
-      "description": "Comprehensive training in Data Science, Machine Learning pipelines, exploratory data analysis, and model deployment.",
-      "link": "https://drive.google.com/file/d/1cl2VigQ5hxvn8Rvf95aB_rDKcxp-DC7W/view?usp=drive_link"
+      "description": "Successfully completed Full Stack Data Science & AIML training, including data science, data analysis, machine learning, and AI/ML concepts. Completed end-to-end industry project.",
+      "image": null,
+      "verifyUrl": "https://drive.google.com/file/d/1cl2VigQ5hxvn8Rvf95aB_rDKcxp-DC7W/view?usp=drive_link"
     },
     {
       "id": "cert-2",
       "title": "30 Days Python Micro Course",
-      "issuer": "Kaggle",
+      "issuer": "SkillCourse",
       "date": "2023",
       "category": "Programming",
       "credentialUrl": "https://drive.google.com/file/d/1_8l84tbuG8lmW_nmikiv928YXy97ercc/view?usp=drive_link",
-      "description": "Intensive hands-on programming with Python, data structures, algorithms, and modular coding.",
-      "link": "https://drive.google.com/file/d/1_8l84tbuG8lmW_nmikiv928YXy97ercc/view?usp=drive_link"
+      "description": "Comprehensive 30-day intensive program mastering Python core fundamentals, object-oriented programming (OOP), data structures, scripting, algorithms, and real-world implementation.",
+      "image": null,
+      "verifyUrl": "https://drive.google.com/file/d/1_8l84tbuG8lmW_nmikiv928YXy97ercc/view?usp=drive_link"
     },
     {
       "id": "cert-3",
       "title": "SQL for Data Analysis",
-      "issuer": "DataCamp",
+      "issuer": "Udacity",
       "date": "2023",
       "category": "Databases",
-      "credentialUrl": "",
-      "description": "Mastery of relational queries, CTEs, window functions, and business data extraction.",
-      "link": ""
+      "credentialUrl": "https://github.com/thesubhankar",
+      "description": "Detailed learning of relational database structures, schema validation, window functions, CTEs, subqueries, and database performance optimization.",
+      "image": null,
+      "verifyUrl": "https://github.com/thesubhankar"
     },
     {
       "id": "cert-4",
       "title": "Power BI Desktop Complete",
-      "issuer": "Microsoft / Udemy",
+      "issuer": "Udemy",
       "date": "2023",
       "category": "Visualization",
-      "credentialUrl": "",
-      "description": "Enterprise dashboard design, DAX measures, data modeling, and interactive storytelling.",
-      "link": ""
+      "credentialUrl": "https://github.com/thesubhankar",
+      "description": "Proficient modeling of DAX variables, star-schemas, cleaning processes in Power Query, and formatting premium UX analytics report dashboards.",
+      "image": null,
+      "verifyUrl": "https://github.com/thesubhankar"
     },
     {
       "id": "cert-5",
       "title": "Microsoft Excel: Data Analytics & Modeling",
-      "issuer": "Microsoft",
+      "issuer": "Microsoft / Macquarie",
       "date": "2023",
       "category": "Analytics",
-      "credentialUrl": "",
-      "description": "Advanced formulas, Pivot tables, financial modeling, and data cleansing.",
-      "link": ""
+      "credentialUrl": "https://github.com/thesubhankar",
+      "description": "Advanced data analysis, complex business modeling with XLOOKUP &amp; INDEX/MATCH, PivotTables, Power Query transformation, and automated interactive executive reporting.",
+      "image": null,
+      "verifyUrl": "https://github.com/thesubhankar"
     },
     {
       "id": "cert-6",
       "title": "Deep Learning & Neural Networks",
-      "issuer": "DeepLearning.AI",
+      "issuer": "Coursera / DeepLearning.AI",
       "date": "2024",
       "category": "AI & ML",
-      "credentialUrl": "",
-      "description": "Neural network architectures, forward & backpropagation, CNNs, and optimization.",
-      "link": ""
+      "credentialUrl": "https://github.com/thesubhankar",
+      "description": "Built neural network architectures, optimization algorithms, hyperparameter tuning, PyTorch implementations, and computer vision models.",
+      "image": null,
+      "verifyUrl": "https://github.com/thesubhankar"
     },
     {
       "id": "cert-7",
       "title": "Encoder-Decoder Architecture",
-      "issuer": "Google Cloud",
+      "issuer": "SimpliLearn / Google Cloud",
       "date": "2024",
       "category": "AI & ML",
       "credentialUrl": "https://drive.google.com/file/d/1PQYTXUosc0CQCNKmF9qnaavIedDubfzz/view?usp=drive_link",
-      "description": "Sequence-to-sequence neural architectures and attention mechanisms.",
-      "link": "https://drive.google.com/file/d/1PQYTXUosc0CQCNKmF9qnaavIedDubfzz/view?usp=drive_link"
+      "description": "Gained foundational knowledge of sequence-to-sequence models and their applications in Natural Language Processing (NLP) and modern deep learning.",
+      "image": null,
+      "verifyUrl": "https://drive.google.com/file/d/1PQYTXUosc0CQCNKmF9qnaavIedDubfzz/view?usp=drive_link"
     },
     {
       "id": "cert-8",
       "title": "Introduction to Generative AI",
-      "issuer": "Google Cloud",
+      "issuer": "Coursera / Google Cloud",
       "date": "2024",
       "category": "GenAI",
       "credentialUrl": "https://drive.google.com/file/d/1BpAuz2XJxlBwAC32AYEE06Y6eAdSgT-x/view?usp=drive_link",
-      "description": "Foundation models, generative concepts, and responsible AI practices.",
-      "link": "https://drive.google.com/file/d/1BpAuz2XJxlBwAC32AYEE06Y6eAdSgT-x/view?usp=drive_link"
+      "description": "Foundation in Generative AI, Large Language Models (LLMs), attention mechanisms, and applied machine learning techniques for enterprise applications.",
+      "image": null,
+      "verifyUrl": "https://www.coursera.org/account/accomplishments/verify/DEFVJX3WOXGL"
     },
     {
       "id": "cert-9",
       "title": "Introduction to Large Language Models (LLMs)",
-      "issuer": "Google Cloud",
+      "issuer": "Simplilearn / Google Cloud",
       "date": "2024",
       "category": "GenAI",
       "credentialUrl": "https://drive.google.com/file/d/1LoNw328xcCGA0xyt9pPcDW8ZatINjU4V/view?usp=drive_link",
-      "description": "Prompt engineering, transformers, and practical LLM applications.",
-      "link": "https://drive.google.com/file/d/1LoNw328xcCGA0xyt9pPcDW8ZatINjU4V/view?usp=drive_link"
+      "description": "Foundational knowledge of Large Language Models, Generative AI capabilities, transformer architectures, and real-world AI applications.",
+      "image": null,
+      "verifyUrl": "https://drive.google.com/file/d/1LoNw328xcCGA0xyt9pPcDW8ZatINjU4V/view?usp=drive_link"
     }
   ],
   "resume": {
@@ -476,12 +485,10 @@
       "institution": "KMBB College of Engineering and Technology",
       "timeline": "2023 - 2027",
       "status": "In Progress",
-      "grade": "Current CGPA: 8.5/10",
-      "details": "Affiliated with Biju Patnaik University of Technology (BPUT), Rourkela, Odisha. Deep focus on Algorithms, Data Structures, Database Systems, Artificial Intelligence, and Applied Machine Learning.",
-      "link": "",
+      "grade": "In Progress",
       "color": "cyan",
-      "viewLink": "",
-      "downloadLink": ""
+      "details": "Affiliated with Biju Patnaik University of Technology (BPUT), Rourkela, Odisha. Deep focus on Algorithms, Data Structures, Database Systems, Artificial Intelligence, and Applied Machine Learning.",
+      "link": ""
     },
     {
       "id": "edu_higher_secondary",
@@ -489,12 +496,10 @@
       "institution": "Dr. Harekrushna Mahatab College, Kupari",
       "timeline": "2021 - 2023",
       "status": "Completed",
-      "grade": "First Class with Distinction",
-      "details": "Council of Higher Secondary Education (CHSE), Odisha. Major coursework in Physics, Chemistry, Mathematics, and Computer Science with foundational analytical problem-solving.",
-      "link": "",
-      "color": "pink",
-      "viewLink": "",
-      "downloadLink": ""
+      "grade": "First Division: 65%",
+      "color": "blue",
+      "details": "Council of Higher Secondary Education (CHSE), Odisha. Specialization in Physics, Chemistry, Mathematics, and Statistics.",
+      "link": ""
     },
     {
       "id": "edu_matriculation",
@@ -502,12 +507,10 @@
       "institution": "Shakuntala High School, Jirital",
       "timeline": "2020 - 2021",
       "status": "Completed",
-      "grade": "First Division",
-      "details": "Board of Secondary Education (BSE), Odisha. Rigorous general secondary curriculum covering foundational Mathematics, Science, and Social Studies.",
-      "link": "",
-      "color": "green",
-      "viewLink": "",
-      "downloadLink": ""
+      "grade": "Aggregate: 78%",
+      "color": "purple",
+      "details": "Completed secondary schooling under Board of Secondary Education (BSE), Odisha with strong foundations in Mathematics and Science.",
+      "link": ""
     }
   ],
   "moreCertificatesDriveUrl": "https://drive.google.com/drive/folders/1rhWWTwEuRvtgEDp8v48kL5W7qvmzBDaY?usp=drive_link",
