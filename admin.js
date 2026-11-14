@@ -681,24 +681,44 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 card.className = 'admin-item-card';
 
                 card.innerHTML = `
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <div class="admin-card-header">
-                            <span class="tech-chip" style="color: #FF2D95; border-color: rgba(255, 45, 149, 0.35);">
-                                ${c.date || '2024'}
-                            </span>
-                            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
-                                ${c.category || 'General'}
-                            </span>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div class="admin-card-header" style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                            <!-- Left: 3D Certificate Logo Emblem in place of Year -->
+                            <div class="cert-logo-3d" title="Verified Certificate Credential">
+                                ${c.image ? `<img src="/${escapeHtml(c.image)}" alt="${escapeHtml(c.title)}" style="width: 26px; height: 26px; object-fit: contain; border-radius: 6px;" />` : `
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="6"></circle>
+                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                </svg>`}
+                            </div>
+
+                            <!-- Right: Year & Role written clearly -->
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
+                                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; justify-content: flex-end;">
+                                    <span class="tech-chip" style="color: #00F2FE; border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.08); font-size: 0.72rem; padding: 0.18rem 0.55rem; font-weight: 700;">
+                                        📅 ${escapeHtml(c.date || '2024')}
+                                    </span>
+                                    <span class="tech-chip" style="color: #FF2D95; border-color: rgba(255, 45, 149, 0.4); background: rgba(255, 45, 149, 0.08); font-size: 0.72rem; padding: 0.18rem 0.55rem; font-weight: 700;">
+                                        🎯 ${escapeHtml(c.category || 'General')}
+                                    </span>
+                                </div>
+                                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">
+                                    Year: <strong style="color: var(--color-cyan, #00F2FE); font-weight: 700;">${escapeHtml(c.date || '2024')}</strong> &nbsp;|&nbsp; Role: <strong style="color: #FF2D95; font-weight: 700;">${escapeHtml(c.category || 'General')}</strong>
+                                </span>
+                            </div>
                         </div>
-                        <h4 class="admin-card-title">${c.title}</h4>
-                        <p style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cyan, #00F2FE); margin: 0;">
-                            ${c.issuer}
-                        </p>
-                        <p class="admin-card-desc">${c.description || ''}</p>
+
+                        <div>
+                            <h4 class="admin-card-title" style="margin: 0; font-size: 1.05rem; line-height: 1.35;">${escapeHtml(c.title)}</h4>
+                            <p style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cyan, #00F2FE); margin: 3px 0 0 0;">
+                                ${escapeHtml(c.issuer)}
+                            </p>
+                        </div>
+                        <p class="admin-card-desc" style="margin: 0;">${escapeHtml(c.description || '')}</p>
                     </div>
 
                     <div class="admin-card-footer" style="display: flex; justify-content: flex-end; align-items: center; gap: 0.45rem; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
-                        <!-- 1. 3D View Button (Replaced old Verify link) -->
+                        <!-- 1. 3D View Button -->
                         <a href="${c.credentialUrl || '#'}" target="_blank" class="btn-3d btn-3d-view" title="View Certificate Document">
                             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
