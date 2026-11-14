@@ -4301,17 +4301,29 @@ async function initDynamicPortfolioSync(isForced = false) {
     try {
         let response = null;
         try {
-            response = await fetch('/api/portfolio-data');
+            response = await fetch('/api/portfolio-data?_t=' + Date.now(), { cache: 'no-store' });
         } catch (e) {}
 
         if (!response || !response.ok) {
             try {
-                response = await fetch('data/portfolio_data.json');
+                response = await fetch('data/portfolio_data.json?_t=' + Date.now(), { cache: 'no-store' });
             } catch (e) {}
         }
 
-        if (!response || !response.ok) return;
-        const data = await response.json();
+        let data = null;
+        if (response && response.ok) {
+            data = await response.json();
+            try {
+                localStorage.setItem('sg_portfolio_data', JSON.stringify(data));
+            } catch (e) {}
+        } else {
+            const localSaved = localStorage.getItem('sg_portfolio_data');
+            if (localSaved) {
+                try { data = JSON.parse(localSaved); } catch (e) {}
+            }
+        }
+
+        if (!data) return;
 
         // 1. Sync Resume Links
         if (data.resume) {
@@ -4319,19 +4331,14 @@ async function initDynamicPortfolioSync(isForced = false) {
             if (resumeSec) {
                 const viewBtn = resumeSec.querySelector('.btn-primary.btn-resume');
                 const downloadBtn = resumeSec.querySelector('.btn-secondary.btn-resume');
-                if (viewBtn) {
-                    if (data.resume.filePath) {
-                        viewBtn.href = '/' + data.resume.filePath;
-                    } else if (data.resume.driveUrl) {
-                        viewBtn.href = data.resume.driveUrl;
-                    }
+                const targetUrl = data.resume.filePath ? ('/' + data.resume.filePath) : (data.resume.driveUrl || '');
+                if (viewBtn && targetUrl) {
+                    viewBtn.href = targetUrl;
                 }
-                if (downloadBtn) {
+                if (downloadBtn && targetUrl) {
+                    downloadBtn.href = targetUrl;
                     if (data.resume.filePath) {
-                        downloadBtn.href = '/' + data.resume.filePath;
                         downloadBtn.setAttribute('download', 'Subhankar_Giri_Resume.pdf');
-                    } else if (data.resume.driveUrl) {
-                        downloadBtn.href = data.resume.driveUrl;
                     }
                 }
             }
@@ -4345,127 +4352,94 @@ async function initDynamicPortfolioSync(isForced = false) {
             }
         }
 
-        // --- PREVENT INITIAL DOM WIPE ---
-        // If the static HTML in index.html is already present, DO NOT wipe the DOM!
-        const existingCatCount = document.querySelectorAll('.skill-category-card').length;
-        const existingProjCount = document.querySelectorAll('.compact-project-card').length;
-        const existingCertCount = document.querySelectorAll('.cert-card-interactive').length;
-        const existingEduCount = document.querySelectorAll('.edu-card-interactive').length;
-
-        const isInitialPageLoad = !window._hasCompletedInitialPortfolioSync;
-        window._hasCompletedInitialPortfolioSync = true;
-
-        if (isInitialPageLoad && existingCatCount > 0 && existingProjCount > 0 && existingCertCount > 0 && existingEduCount > 0 && !isForced) {
-            // Keep the exact static HTML intact! Zero DOM wipe, zero flicker, zero item change!
-            window._LAST_SYNCED_PORTFOLIO_DATA = JSON.stringify(data);
-            return;
-        }
-
-        const dataHash = JSON.stringify(data);
-        if (window._LAST_SYNCED_PORTFOLIO_DATA === dataHash && !isForced) {
-            window._isPortfolioSyncing = false;
-            return;
-        }
-        window._LAST_SYNCED_PORTFOLIO_DATA = dataHash;
-
-        // Resume links already synced above
-        if (data.resume) {
-            const resumeSec = document.getElementById('page-resume');
-            if (resumeSec) {
-                const viewBtn = resumeSec.querySelector('.btn-primary.btn-resume');
-                const downloadBtn = resumeSec.querySelector('.btn-secondary.btn-resume');
-                if (viewBtn && data.resume.driveUrl) {
-                    viewBtn.href = data.resume.driveUrl;
-                }
-                if (downloadBtn) {
-                    if (data.resume.filePath) {
-                        downloadBtn.href = '/' + data.resume.filePath;
-                        downloadBtn.setAttribute('download', 'Subhankar_Giri_Resume.pdf');
-                    } else if (data.resume.driveUrl) {
-                        downloadBtn.href = data.resume.driveUrl;
-                    }
-                }
-            }
-        }
-
-        // 2. Sync Skills & Categories (Full dynamic reconciliation: deleted categories & skills are removed)
+        // 3. Sync Skills & Categories (Intelligent zero-flicker reconciliation)
         if (Array.isArray(data.skills)) {
             const categoriesGrid = document.querySelector('.skills-categories-grid');
             if (categoriesGrid) {
-                if (!window._AVAILABLE_LOGOS) {
-                    try {
-                        const lRes = await fetch('/api/skill-logos');
-                        if (lRes && lRes.ok) {
-                            const lData = await lRes.json();
-                            window._AVAILABLE_LOGOS = lData.logos || {};
-                        }
-                    } catch (e) {}
-                }
+                const skillsSig = data.skills.map(c => `${(c.category || '').trim()}:${(c.badge || '').trim()}:${(c.skills || []).map(s => (s.name || '').trim()).join(',')}`).join(';');
+                const currentDomSkillsSig = Array.from(categoriesGrid.querySelectorAll('.skill-category-card')).map(card => {
+                    const title = (card.querySelector('.cat-card-title')?.textContent || '').trim();
+                    const badge = (card.querySelector('.cat-card-badge')?.textContent || '').trim();
+                    const pills = Array.from(card.querySelectorAll('.skill-pill-text')).map(s => s.textContent.trim()).join(',');
+                    return `${title}:${badge}:${pills}`;
+                }).join(';');
 
-                function getLiveSkillLogo(skillName, skillSvg) {
-                    if (skillSvg && skillSvg.trim().length > 15) return skillSvg;
-                    if (window._AVAILABLE_LOGOS) {
-                        const clean = (skillName || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-                        const keyMap = {
-                            'pytorch': 'pytorch', 'torch': 'pytorch', 'python': 'python', 'tensorflow': 'tensorflow', 'tf': 'tensorflow',
-                            'keras': 'keras', 'pandas': 'pandas', 'numpy': 'numpy', 'scikit': 'scikit-learn', 'scikitlearn': 'scikit-learn', 'sklearn': 'scikit-learn',
-                            'powerbi': 'powerbi', 'tableau': 'tableau', 'matplotlib': 'matplotlib', 'seaborn': 'seaborn',
-                            'sql': 'sql', 'mysql': 'mysql', 'postgres': 'postgresql', 'postgresql': 'postgresql', 'sqlite': 'sqlite',
-                            'mongodb': 'mongodb', 'docker': 'docker', 'fastapi': 'fastapi', 'flask': 'flask', 'streamlit': 'streamlit',
-                            'git': 'git', 'github': 'github', 'vscode': 'vscode', 'jupyter': 'jupyter', 'excel': 'excel',
-                            'anaconda': 'anaconda', 'opencv': 'opencv', 'langchain': 'langchain', 'huggingface': 'huggingface',
-                            'aws': 'aws', 'azure': 'azure', 'gcp': 'gcp',
-                            'math': 'math', 'mathematics': 'mathematics', 'calculus': 'calculus', 'linearalgebra': 'linearalgebra',
-                            'algebra': 'linearalgebra', 'matrix': 'linearalgebra', 'probability': 'probability', 'prob': 'probability',
-                            'optimization': 'optimization', 'statistics': 'stats', 'stats': 'stats'
-                        };
-                        const k = keyMap[clean] || clean;
-                        if (window._AVAILABLE_LOGOS[k]) return window._AVAILABLE_LOGOS[k];
+                if (isForced || currentDomSkillsSig !== skillsSig) {
+                    if (!window._AVAILABLE_LOGOS) {
+                        try {
+                            const lRes = await fetch('/api/skill-logos?_t=' + Date.now(), { cache: 'no-store' });
+                            if (lRes && lRes.ok) {
+                                const lData = await lRes.json();
+                                window._AVAILABLE_LOGOS = lData.logos || {};
+                            }
+                        } catch (e) {}
                     }
-                    return skillSvg || '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#00F2FE" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>';
-                }
 
-                categoriesGrid.innerHTML = '';
-                if (data.skills.length === 0) {
-                    categoriesGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No skill categories published yet.</div>';
-                } else {
-                    data.skills.forEach(catData => {
-                        const card = document.createElement('div');
-                        card.className = 'skill-category-card';
-                        const catIconSvg = getCategoryBrandSvg(catData.category);
+                    function getLiveSkillLogo(skillName, skillSvg) {
+                        if (skillSvg && skillSvg.trim().length > 15) return skillSvg;
+                        if (window._AVAILABLE_LOGOS) {
+                            const clean = (skillName || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+                            const keyMap = {
+                                'pytorch': 'pytorch', 'torch': 'pytorch', 'python': 'python', 'tensorflow': 'tensorflow', 'tf': 'tensorflow',
+                                'keras': 'keras', 'pandas': 'pandas', 'numpy': 'numpy', 'scikit': 'scikit-learn', 'scikitlearn': 'scikit-learn', 'sklearn': 'scikit-learn',
+                                'powerbi': 'powerbi', 'tableau': 'tableau', 'matplotlib': 'matplotlib', 'seaborn': 'seaborn',
+                                'sql': 'sql', 'mysql': 'mysql', 'postgres': 'postgresql', 'postgresql': 'postgresql', 'sqlite': 'sqlite',
+                                'mongodb': 'mongodb', 'docker': 'docker', 'fastapi': 'fastapi', 'flask': 'flask', 'streamlit': 'streamlit',
+                                'git': 'git', 'github': 'github', 'vscode': 'vscode', 'jupyter': 'jupyter', 'excel': 'excel',
+                                'anaconda': 'anaconda', 'opencv': 'opencv', 'langchain': 'langchain', 'huggingface': 'huggingface',
+                                'aws': 'aws', 'azure': 'azure', 'gcp': 'gcp',
+                                'math': 'math', 'mathematics': 'mathematics', 'calculus': 'calculus', 'linearalgebra': 'linearalgebra',
+                                'algebra': 'linearalgebra', 'matrix': 'linearalgebra', 'probability': 'probability', 'prob': 'probability',
+                                'optimization': 'optimization', 'statistics': 'stats', 'stats': 'stats'
+                            };
+                            const k = keyMap[clean] || clean;
+                            if (window._AVAILABLE_LOGOS[k]) return window._AVAILABLE_LOGOS[k];
+                        }
+                        return skillSvg || '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#00F2FE" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>';
+                    }
 
-                        let pillsHtml = '';
-                        (catData.skills || []).forEach(skill => {
-                            const svgHtml = getLiveSkillLogo(skill.name, skill.svg);
-                            pillsHtml += `
-                                <span class="skill-pill">
-                                    <span class="skill-icon-wrap">${svgHtml}</span>
-                                    <span class="skill-pill-text">${skill.name}</span>
-                                </span>
-                            `;
-                        });
+                    categoriesGrid.innerHTML = '';
+                    if (data.skills.length === 0) {
+                        categoriesGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No skill categories published yet.</div>';
+                    } else {
+                        data.skills.forEach(catData => {
+                            const card = document.createElement('div');
+                            card.className = 'skill-category-card';
+                            const catIconSvg = getCategoryBrandSvg(catData.category);
 
-                        card.innerHTML = `
-                            <div class="cat-card-header">
-                                <div class="cat-card-title-group">
-                                    <div class="cat-card-icon-wrap" title="${catData.category}">
-                                        ${catIconSvg}
+                            let pillsHtml = '';
+                            (catData.skills || []).forEach(skill => {
+                                const svgHtml = getLiveSkillLogo(skill.name, skill.svg);
+                                pillsHtml += `
+                                    <span class="skill-pill">
+                                        <span class="skill-icon-wrap">${svgHtml}</span>
+                                        <span class="skill-pill-text">${skill.name}</span>
+                                    </span>
+                                `;
+                            });
+
+                            card.innerHTML = `
+                                <div class="cat-card-header">
+                                    <div class="cat-card-title-group">
+                                        <div class="cat-card-icon-wrap" title="${catData.category}">
+                                            ${catIconSvg}
+                                        </div>
+                                        <h4 class="cat-card-title">${catData.category}</h4>
                                     </div>
-                                    <h4 class="cat-card-title">${catData.category}</h4>
+                                    <span class="cat-card-badge">${catData.badge || 'PRO'}</span>
                                 </div>
-                                <span class="cat-card-badge">${catData.badge || 'PRO'}</span>
-                            </div>
-                            <div class="cat-chips-wrap">
-                                ${pillsHtml}
-                            </div>
-                        `;
-                        categoriesGrid.appendChild(card);
-                    });
+                                <div class="cat-chips-wrap">
+                                    ${pillsHtml}
+                                </div>
+                            `;
+                            categoriesGrid.appendChild(card);
+                        });
+                    }
                 }
             }
         }
 
-        // 3. Sync Projects (Clean dynamic reconciliation: deleted projects are removed immediately)
+        // 4. Sync Projects (Intelligent zero-flicker reconciliation)
         if (Array.isArray(data.projects)) {
             const compactGrid = document.getElementById('compactCardsGrid');
             const newStudioProjects = {};
@@ -4475,176 +4449,200 @@ async function initDynamicPortfolioSync(isForced = false) {
             window._STUDIO_PROJECTS = newStudioProjects;
 
             if (compactGrid) {
-                compactGrid.innerHTML = '';
-                if (data.projects.length === 0) {
-                    compactGrid.innerHTML = '<div style="color:var(--text-muted); padding:1.5rem; font-family:var(--font-mono); font-size:0.85rem; text-align:center;">No projects published yet.</div>';
-                } else {
-                    const currentActiveId = window._currentProjectId || (data.projects[0] && data.projects[0].id);
+                const projsSig = data.projects.map(p => `${p.id}:${(p.title || '').trim()}:${(p.categoryBadge || '').trim()}`).join(';');
+                const currentDomProjsSig = Array.from(compactGrid.querySelectorAll('.compact-project-card')).map(card => {
+                    const id = card.getAttribute('data-project-id') || '';
+                    const title = (card.querySelector('.compact-title')?.textContent || '').trim();
+                    const badge = (card.querySelector('.compact-badge-cat')?.textContent || '').trim();
+                    return `${id}:${title}:${badge}`;
+                }).join(';');
 
-                    data.projects.forEach((p, idx) => {
-                        const card = document.createElement('div');
-                        const isActive = (p.id === currentActiveId) || (!window._currentProjectId && idx === 0);
-                        card.className = 'compact-project-card' + (isActive ? ' active-preview' : '');
-                        card.setAttribute('data-project-id', p.id);
-                        card.setAttribute('data-category', p.categoryTag || 'all data-science');
-                        card.setAttribute('role', 'button');
-                        card.setAttribute('tabindex', '0');
-                        card.setAttribute('title', 'Click to view ' + p.title + ' in Studio');
+                if (isForced || currentDomProjsSig !== projsSig) {
+                    compactGrid.innerHTML = '';
+                    if (data.projects.length === 0) {
+                        compactGrid.innerHTML = '<div style="color:var(--text-muted); padding:1.5rem; font-family:var(--font-mono); font-size:0.85rem; text-align:center;">No projects published yet.</div>';
+                    } else {
+                        const currentActiveId = window._currentProjectId || (data.projects[0] && data.projects[0].id);
 
-                        const thumb = (p.slides && p.slides[0]?.webp) ? p.slides[0].webp : 'assets/uploads/projects/thrianex image/thumblain.webp';
-                        card.innerHTML = `
-                            <div class="compact-thumb-wrap">
-                                <img src="/${thumb}" alt="${p.title}" class="compact-thumb-img" loading="lazy">
-                                <span class="compact-badge-cat">${p.categoryBadge || 'PROJECT'}</span>
-                                <span class="compact-active-indicator">● ACTIVE</span>
-                            </div>
-                            <div class="compact-content">
-                                <h5 class="compact-title">${p.title}</h5>
-                                <div class="compact-action-row">
-                                    <span class="compact-open-text">Open in Studio</span>
-                                    <span class="compact-arrow-icon">↗</span>
+                        data.projects.forEach((p, idx) => {
+                            const card = document.createElement('div');
+                            const isActive = (p.id === currentActiveId) || (!window._currentProjectId && idx === 0);
+                            card.className = 'compact-project-card' + (isActive ? ' active-preview' : '');
+                            card.setAttribute('data-project-id', p.id);
+                            card.setAttribute('data-category', p.categoryTag || 'all data-science');
+                            card.setAttribute('role', 'button');
+                            card.setAttribute('tabindex', '0');
+                            card.setAttribute('title', 'Click to view ' + p.title + ' in Studio');
+
+                            const thumb = (p.slides && p.slides[0]?.webp) ? p.slides[0].webp : 'assets/uploads/projects/thrianex image/thumblain.webp';
+                            card.innerHTML = `
+                                <div class="compact-thumb-wrap">
+                                    <img src="/${thumb}" alt="${p.title}" class="compact-thumb-img" loading="lazy">
+                                    <span class="compact-badge-cat">${p.categoryBadge || 'PROJECT'}</span>
+                                    <span class="compact-active-indicator">● ACTIVE</span>
                                 </div>
-                            </div>
-                        `;
+                                <div class="compact-content">
+                                    <h5 class="compact-title">${p.title}</h5>
+                                    <div class="compact-action-row">
+                                        <span class="compact-open-text">Open in Studio</span>
+                                        <span class="compact-arrow-icon">↗</span>
+                                    </div>
+                                </div>
+                            `;
 
-                        card.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            if (window._renderActiveProject) {
-                                window._renderActiveProject(p.id, true);
-                            }
-                        });
-
-                        card.addEventListener('keydown', (e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
+                            card.addEventListener('click', (e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 if (window._renderActiveProject) {
                                     window._renderActiveProject(p.id, true);
                                 }
-                            }
+                            });
+
+                            card.addEventListener('keydown', (e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    if (window._renderActiveProject) {
+                                        window._renderActiveProject(p.id, true);
+                                    }
+                                }
+                            });
+
+                            compactGrid.appendChild(card);
                         });
+                    }
 
-                        compactGrid.appendChild(card);
-                    });
+                    if (window._renderActiveProject && data.projects.length > 0) {
+                        const activeId = newStudioProjects[window._currentProjectId] ? window._currentProjectId : data.projects[0].id;
+                        window._renderActiveProject(activeId, false);
+                    }
                 }
-            }
-
-            // If active project was updated or deleted, ensure Studio renders the fresh state
-            if (window._renderActiveProject && data.projects.length > 0) {
-                const activeId = newStudioProjects[window._currentProjectId] ? window._currentProjectId : data.projects[0].id;
-                window._renderActiveProject(activeId, false);
             }
         }
 
-        // 4. Sync Certificates (Full dynamic reconciliation: deleted certificates are removed)
+        // 5. Sync Certificates (Intelligent zero-flicker reconciliation)
         if (Array.isArray(data.certificates)) {
             const certGrid = document.querySelector('.certificates-grid');
             if (certGrid) {
-                certGrid.innerHTML = '';
-                if (data.certificates.length === 0) {
-                    certGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No certificates published yet.</div>';
-                } else {
-                    data.certificates.forEach((cert, idx) => {
-                        const certCard = document.createElement('div');
-                        certCard.className = 'cert-card-interactive';
+                const certsSig = data.certificates.map(c => `${(c.title || '').trim()}:${(c.issuer || '').trim()}:${(c.credentialUrl || c.link || '').trim()}`).join(';');
+                const currentDomCertsSig = Array.from(certGrid.querySelectorAll('.cert-card-interactive')).map(card => {
+                    const title = (card.querySelector('.cert-name')?.textContent || '').trim();
+                    const issuer = (card.querySelector('.cert-issuer-badge')?.textContent || '').trim();
+                    const href = (card.querySelector('a.btn-cert-icon')?.getAttribute('href') || '').trim();
+                    return `${title}:${issuer}:${href}`;
+                }).join(';');
 
-                        const iconData = getCertificateIconData(cert, idx);
-                        const badgeHtml = iconData.html;
-                        const badgeColorClass = iconData.color;
+                if (isForced || currentDomCertsSig !== certsSig) {
+                    certGrid.innerHTML = '';
+                    if (data.certificates.length === 0) {
+                        certGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No certificates published yet.</div>';
+                    } else {
+                        data.certificates.forEach((cert, idx) => {
+                            const certCard = document.createElement('div');
+                            certCard.className = 'cert-card-interactive';
 
-                        const credUrl = cert.credentialUrl || cert.link || '#';
-                        certCard.innerHTML = `
-                            <div class="cert-top-header">
-                                <div class="cert-badge-circle ${badgeColorClass}">
-                                    ${badgeHtml}
+                            const iconData = getCertificateIconData(cert, idx);
+                            const badgeHtml = iconData.html;
+                            const badgeColorClass = iconData.color;
+
+                            const credUrl = cert.credentialUrl || cert.link || '#';
+                            certCard.innerHTML = `
+                                <div class="cert-top-header">
+                                    <div class="cert-badge-circle ${badgeColorClass}">
+                                        ${badgeHtml}
+                                    </div>
+                                    <span class="cert-issuer-badge">${cert.issuer || 'Credential'}</span>
                                 </div>
-                                <span class="cert-issuer-badge">${cert.issuer || 'Credential'}</span>
-                            </div>
-                            <h4 class="cert-name">${cert.title}</h4>
-                            <p class="cert-desc-text">${cert.description || 'Verified credential in ' + (cert.category || 'Data Science') + '.'}</p>
-                            <div class="cert-btn-group">
-                                ${credUrl !== '#' ? `
-                                <a href="${credUrl}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-view" aria-label="View Certificate" title="View Certificate">
-                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                                </a>
-                                <a href="${credUrl}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-verify" aria-label="Verify Credential" title="Verify Credential">
-                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
-                                </a>` : ''}
-                            </div>
-                        `;
-                        certGrid.appendChild(certCard);
-                    });
+                                <h4 class="cert-name">${cert.title}</h4>
+                                <p class="cert-desc-text">${cert.description || 'Verified credential in ' + (cert.category || 'Data Science') + '.'}</p>
+                                <div class="cert-btn-group">
+                                    ${credUrl !== '#' ? `
+                                    <a href="${credUrl}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-view" aria-label="View Certificate" title="View Certificate">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                    </a>
+                                    <a href="${credUrl}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-verify" aria-label="Verify Credential" title="Verify Credential">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                                    </a>` : ''}
+                                </div>
+                            `;
+                            certGrid.appendChild(certCard);
+                        });
+                    }
                 }
             }
         }
-        // Sync More Certificates Drive Folder Button
-        if (data.moreCertificatesDriveUrl || data.certificatesDriveFolder) {
-            const moreBtn = document.querySelector('.more-certs-drive-footer a.btn-drive-all');
-            if (moreBtn) {
-                moreBtn.href = data.moreCertificatesDriveUrl || data.certificatesDriveFolder;
-            }
-        }
 
-        // 5. Sync Education Timeline (Full dynamic reconciliation: deleted education milestones are removed)
+        // 6. Sync Education Timeline (Intelligent zero-flicker reconciliation)
         if (Array.isArray(data.education)) {
             const eduGrid = document.querySelector('.education-timeline-grid');
             if (eduGrid) {
-                eduGrid.innerHTML = '';
-                if (data.education.length === 0) {
-                    eduGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No education milestones published yet.</div>';
-                } else {
-                    data.education.forEach(edu => {
-                        const card = document.createElement('div');
-                        card.className = 'edu-card-interactive';
-                        const colorClass = edu.color || 'cyan';
-                        const isProgress = (edu.status || '').toLowerCase().includes('progress');
-                        const badgeClass = isProgress ? 'status-badge-progress' : 'grade-badge';
-                        const badgeText = edu.grade || edu.status || 'Verified';
+                const eduSig = data.education.map(e => `${(e.degree || '').trim()}:${(e.institution || '').trim()}:${(e.timeline || '').trim()}:${(e.grade || e.status || '').trim()}:${(e.viewLink || e.link || '').trim()}`).join(';');
+                const currentDomEduSig = Array.from(eduGrid.querySelectorAll('.edu-card-interactive')).map(card => {
+                    const degree = (card.querySelector('.edu-degree-title')?.textContent || '').trim();
+                    const inst = (card.querySelector('.edu-institute')?.textContent || '').trim();
+                    const timeline = (card.querySelector('.edu-timeline-pill')?.textContent || '').trim();
+                    const badge = (card.querySelector('.grade-badge, .status-badge-progress')?.textContent || '').trim();
+                    const view = (card.querySelector('a.btn-edu-view')?.getAttribute('href') || '').trim();
+                    return `${degree}:${inst}:${timeline}:${badge}:${view}`;
+                }).join(';');
 
-                        let iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
-                        const degLower = (edu.degree || '').toLowerCase();
-                        if (degLower.includes('secondary') || degLower.includes('+2')) {
-                            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`;
-                        } else if (degLower.includes('matric') || degLower.includes('10th')) {
-                            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`;
-                        }
+                if (isForced || currentDomEduSig !== eduSig) {
+                    eduGrid.innerHTML = '';
+                    if (data.education.length === 0) {
+                        eduGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No education milestones published yet.</div>';
+                    } else {
+                        data.education.forEach(edu => {
+                            const card = document.createElement('div');
+                            card.className = 'edu-card-interactive';
+                            const colorClass = edu.color || 'cyan';
+                            const isProgress = (edu.status || '').toLowerCase().includes('progress');
+                            const badgeClass = isProgress ? 'status-badge-progress' : 'grade-badge';
+                            const badgeText = edu.grade || edu.status || 'Verified';
 
-                        card.innerHTML = `
-                            <div class="edu-left-icon">
-                                <div class="edu-badge-circle ${colorClass}">
-                                    ${iconSvg}
+                            let iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
+                            const degLower = (edu.degree || '').toLowerCase();
+                            if (degLower.includes('secondary') || degLower.includes('+2')) {
+                                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`;
+                            } else if (degLower.includes('matric') || degLower.includes('10th')) {
+                                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`;
+                            }
+
+                            card.innerHTML = `
+                                <div class="edu-left-icon">
+                                    <div class="edu-badge-circle ${colorClass}">
+                                        ${iconSvg}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="edu-main-content">
-                                <div class="edu-header-row">
-                                    <span class="edu-timeline-pill">${edu.timeline || ''}</span>
-                                    <span class="${badgeClass}">${badgeText}</span>
+                                <div class="edu-main-content">
+                                    <div class="edu-header-row">
+                                        <span class="edu-timeline-pill">${edu.timeline || ''}</span>
+                                        <span class="${badgeClass}">${badgeText}</span>
+                                    </div>
+                                    <h4 class="edu-degree-title">${edu.degree}</h4>
+                                    <p class="edu-institute">${edu.institution}</p>
+                                    <p class="edu-details-text">${edu.details || ''}</p>
+                                    <div class="edu-action-box">
+                                        <a href="${(edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#')}" ${((edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '')) ? 'target="_blank" rel="noopener noreferrer"' : '')} class="btn-edu-3d btn-edu-view" title="View Education Document">
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            <span>View</span>
+                                        </a>
+                                        <a href="${(edu.downloadLink || edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#')}" download target="_blank" rel="noopener noreferrer" class="btn-edu-3d btn-edu-download" title="Download Education Document">
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                <polyline points="7 10 12 15 17 10"></polyline>
+                                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                                            </svg>
+                                            <span>Download</span>
+                                        </a>
+                                    </div>
                                 </div>
-                                <h4 class="edu-degree-title">${edu.degree}</h4>
-                                <p class="edu-institute">${edu.institution}</p>
-                                <p class="edu-details-text">${edu.details || ''}</p>
-                                <div class="edu-action-box">
-                                    <a href="${(edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#')}" ${((edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '')) ? 'target="_blank" rel="noopener noreferrer"' : '')} class="btn-edu-3d btn-edu-view" title="View Education Document">
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                        <span>View</span>
-                                    </a>
-                                    <a href="${(edu.downloadLink || edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#')}" download target="_blank" rel="noopener noreferrer" class="btn-edu-3d btn-edu-download" title="Download Education Document">
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                            <polyline points="7 10 12 15 17 10"></polyline>
-                                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                                        </svg>
-                                        <span>Download</span>
-                                    </a>
-                                </div>
-                            </div>
-                        `;
-                        eduGrid.appendChild(card);
-                    });
+                            `;
+                            eduGrid.appendChild(card);
+                        });
+                    }
                 }
             }
         }

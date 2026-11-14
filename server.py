@@ -631,7 +631,11 @@ def get_portfolio_data():
                 })
         proj["skills"] = formatted_skills
 
-    return jsonify(data)
+    resp = jsonify(data)
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
 
 @app.route("/api/skill-logos", methods=["GET"])
 def get_all_logos():

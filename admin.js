@@ -175,6 +175,9 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             if (isSuccess) {
                 try {
                     localStorage.setItem('sg_portfolio_updated', String(Date.now()));
+                    if (window.PORTFOLIO_DATA) {
+                        localStorage.setItem('sg_portfolio_data', JSON.stringify(window.PORTFOLIO_DATA));
+                    }
                 } catch (e) {}
             }
             const el = document.getElementById('notifyBanner');
@@ -232,12 +235,42 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
             try {
                 // Fetch official logo dictionary first so renderers can use it
-                const lRes = await fetch('/api/skill-logos');
-                const lData = await lRes.json();
-                AVAILABLE_LOGOS = lData.logos || {};
+                try {
+                    const lRes = await fetch('/api/skill-logos?_t=' + Date.now(), { cache: 'no-store' });
+                    if (lRes.ok) {
+                        const lData = await lRes.json();
+                        AVAILABLE_LOGOS = lData.logos || {};
+                    }
+                } catch (e) {}
 
-                const res = await fetch('/api/portfolio-data');
-                PORTFOLIO_DATA = await res.json();
+                let res = null;
+                try {
+                    res = await fetch('/api/portfolio-data?_t=' + Date.now(), { cache: 'no-store' });
+                } catch (e) {}
+
+                if (!res || !res.ok) {
+                    try {
+                        res = await fetch('data/portfolio_data.json?_t=' + Date.now(), { cache: 'no-store' });
+                    } catch (e) {}
+                }
+
+                if (res && res.ok) {
+                    PORTFOLIO_DATA = await res.json();
+                    window.PORTFOLIO_DATA = PORTFOLIO_DATA;
+                    try {
+                        localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA));
+                        localStorage.setItem('sg_portfolio_updated', String(Date.now()));
+                    } catch (e) {}
+                } else {
+                    const saved = localStorage.getItem('sg_portfolio_data');
+                    if (saved) {
+                        try {
+                            PORTFOLIO_DATA = JSON.parse(saved);
+                            window.PORTFOLIO_DATA = PORTFOLIO_DATA;
+                        } catch (e) {}
+                    }
+                }
+
                 renderProjects();
                 renderCertificates();
                 renderSkills();
