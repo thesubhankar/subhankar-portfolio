@@ -4301,6 +4301,38 @@ function getEducationIconSvg(degreeName) {
     </svg>`;
 }
 
+function getExperienceIconSvg(iconKey, roleTitle) {
+    const key = (iconKey || '').toLowerCase();
+    const clean = (roleTitle || '').toLowerCase();
+
+    if (key === 'chart' || key === 'analytics' || clean.includes('analyst') || clean.includes('analytics') || clean.includes('bi')) {
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>`;
+    }
+    if (key === 'rocket' || key === 'ai' || clean.includes('rocket') || clean.includes('ai') || clean.includes('open source') || clean.includes('engineer')) {
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+        </svg>`;
+    }
+    if (key === 'code' || key === 'laptop' || clean.includes('developer') || clean.includes('software')) {
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>`;
+    }
+    // Default: Briefcase
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+    </svg>`;
+}
+
 async function initDynamicPortfolioSync(isForced = false) {
     // Prevent dual concurrent sync runs
     if (window._isPortfolioSyncing) return;
@@ -4636,6 +4668,58 @@ async function initDynamicPortfolioSync(isForced = false) {
                                 </div>
                             `;
                             eduGrid.appendChild(card);
+                        });
+                    }
+                }
+            }
+        }
+
+        // 7. Sync Professional Experience Section (Zero-flicker reconciliation)
+        if (Array.isArray(data.experience)) {
+            const expContainer = document.querySelector('.experience-list-container');
+            if (expContainer) {
+                const expSig = data.experience.map(e => `${(e.role || '').trim()}:${(e.company || '').trim()}:${(e.duration || '').trim()}:${(e.color || '').trim()}:${(e.bullets || []).join('|')}`).join(';');
+                const currentDomExpSig = Array.from(expContainer.querySelectorAll('.exp-item-card')).map(card => {
+                    const role = (card.querySelector('.exp-role-title')?.textContent || '').trim();
+                    const comp = (card.querySelector('.exp-company-text')?.textContent || '').trim();
+                    const dur = (card.querySelector('.exp-duration-badge')?.textContent || '').trim();
+                    const bullets = Array.from(card.querySelectorAll('.exp-bullets-list li')).map(li => li.textContent.trim()).join('|');
+                    const color = card.querySelector('.exp-badge-3d')?.classList[1] || '';
+                    return `${role}:${comp}:${dur}:${color}:${bullets}`;
+                }).join(';');
+
+                if (isForced || currentDomExpSig !== expSig) {
+                    expContainer.innerHTML = '';
+                    if (data.experience.length === 0) {
+                        expContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No experience milestones published yet.</div>';
+                    } else {
+                        data.experience.forEach(exp => {
+                            const card = document.createElement('div');
+                            card.className = 'exp-item-card';
+                            const colorClass = exp.color || 'cyan';
+                            const iconSvg = getExperienceIconSvg(exp.icon, exp.role);
+
+                            let bulletsHtml = '';
+                            if (Array.isArray(exp.bullets) && exp.bullets.length > 0) {
+                                bulletsHtml = '<ul class="exp-bullets-list">' + exp.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('') + '</ul>';
+                            }
+
+                            card.innerHTML = `
+                                <div class="exp-top-banner">
+                                    <div class="exp-title-area">
+                                        <div class="exp-badge-3d ${colorClass}">
+                                            ${iconSvg}
+                                        </div>
+                                        <div>
+                                            <h4 class="exp-role-title">${escapeHtml(exp.role)}</h4>
+                                            <p class="exp-company-text">${escapeHtml(exp.company)}</p>
+                                        </div>
+                                    </div>
+                                    <span class="exp-duration-badge">${escapeHtml(exp.duration || 'Present')}</span>
+                                </div>
+                                ${bulletsHtml}
+                            `;
+                            expContainer.appendChild(card);
                         });
                     }
                 }

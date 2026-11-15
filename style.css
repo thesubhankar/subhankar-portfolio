@@ -5257,6 +5257,138 @@ body[data-theme="light"] .toggle-slider {
     box-shadow: inset 0 1.2px 1.5px #ffffff, inset 0 -2px 3px rgba(0, 0, 0, 0.08);
 }
 
+/* 3D Experience Luxury Emblem (100% Visual Parity) */
+.exp-badge-3d {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: default;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.exp-badge-3d::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    right: 2px;
+    height: 46%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+    border-radius: 12px 12px 16px 16px / 12px 12px 5px 5px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.exp-badge-3d::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    box-shadow: inset 0 1.2px 1.5px rgba(255, 255, 255, 0.7), inset 0 -2px 3px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.exp-badge-3d svg,
+.exp-badge-3d i {
+    width: 24px;
+    height: 24px;
+    font-size: 1.35rem;
+    position: relative;
+    z-index: 4;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.exp-badge-3d:hover {
+    transform: translateY(-3px) scale(1.08);
+}
+
+.exp-badge-3d:hover svg,
+.exp-badge-3d:hover i {
+    transform: scale(1.1);
+}
+
+.exp-badge-3d.cyan {
+    background: linear-gradient(145deg, rgba(6, 182, 212, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(6, 182, 212, 0.4);
+    color: var(--accent-cyan, #00F2FE);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 0 16px rgba(6, 182, 212, 0.3);
+}
+.exp-badge-3d.cyan:hover {
+    border-color: var(--accent-cyan, #00F2FE);
+    box-shadow: 0 8px 22px rgba(6, 182, 212, 0.5), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.exp-badge-3d.blue {
+    background: linear-gradient(145deg, rgba(43, 108, 184, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(43, 108, 184, 0.4);
+    color: var(--primary-blue, #38BDF8);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 0 16px rgba(43, 108, 184, 0.3);
+}
+.exp-badge-3d.blue:hover {
+    border-color: var(--primary-blue, #38BDF8);
+    box-shadow: 0 8px 22px rgba(43, 108, 184, 0.5), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.exp-badge-3d.purple {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(139, 92, 246, 0.4);
+    color: var(--accent-purple, #A855F7);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 0 16px rgba(139, 92, 246, 0.3);
+}
+.exp-badge-3d.purple:hover {
+    border-color: var(--accent-purple, #A855F7);
+    box-shadow: 0 8px 22px rgba(139, 92, 246, 0.5), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.exp-badge-3d.orange {
+    background: linear-gradient(145deg, rgba(249, 115, 22, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(249, 115, 22, 0.4);
+    color: #F97316;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 0 16px rgba(249, 115, 22, 0.3);
+}
+.exp-badge-3d.orange:hover {
+    border-color: #F97316;
+    box-shadow: 0 8px 22px rgba(249, 115, 22, 0.5), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.exp-badge-3d.green {
+    background: linear-gradient(145deg, rgba(16, 185, 129, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #10B981;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), 0 0 16px rgba(16, 185, 129, 0.3);
+}
+.exp-badge-3d.green:hover {
+    border-color: #10B981;
+    box-shadow: 0 8px 22px rgba(16, 185, 129, 0.5), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .exp-badge-3d {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .exp-badge-3d::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 100%);
+}
+[data-theme="light"] .exp-badge-3d::after {
+    box-shadow: inset 0 1.2px 1.5px #ffffff, inset 0 -2px 3px rgba(0, 0, 0, 0.08);
+}
+
 .edu-main-content {
 
     flex-grow: 1;
@@ -9744,6 +9876,8 @@ body[data-theme="light"] .toggle-slider {
     }
 
     .edu-badge-circle,
+
+    .exp-badge-3d,
 
     .cert-badge-circle {
 

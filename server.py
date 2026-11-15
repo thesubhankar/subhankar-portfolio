@@ -427,6 +427,48 @@ except Exception as _e:
 # =========================================================================
 # Data Helpers (Hybrid Database with Seamless JSON Fallback & High-Speed Cache)
 # =========================================================================
+DEFAULT_EXPERIENCES = [
+    {
+        "id": "exp_ds_intern",
+        "role": "Data Science Intern",
+        "company": "Tech Solutions Inc. (Remote)",
+        "duration": "Dec 2024 - Mar 2025",
+        "icon": "briefcase",
+        "color": "cyan",
+        "bullets": [
+            "Assisted in building custom ETL pipelines parsing JSON web-traffic datasets.",
+            "Reduced processing anomalies by 18% implementing rigorous Pandas validation.",
+            "Automated reports dashboarding KPIs weekly for project stakeholder viewings."
+        ]
+    },
+    {
+        "id": "exp_freelance_analyst",
+        "role": "Freelance Analyst",
+        "company": "Upwork / Fiverr Client Contracts",
+        "duration": "2023 - Present",
+        "icon": "chart",
+        "color": "blue",
+        "bullets": [
+            "Transformed unstructured Excel sheets into premium interactive dashboards in Power BI.",
+            "Designed SQL triggers and custom indices tuning performance on high-load stores.",
+            "Provided cohort metrics analysis for global local-brand retail storefronts."
+        ]
+    },
+    {
+        "id": "exp_personal_ai",
+        "role": "Personal Projects & AI Engineering",
+        "company": "Self-Initiated Deployments",
+        "duration": "Continuous Development",
+        "icon": "rocket",
+        "color": "purple",
+        "bullets": [
+            "Programmed statistical modules calculating confidence metrics on custom genomic tests.",
+            "Maintained Git repositories hosting scripts that parse real-time financial market parameters.",
+            "Deployed web interfaces processing regression computations dynamically in-browser."
+        ]
+    }
+]
+
 _DATA_CACHE = None
 
 def load_data(force_refresh=False):
@@ -484,6 +526,11 @@ def load_data(force_refresh=False):
                         if "downloadLink" not in e:
                             e["downloadLink"] = ""
                             needs_save = True
+                    if not data.get("experience"):
+                        import copy
+                        data["experience"] = copy.deepcopy(DEFAULT_EXPERIENCES)
+                        needs_save = True
+
                     _DATA_CACHE = data
                     if needs_save:
                         save_data(data)
@@ -504,11 +551,14 @@ def load_data(force_refresh=False):
             if m:
                 raw_json = m.group(1).replace("''", "'")
                 _DATA_CACHE = json.loads(raw_json)
+                if not _DATA_CACHE.get("experience"):
+                    import copy
+                    _DATA_CACHE["experience"] = copy.deepcopy(DEFAULT_EXPERIENCES)
                 return _DATA_CACHE
         except Exception as e:
             print("[Database] Error reading from schema.sql fallback:", e)
 
-    return {"projects": [], "certificates": [], "resume": {}, "skills": []}
+    return {"projects": [], "certificates": [], "resume": {}, "skills": [], "education": [], "experience": DEFAULT_EXPERIENCES}
 
 def save_data(data):
     global _DATA_CACHE
@@ -1367,6 +1417,59 @@ def delete_education(edu_id):
     data["education"] = [e for e in data.get("education", []) if e.get("id") != edu_id]
     save_data(data)
     return jsonify({"success": True, "message": "Education milestone deleted"})
+
+# =========================================================================
+# 5. Experience Management Endpoints
+# =========================================================================
+@app.route("/api/admin/experience", methods=["POST"])
+def add_or_update_experience():
+    data = load_data()
+    if request.is_json:
+        req = request.get_json() or {}
+    else:
+        req = request.form.to_dict()
+
+    role = req.get("role", "").strip()
+    company = req.get("company", "").strip()
+    if not role or not company:
+        return jsonify({"error": "Role title and Company are required"}), 400
+
+    exp_id = req.get("id") or ("exp_" + str(int(time.time())))
+    duration = req.get("duration", "").strip() or "Present"
+    icon = req.get("icon", "briefcase").strip()
+    color = req.get("color", "cyan").strip()
+
+    bullets = req.get("bullets", [])
+    if isinstance(bullets, str):
+        bullets = [b.strip().lstrip("•-* ").strip() for b in bullets.split("\n") if b.strip()]
+
+    new_exp = {
+        "id": exp_id,
+        "role": role,
+        "company": company,
+        "duration": duration,
+        "icon": icon,
+        "color": color,
+        "bullets": bullets
+    }
+
+    exp_list = data.setdefault("experience", [])
+    existing_idx = next((i for i, e in enumerate(exp_list) if e.get("id") == exp_id), -1)
+
+    if existing_idx >= 0:
+        exp_list[existing_idx] = new_exp
+    else:
+        exp_list.append(new_exp)
+
+    save_data(data)
+    return jsonify({"success": True, "message": "Experience milestone saved successfully", "experience": new_exp})
+
+@app.route("/api/admin/experience/<exp_id>", methods=["DELETE"])
+def delete_experience(exp_id):
+    data = load_data()
+    data["experience"] = [e for e in data.get("experience", []) if e.get("id") != exp_id]
+    save_data(data)
+    return jsonify({"success": True, "message": "Experience milestone deleted"})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

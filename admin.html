@@ -16,7 +16,7 @@
 
                 // 2. Instant Deep-Link Hash Activator (Prevents jump on direct section links)
                 var hash = window.location.hash.replace('#', '');
-                var validAdminPages = ['projects', 'certificates', 'skills', 'education', 'resume'];
+                var validAdminPages = ['projects', 'certificates', 'skills', 'education', 'experience', 'resume'];
                 if (hash && validAdminPages.indexOf(hash) !== -1 && hash !== 'projects') {
                     document.addEventListener('DOMContentLoaded', function () {
                         var defaultPage = document.querySelector('.notebook-page.active');
@@ -105,8 +105,13 @@
                         <span class="nav-text">Education</span>
                         <span class="nav-dot"></span>
                     </a>
-                    <a href="#resume" class="sidebar-nav-item" data-page="resume" onclick="switchPage('resume', event)">
+                    <a href="#experience" class="sidebar-nav-item" data-page="experience" onclick="switchPage('experience', event)">
                         <span class="nav-num">[5]</span>
+                        <span class="nav-text">Experience</span>
+                        <span class="nav-dot"></span>
+                    </a>
+                    <a href="#resume" class="sidebar-nav-item" data-page="resume" onclick="switchPage('resume', event)">
+                        <span class="nav-num">[6]</span>
                         <span class="nav-text">Resume</span>
                         <span class="nav-dot"></span>
                     </a>
@@ -587,7 +592,94 @@
             </section>
 
             <!-- ============================================================
-                 [5] RESUME MANAGER (#page-resume)
+                 [5] EXPERIENCE MANAGER (#page-experience)
+                 ============================================================ -->
+            <section class="notebook-page" id="page-experience" data-page="experience">
+                <div class="cell-md-header">
+                    <span class="md-tag">💼 Professional Experience Manager</span>
+                </div>
+
+                <!-- Add/Edit Experience Form Card -->
+                <div class="admin-panel-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title" id="expFormTitle">➕ Add / Edit Professional Role</h3>
+                    </div>
+                    <div class="cell-output-card">
+                        <form id="expForm" class="admin-form-panel">
+                            <input type="hidden" id="expId" value="" />
+                            
+                            <div class="admin-grid-2col">
+                                <div class="form-group">
+                                    <label class="form-label">Role Title / Designation *</label>
+                                    <input type="text" id="expRole" class="form-input" placeholder="e.g. Data Science Intern or Senior ML Engineer" required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Company / Client / Organization *</label>
+                                    <input type="text" id="expCompany" class="form-input" placeholder="e.g. Tech Solutions Inc. (Remote)" required />
+                                </div>
+                            </div>
+
+                            <div class="admin-grid-3col">
+                                <div class="form-group">
+                                    <label class="form-label">Duration / Timeline *</label>
+                                    <input type="text" id="expDuration" class="form-input" placeholder="e.g. Dec 2024 - Mar 2025 or 2023 - Present" required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">3D Emblem Icon</label>
+                                    <select id="expIcon" class="form-input">
+                                        <option value="briefcase">💼 Briefcase (Work / Corporate)</option>
+                                        <option value="chart">📊 Analytics Chart (Analysis / BI)</option>
+                                        <option value="rocket">🚀 Rocket (AI / Innovation / Startup)</option>
+                                        <option value="code">💻 Code / Terminal (Software / Dev)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Color Theme</label>
+                                    <select id="expColor" class="form-input">
+                                        <option value="cyan">Cyan (Cyber Neon)</option>
+                                        <option value="blue">Blue (Electric)</option>
+                                        <option value="purple">Purple (Deep AI)</option>
+                                        <option value="orange">Orange (Sunset)</option>
+                                        <option value="green">Green (Emerald)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Key Responsibilities &amp; Impact (One bullet per line) *</label>
+                                <textarea id="expBullets" class="form-textarea" rows="4" placeholder="• Built automated ETL pipelines parsing JSON web-traffic datasets&#10;• Reduced processing anomalies by 18% implementing rigorous Pandas validation&#10;• Automated reports dashboarding KPIs weekly for project stakeholder viewings" required></textarea>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 4px; display: block;">
+                                    💡 Tip: Each line will automatically become an impactful bullet point in the live portfolio.
+                                </span>
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+                                <button type="button" id="expCancelBtn" class="btn btn-outline" style="display: none;" onclick="cancelExpEdit()">
+                                    <span>✖ Cancel Edit</span>
+                                </button>
+                                <button type="submit" id="expSubmitBtn" class="btn btn-primary">
+                                    <span>💼 Publish Experience Role</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Experience Database Grid Card -->
+                <div class="admin-panel-card" style="margin-top: 1.5rem;">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">💼 Professional Roles &amp; History</h3>
+                    </div>
+                    <div class="cell-output-card">
+                        <div id="experienceList" class="admin-cards-grid">
+                            <!-- Rendered dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 [6] RESUME MANAGER (#page-resume)
                  ============================================================ -->
             <section class="notebook-page" id="page-resume" data-page="resume">
                 <div class="cell-md-header">

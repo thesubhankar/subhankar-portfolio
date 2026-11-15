@@ -2,7 +2,7 @@
    SUBHANKAR GIRI PORTFOLIO - ADMIN STUDIO ENGINE (admin.js)
    ========================================================================== */
 
-let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], education: [] };
+let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], education: [], experience: [] };
         let AVAILABLE_LOGOS = {};
 
         // --- Theme Engine Initialization (Matches script.js) ---
@@ -237,13 +237,14 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const saved = localStorage.getItem('sg_portfolio_data');
                 if (saved) {
                     const data = JSON.parse(saved);
-                    if (data && (data.projects || data.certificates || data.skills || data.education)) {
+                    if (data && (data.projects || data.certificates || data.skills || data.education || data.experience)) {
                         PORTFOLIO_DATA = data;
                         window.PORTFOLIO_DATA = PORTFOLIO_DATA;
                         renderProjects();
                         renderCertificates();
                         renderSkills();
                         renderEducation();
+                        renderExperience();
                         renderResume();
                         return true;
                     }
@@ -300,6 +301,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 renderCertificates();
                 renderSkills();
                 renderEducation();
+                renderExperience();
                 renderResume();
 
                 if (statusDot) statusDot.className = 'status-indicator-dot idle';
@@ -1993,7 +1995,224 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         }
 
         // =========================================================================
-        // 5. Resume Management
+        // 5. Professional Experience Manager
+        // =========================================================================
+        function getExperienceIconSvg(iconKey, roleTitle) {
+            const key = (iconKey || '').toLowerCase();
+            const clean = (roleTitle || '').toLowerCase();
+
+            if (key === 'chart' || key === 'analytics' || clean.includes('analyst') || clean.includes('analytics') || clean.includes('bi')) {
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>`;
+            }
+            if (key === 'rocket' || key === 'ai' || clean.includes('rocket') || clean.includes('ai') || clean.includes('open source') || clean.includes('engineer')) {
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                    <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+                    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                </svg>`;
+            }
+            if (key === 'code' || key === 'laptop' || clean.includes('developer') || clean.includes('software')) {
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>`;
+            }
+            // Default: Briefcase
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>`;
+        }
+
+        function renderExperience() {
+            const list = document.getElementById('experienceList');
+            if (!list) return;
+            list.innerHTML = '';
+
+            const expList = PORTFOLIO_DATA.experience || [];
+            if (expList.length === 0) {
+                list.innerHTML = '<div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); padding: 1rem;">No professional experience roles published yet.</div>';
+                return;
+            }
+
+            expList.forEach((exp) => {
+                const card = document.createElement('div');
+                card.className = 'admin-item-card';
+
+                const colorDotMap = {
+                    cyan: '#00F2FE',
+                    blue: '#38BDF8',
+                    purple: '#A855F7',
+                    orange: '#F97316',
+                    green: '#10B981'
+                };
+                const dotColor = colorDotMap[exp.color] || '#00F2FE';
+                const iconSvg = getExperienceIconSvg(exp.icon, exp.role);
+
+                let bulletsHtml = '';
+                if (Array.isArray(exp.bullets) && exp.bullets.length > 0) {
+                    bulletsHtml = '<ul style="margin: 0.4rem 0 0 0; padding-left: 1.2rem; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; font-family: var(--font-sans);">' +
+                        exp.bullets.map(b => `<li style="margin-bottom: 3px;">${escapeHtml(b)}</li>`).join('') +
+                        '</ul>';
+                }
+
+                card.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 0.65rem; flex: 1 1 auto;">
+                        <div class="admin-card-header" style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div class="exp-badge-3d ${exp.color || 'cyan'}" style="width: 38px; height: 38px; min-width: 38px; border-radius: 10px;">
+                                    ${iconSvg}
+                                </div>
+                                <div>
+                                    <h4 class="admin-card-title" style="margin: 0; line-height: 1.3; font-size: 0.95rem;">${escapeHtml(exp.role)}</h4>
+                                    <p style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cyan, #00F2FE); margin: 2px 0 0 0;">
+                                        ${escapeHtml(exp.company)}
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="tech-chip" style="color: ${dotColor}; border-color: ${dotColor}55;">
+                                ${escapeHtml(exp.duration || 'Present')}
+                            </span>
+                        </div>
+                        ${bulletsHtml}
+                    </div>
+
+                    <div class="admin-card-footer" style="display: flex; justify-content: flex-end; align-items: center; gap: 0.45rem; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
+                        <!-- 3D Edit Button -->
+                        <button type="button" onclick="editExperience('${escapeJs(exp.id)}')" class="btn-3d btn-3d-edit" title="Edit Professional Role">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            <span>Edit</span>
+                        </button>
+
+                        <!-- 3D Delete Button -->
+                        <button type="button" onclick="deleteExperience('${escapeJs(exp.id)}')" class="btn-3d btn-3d-delete" title="Delete Professional Role">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function editExperience(id) {
+            const expList = PORTFOLIO_DATA.experience || [];
+            const exp = expList.find(e => e.id === id);
+            if (!exp) return;
+
+            document.getElementById('expId').value = exp.id;
+            document.getElementById('expRole').value = exp.role || '';
+            document.getElementById('expCompany').value = exp.company || '';
+            document.getElementById('expDuration').value = exp.duration || '';
+            document.getElementById('expIcon').value = exp.icon || 'briefcase';
+            document.getElementById('expColor').value = exp.color || 'cyan';
+            document.getElementById('expBullets').value = Array.isArray(exp.bullets) ? exp.bullets.join('\n') : (exp.bullets || '');
+
+            const submitBtn = document.getElementById('expSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<span>💾 Update Experience Role</span>';
+            const cancelBtn = document.getElementById('expCancelBtn');
+            if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+            const formCard = document.getElementById('expFormTitle');
+            if (formCard) formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function cancelExpEdit() {
+            const form = document.getElementById('expForm');
+            if (form) form.reset();
+            document.getElementById('expId').value = '';
+            const submitBtn = document.getElementById('expSubmitBtn');
+            if (submitBtn) submitBtn.innerHTML = '<span>💼 Publish Experience Role</span>';
+            const cancelBtn = document.getElementById('expCancelBtn');
+            if (cancelBtn) cancelBtn.style.display = 'none';
+        }
+
+        const expForm = document.getElementById('expForm');
+        if (expForm) {
+            expForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const expId = document.getElementById('expId').value;
+                const bulletsText = document.getElementById('expBullets').value;
+                const bulletsList = bulletsText.split('\n').map(b => b.trim().replace(/^[•\-\*]\s*/, '')).filter(Boolean);
+
+                const payload = {
+                    id: expId || undefined,
+                    role: document.getElementById('expRole').value.trim(),
+                    company: document.getElementById('expCompany').value.trim(),
+                    duration: document.getElementById('expDuration').value.trim(),
+                    icon: document.getElementById('expIcon').value.trim(),
+                    color: document.getElementById('expColor').value.trim(),
+                    bullets: bulletsList
+                };
+
+                try {
+                    const res = await fetch('/api/admin/experience', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const d = await res.json();
+                    if (d.success) {
+                        showNotify(expId ? 'Experience role updated successfully!' : 'Experience role published successfully!');
+                        cancelExpEdit();
+                        if (d.experience) {
+                            const exps = PORTFOLIO_DATA.experience || [];
+                            const exIdx = exps.findIndex(e => e.id === d.experience.id);
+                            if (exIdx >= 0) {
+                                exps[exIdx] = d.experience;
+                            } else {
+                                exps.unshift(d.experience);
+                            }
+                            PORTFOLIO_DATA.experience = exps;
+                            renderExperience();
+                            try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+                        }
+                        loadData();
+                    } else {
+                        showNotify(d.message || 'Error saving experience role', false);
+                    }
+                } catch (err) {
+                    showNotify('Failed to save experience role', false);
+                }
+            });
+        }
+
+        async function deleteExperience(id) {
+            if (!confirm('Are you sure you want to delete this experience role?')) return;
+            // Instant optimistic removal from UI
+            PORTFOLIO_DATA.experience = (PORTFOLIO_DATA.experience || []).filter(e => e.id !== id);
+            renderExperience();
+            try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+
+            try {
+                const res = await fetch('/api/admin/experience/' + id, { method: 'DELETE' });
+                const d = await res.json();
+                if (d.success) {
+                    showNotify('Experience role deleted');
+                    loadData();
+                } else {
+                    showNotify(d.message || 'Failed to delete experience role', false);
+                    loadData();
+                }
+            } catch (err) {
+                showNotify('Failed to delete experience role', false);
+                loadData();
+            }
+        }
+
+        // =========================================================================
+        // 6. Resume Management
         // =========================================================================
         // ============================================================
         // Multi-Resume Library Manager Logic (Upload + Individual Cards with View, Edit, Delete)
@@ -2325,7 +2544,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             initTheme();
             renderFromLocalCache(); // Instantaneous 0ms render from cache!
             const hash = window.location.hash.replace('#', '');
-            if (hash && ['projects', 'certificates', 'skills', 'education', 'resume'].includes(hash)) {
+            if (hash && ['projects', 'certificates', 'skills', 'education', 'experience', 'resume'].includes(hash)) {
                 switchPage(hash);
             }
             checkAuth();
@@ -2369,5 +2588,9 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 }
             });
         }
+
+        window.editExperience = editExperience;
+        window.deleteExperience = deleteExperience;
+        window.cancelExpEdit = cancelExpEdit;
 
 });
