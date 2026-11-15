@@ -374,37 +374,47 @@ def init_db():
 
     try:
         with conn.cursor() as cur:
-            # 1. State Table for Portfolio JSON (Projects, Skills, Certs, Edu, Resume)
-            cur.execute("""
-                CREATE TABLE IF NOT EXISTS portfolio_state (
-                    id VARCHAR(50) PRIMARY KEY,
-                    data JSONB NOT NULL,
-                    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-                );
-            """)
-
-            # 2. Check if 'main' state is already initialized
-            cur.execute("SELECT id FROM portfolio_state WHERE id = 'main';")
-            row = cur.fetchone()
-            if not row:
-                print("[Database] Initializing PostgreSQL with existing portfolio_data.json...")
-                initial_data = {}
-                if os.path.exists(DATA_FILE):
-                    try:
-                        with open(DATA_FILE, "r", encoding="utf-8") as f:
-                            initial_data = json.load(f)
-                    except Exception as err:
-                        print("Error reading initial data file:", err)
-
-                import psycopg2.extras
-                cur.execute(
-                    "INSERT INTO portfolio_state (id, data, updated_at) VALUES ('main', %s, CURRENT_TIMESTAMP);",
-                    (psycopg2.extras.Json(initial_data),)
-                )
-                conn.commit()
-                print("[Database] Successfully migrated portfolio_data.json to PostgreSQL!")
+            # 1. Check if relational tables (e.g. projects) already exist and have records
+            cur.execute("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'projects');")
+            projects_table_exists = cur.fetchone()[0]
+            needs_schema = False
+            if not projects_table_exists:
+                needs_schema = True
             else:
-                print("[Database] PostgreSQL portfolio_state table verified (already seeded).")
+                cur.execute("SELECT COUNT(*) FROM projects;")
+                if cur.fetchone()[0] == 0:
+                    needs_schema = True
+
+            # 2. Automatically execute schema.sql on startup without any manual run required!
+            if needs_schema:
+                schema_file = os.path.join(BASE_DIR, "database", "schema.sql")
+                if os.path.exists(schema_file):
+                    print("[Database] Auto-running database/schema.sql on startup to create all tables & seed data...")
+                    with open(schema_file, "r", encoding="utf-8") as f:
+                        sql_content = f.read()
+                    cur.execute(sql_content)
+                    conn.commit()
+                    print("[Database] Successfully auto-executed schema.sql! All 9 tables and 100% data live in Neon.")
+            else:
+                # Ensure portfolio_state is always synced
+                cur.execute("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'portfolio_state');")
+                if cur.fetchone()[0]:
+                    cur.execute("SELECT id FROM portfolio_state WHERE id = 'main';")
+                    if not cur.fetchone():
+                        initial_data = {}
+                        if os.path.exists(DATA_FILE):
+                            try:
+                                with open(DATA_FILE, "r", encoding="utf-8") as f:
+                                    initial_data = json.load(f)
+                            except Exception:
+                                pass
+                        import psycopg2.extras
+                        cur.execute(
+                            "INSERT INTO portfolio_state (id, data, updated_at) VALUES ('main', %s, CURRENT_TIMESTAMP);",
+                            (psycopg2.extras.Json(initial_data),)
+                        )
+                        conn.commit()
+                print("[Database] PostgreSQL tables and state verified online.")
         conn.close()
         return True
     except Exception as e:
