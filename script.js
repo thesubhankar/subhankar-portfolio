@@ -18,6 +18,16 @@ const PORTFOLIO_STATE = {
 
 };
 
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 function initApp() {
 
     init3DPreloader();
@@ -4400,10 +4410,19 @@ async function initDynamicPortfolioSync(isForced = false) {
                 if (isForced || currentDomSkillsSig !== skillsSig) {
                     if (!window._AVAILABLE_LOGOS) {
                         try {
+                            const cachedLogos = localStorage.getItem('sg_skill_logos');
+                            if (cachedLogos) {
+                                window._AVAILABLE_LOGOS = JSON.parse(cachedLogos);
+                            }
+                        } catch (e) {}
+                    }
+                    if (!window._AVAILABLE_LOGOS) {
+                        try {
                             const lRes = await fetch('/api/skill-logos?_t=' + Date.now(), { cache: 'no-store' });
                             if (lRes && lRes.ok) {
                                 const lData = await lRes.json();
                                 window._AVAILABLE_LOGOS = lData.logos || {};
+                                try { localStorage.setItem('sg_skill_logos', JSON.stringify(window._AVAILABLE_LOGOS)); } catch (e) {}
                             }
                         } catch (e) {}
                     }
@@ -4431,9 +4450,12 @@ async function initDynamicPortfolioSync(isForced = false) {
                         return skillSvg || '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#00F2FE" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>';
                     }
 
-                    categoriesGrid.innerHTML = '';
+                    const frag = document.createDocumentFragment();
                     if (data.skills.length === 0) {
-                        categoriesGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No skill categories published yet.</div>';
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.style.cssText = 'grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;';
+                        emptyDiv.textContent = 'No skill categories published yet.';
+                        frag.appendChild(emptyDiv);
                     } else {
                         data.skills.forEach(catData => {
                             const card = document.createElement('div');
@@ -4446,7 +4468,7 @@ async function initDynamicPortfolioSync(isForced = false) {
                                 pillsHtml += `
                                     <span class="skill-pill">
                                         <span class="skill-icon-wrap">${svgHtml}</span>
-                                        <span class="skill-pill-text">${skill.name}</span>
+                                        <span class="skill-pill-text">${escapeHtml(skill.name)}</span>
                                     </span>
                                 `;
                             });
@@ -4454,20 +4476,21 @@ async function initDynamicPortfolioSync(isForced = false) {
                             card.innerHTML = `
                                 <div class="cat-card-header">
                                     <div class="cat-card-title-group">
-                                        <div class="cat-card-icon-wrap" title="${catData.category}">
+                                        <div class="cat-card-icon-wrap" title="${escapeHtml(catData.category)}">
                                             ${catIconSvg}
                                         </div>
-                                        <h4 class="cat-card-title">${catData.category}</h4>
+                                        <h4 class="cat-card-title">${escapeHtml(catData.category)}</h4>
                                     </div>
-                                    <span class="cat-card-badge">${catData.badge || 'PRO'}</span>
+                                    <span class="cat-card-badge">${escapeHtml(catData.badge || 'PRO')}</span>
                                 </div>
                                 <div class="cat-chips-wrap">
                                     ${pillsHtml}
                                 </div>
                             `;
-                            categoriesGrid.appendChild(card);
+                            frag.appendChild(card);
                         });
                     }
+                    categoriesGrid.replaceChildren(frag);
                 }
             }
         }
@@ -4491,9 +4514,12 @@ async function initDynamicPortfolioSync(isForced = false) {
                 }).join(';');
 
                 if (isForced || currentDomProjsSig !== projsSig) {
-                    compactGrid.innerHTML = '';
+                    const frag = document.createDocumentFragment();
                     if (data.projects.length === 0) {
-                        compactGrid.innerHTML = '<div style="color:var(--text-muted); padding:1.5rem; font-family:var(--font-mono); font-size:0.85rem; text-align:center;">No projects published yet.</div>';
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.style.cssText = 'color:var(--text-muted); padding:1.5rem; font-family:var(--font-mono); font-size:0.85rem; text-align:center;';
+                        emptyDiv.textContent = 'No projects published yet.';
+                        frag.appendChild(emptyDiv);
                     } else {
                         const currentActiveId = window._currentProjectId || (data.projects[0] && data.projects[0].id);
 
@@ -4510,12 +4536,12 @@ async function initDynamicPortfolioSync(isForced = false) {
                             const thumb = (p.slides && p.slides[0]?.webp) ? p.slides[0].webp : 'assets/uploads/projects/thrianex image/thumblain.webp';
                             card.innerHTML = `
                                 <div class="compact-thumb-wrap">
-                                    <img src="/${thumb}" alt="${p.title}" class="compact-thumb-img" loading="lazy">
-                                    <span class="compact-badge-cat">${p.categoryBadge || 'PROJECT'}</span>
+                                    <img src="/${escapeHtml(thumb)}" alt="${escapeHtml(p.title)}" class="compact-thumb-img" loading="lazy">
+                                    <span class="compact-badge-cat">${escapeHtml(p.categoryBadge || 'PROJECT')}</span>
                                     <span class="compact-active-indicator">● ACTIVE</span>
                                 </div>
                                 <div class="compact-content">
-                                    <h5 class="compact-title">${p.title}</h5>
+                                    <h5 class="compact-title">${escapeHtml(p.title)}</h5>
                                     <div class="compact-action-row">
                                         <span class="compact-open-text">Open in Studio</span>
                                         <span class="compact-arrow-icon">↗</span>
@@ -4541,9 +4567,10 @@ async function initDynamicPortfolioSync(isForced = false) {
                                 }
                             });
 
-                            compactGrid.appendChild(card);
+                            frag.appendChild(card);
                         });
                     }
+                    compactGrid.replaceChildren(frag);
 
                     if (window._renderActiveProject && data.projects.length > 0) {
                         const activeId = newStudioProjects[window._currentProjectId] ? window._currentProjectId : data.projects[0].id;
@@ -4566,9 +4593,12 @@ async function initDynamicPortfolioSync(isForced = false) {
                 }).join(';');
 
                 if (isForced || currentDomCertsSig !== certsSig) {
-                    certGrid.innerHTML = '';
+                    const frag = document.createDocumentFragment();
                     if (data.certificates.length === 0) {
-                        certGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No certificates published yet.</div>';
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.style.cssText = 'grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;';
+                        emptyDiv.textContent = 'No certificates published yet.';
+                        frag.appendChild(emptyDiv);
                     } else {
                         data.certificates.forEach((cert, idx) => {
                             const certCard = document.createElement('div');
@@ -4584,23 +4614,24 @@ async function initDynamicPortfolioSync(isForced = false) {
                                     <div class="cert-badge-circle ${badgeColorClass}">
                                         ${badgeHtml}
                                     </div>
-                                    <span class="cert-issuer-badge">${cert.issuer || 'Credential'}</span>
+                                    <span class="cert-issuer-badge">${escapeHtml(cert.issuer || 'Credential')}</span>
                                 </div>
-                                <h4 class="cert-name">${cert.title}</h4>
-                                <p class="cert-desc-text">${cert.description || 'Verified credential in ' + (cert.category || 'Data Science') + '.'}</p>
+                                <h4 class="cert-name">${escapeHtml(cert.title)}</h4>
+                                <p class="cert-desc-text">${escapeHtml(cert.description || 'Verified credential in ' + (cert.category || 'Data Science') + '.')}</p>
                                 <div class="cert-btn-group">
                                     ${credUrl !== '#' ? `
-                                    <a href="${credUrl}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-view" aria-label="View Certificate" title="View Certificate">
+                                    <a href="${escapeHtml(credUrl)}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-view" aria-label="View Certificate" title="View Certificate">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
                                     </a>
-                                    <a href="${credUrl}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-verify" aria-label="Verify Credential" title="Verify Credential">
+                                    <a href="${escapeHtml(credUrl)}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-verify" aria-label="Verify Credential" title="Verify Credential">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
                                     </a>` : ''}
                                 </div>
                             `;
-                            certGrid.appendChild(certCard);
+                            frag.appendChild(certCard);
                         });
                     }
+                    certGrid.replaceChildren(frag);
                 }
             }
         }
@@ -4609,20 +4640,26 @@ async function initDynamicPortfolioSync(isForced = false) {
         if (Array.isArray(data.education)) {
             const eduGrid = document.querySelector('.education-timeline-grid');
             if (eduGrid) {
-                const eduSig = data.education.map(e => `${(e.degree || '').trim()}:${(e.institution || '').trim()}:${(e.timeline || '').trim()}:${(e.grade || e.status || '').trim()}:${(e.viewLink || e.link || '').trim()}`).join(';');
+                const eduSig = data.education.map(e => {
+                    const targetView = (e.viewLink || (e.link && !e.link.includes('github.com') ? e.link : '') || '#').trim();
+                    return `${(e.degree || '').trim()}:${(e.institution || '').trim()}:${(e.timeline || '').trim()}:${(e.grade || e.status || '').trim()}:${targetView}`;
+                }).join(';');
                 const currentDomEduSig = Array.from(eduGrid.querySelectorAll('.edu-card-interactive')).map(card => {
                     const degree = (card.querySelector('.edu-degree-title')?.textContent || '').trim();
                     const inst = (card.querySelector('.edu-institute')?.textContent || '').trim();
                     const timeline = (card.querySelector('.edu-timeline-pill')?.textContent || '').trim();
                     const badge = (card.querySelector('.grade-badge, .status-badge-progress')?.textContent || '').trim();
-                    const view = (card.querySelector('a.btn-edu-view')?.getAttribute('href') || '').trim();
+                    const view = (card.querySelector('a.btn-edu-view')?.getAttribute('href') || '#').trim();
                     return `${degree}:${inst}:${timeline}:${badge}:${view}`;
                 }).join(';');
 
                 if (isForced || currentDomEduSig !== eduSig) {
-                    eduGrid.innerHTML = '';
+                    const frag = document.createDocumentFragment();
                     if (data.education.length === 0) {
-                        eduGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No education milestones published yet.</div>';
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.style.cssText = 'grid-column: 1/-1; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;';
+                        emptyDiv.textContent = 'No education milestones published yet.';
+                        frag.appendChild(emptyDiv);
                     } else {
                         data.education.forEach(edu => {
                             const card = document.createElement('div');
@@ -4642,21 +4679,21 @@ async function initDynamicPortfolioSync(isForced = false) {
                                 </div>
                                 <div class="edu-main-content">
                                     <div class="edu-header-row">
-                                        <span class="edu-timeline-pill">${edu.timeline || ''}</span>
-                                        <span class="${badgeClass}">${badgeText}</span>
+                                        <span class="edu-timeline-pill">${escapeHtml(edu.timeline || '')}</span>
+                                        <span class="${badgeClass}">${escapeHtml(badgeText)}</span>
                                     </div>
-                                    <h4 class="edu-degree-title">${edu.degree}</h4>
-                                    <p class="edu-institute">${edu.institution}</p>
-                                    <p class="edu-details-text">${edu.details || ''}</p>
+                                    <h4 class="edu-degree-title">${escapeHtml(edu.degree || '')}</h4>
+                                    <p class="edu-institute">${escapeHtml(edu.institution || '')}</p>
+                                    <p class="edu-details-text">${escapeHtml(edu.details || '')}</p>
                                     <div class="edu-action-box">
-                                        <a href="${(edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#')}" ${((edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '')) ? 'target="_blank" rel="noopener noreferrer"' : '')} class="btn-edu-3d btn-edu-view" title="View Education Document">
+                                        <a href="${escapeHtml((edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#'))}" ${((edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '')) ? 'target="_blank" rel="noopener noreferrer"' : '')} class="btn-edu-3d btn-edu-view" title="View Education Document">
                                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
                                             </svg>
                                             <span>View</span>
                                         </a>
-                                        <a href="${(edu.downloadLink || edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#')}" download target="_blank" rel="noopener noreferrer" class="btn-edu-3d btn-edu-download" title="Download Education Document">
+                                        <a href="${escapeHtml((edu.downloadLink || edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#'))}" download target="_blank" rel="noopener noreferrer" class="btn-edu-3d btn-edu-download" title="Download Education Document">
                                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                                 <polyline points="7 10 12 15 17 10"></polyline>
@@ -4667,9 +4704,10 @@ async function initDynamicPortfolioSync(isForced = false) {
                                     </div>
                                 </div>
                             `;
-                            eduGrid.appendChild(card);
+                            frag.appendChild(card);
                         });
                     }
+                    eduGrid.replaceChildren(frag);
                 }
             }
         }
@@ -4678,7 +4716,7 @@ async function initDynamicPortfolioSync(isForced = false) {
         if (Array.isArray(data.experience)) {
             const expContainer = document.querySelector('.experience-list-container');
             if (expContainer) {
-                const expSig = data.experience.map(e => `${(e.role || '').trim()}:${(e.company || '').trim()}:${(e.duration || '').trim()}:${(e.color || '').trim()}:${(e.bullets || []).join('|')}`).join(';');
+                const expSig = data.experience.map(e => `${(e.role || '').trim()}:${(e.company || '').trim()}:${(e.duration || '').trim()}:${(e.color || '').trim()}:${(e.bullets || []).map(b => (b || '').trim()).join('|')}`).join(';');
                 const currentDomExpSig = Array.from(expContainer.querySelectorAll('.exp-item-card')).map(card => {
                     const role = (card.querySelector('.exp-role-title')?.textContent || '').trim();
                     const comp = (card.querySelector('.exp-company-text')?.textContent || '').trim();
@@ -4689,9 +4727,12 @@ async function initDynamicPortfolioSync(isForced = false) {
                 }).join(';');
 
                 if (isForced || currentDomExpSig !== expSig) {
-                    expContainer.innerHTML = '';
+                    const frag = document.createDocumentFragment();
                     if (data.experience.length === 0) {
-                        expContainer.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;">No experience milestones published yet.</div>';
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.style.cssText = 'text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem;';
+                        emptyDiv.textContent = 'No experience milestones published yet.';
+                        frag.appendChild(emptyDiv);
                     } else {
                         data.experience.forEach(exp => {
                             const card = document.createElement('div');
@@ -4711,17 +4752,18 @@ async function initDynamicPortfolioSync(isForced = false) {
                                             ${iconSvg}
                                         </div>
                                         <div>
-                                            <h4 class="exp-role-title">${escapeHtml(exp.role)}</h4>
-                                            <p class="exp-company-text">${escapeHtml(exp.company)}</p>
+                                            <h4 class="exp-role-title">${escapeHtml(exp.role || '')}</h4>
+                                            <p class="exp-company-text">${escapeHtml(exp.company || '')}</p>
                                         </div>
                                     </div>
                                     <span class="exp-duration-badge">${escapeHtml(exp.duration || 'Present')}</span>
                                 </div>
                                 ${bulletsHtml}
                             `;
-                            expContainer.appendChild(card);
+                            frag.appendChild(card);
                         });
                     }
+                    expContainer.replaceChildren(frag);
                 }
             }
         }

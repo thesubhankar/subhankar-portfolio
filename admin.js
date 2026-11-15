@@ -2164,7 +2164,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     });
                     const d = await res.json();
                     if (d.success) {
-                        showNotify(expId ? 'Experience role updated successfully!' : 'Experience role published successfully!');
                         cancelExpEdit();
                         if (d.experience) {
                             const exps = PORTFOLIO_DATA.experience || [];
@@ -2175,9 +2174,11 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                                 exps.unshift(d.experience);
                             }
                             PORTFOLIO_DATA.experience = exps;
+                            window.PORTFOLIO_DATA = PORTFOLIO_DATA;
                             renderExperience();
                             try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
                         }
+                        showNotify(expId ? 'Experience role updated successfully!' : 'Experience role published successfully!');
                         loadData();
                     } else {
                         showNotify(d.message || 'Error saving experience role', false);
@@ -2192,6 +2193,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             if (!confirm('Are you sure you want to delete this experience role?')) return;
             // Instant optimistic removal from UI
             PORTFOLIO_DATA.experience = (PORTFOLIO_DATA.experience || []).filter(e => e.id !== id);
+            window.PORTFOLIO_DATA = PORTFOLIO_DATA;
             renderExperience();
             try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
 

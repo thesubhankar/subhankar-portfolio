@@ -1459,7 +1459,7 @@ def add_or_update_experience():
     if existing_idx >= 0:
         exp_list[existing_idx] = new_exp
     else:
-        exp_list.append(new_exp)
+        exp_list.insert(0, new_exp)
 
     save_data(data)
     return jsonify({"success": True, "message": "Experience milestone saved successfully", "experience": new_exp})
