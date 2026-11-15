@@ -717,26 +717,24 @@ def api_view_resume():
     data = load_data()
     resumes = data.get("resumes", [])
     active = next((r for r in resumes if r.get("isActive")), (resumes[0] if resumes else None))
-    fpath = (active.get("filePath") if active else "assets/resume.pdf") or "assets/resume.pdf"
+    fpath = (active.get("filePath") if active else None) or "assets/uploads/resume/Subhankar_Giri_ATS_Resume_No_Photo.pdf"
     norm_path = fpath.replace("\\", "/").strip().lstrip("/")
     abs_path = os.path.join(BASE_DIR, norm_path.replace("/", os.sep))
 
     if not os.path.exists(abs_path):
-        blob = get_uploaded_blob(norm_path) or get_uploaded_blob("assets/resume.pdf")
+        blob = get_uploaded_blob(norm_path)
         if blob:
             os.makedirs(os.path.dirname(abs_path), exist_ok=True)
             with open(abs_path, "wb") as f_out:
                 f_out.write(blob["bytes"])
-            primary = os.path.join(BASE_DIR, "assets", "resume.pdf")
-            if abs_path != primary:
-                with open(primary, "wb") as f_out:
-                    f_out.write(blob["bytes"])
 
-    # Fallback to local assets/resume.pdf if target path is still missing
+    # Fallback to any available PDF in assets/uploads/resume/ if target path is still missing
     if not os.path.exists(abs_path):
-        primary = os.path.join(BASE_DIR, "assets", "resume.pdf")
-        if os.path.exists(primary):
-            abs_path = primary
+        resume_dir = os.path.join(BASE_DIR, "assets", "uploads", "resume")
+        if os.path.exists(resume_dir):
+            pdfs = [os.path.join(resume_dir, f) for f in os.listdir(resume_dir) if f.lower().endswith(".pdf")]
+            if pdfs:
+                abs_path = sorted(pdfs, key=os.path.getmtime, reverse=True)[0]
 
     if os.path.exists(abs_path):
         resp = send_file(abs_path, mimetype="application/pdf")
@@ -756,27 +754,29 @@ def api_download_resume():
     data = load_data()
     resumes = data.get("resumes", [])
     active = next((r for r in resumes if r.get("isActive")), (resumes[0] if resumes else None))
-    fpath = (active.get("filePath") if active else "assets/resume.pdf") or "assets/resume.pdf"
+    fpath = (active.get("filePath") if active else None) or "assets/uploads/resume/Subhankar_Giri_ATS_Resume_No_Photo.pdf"
     norm_path = fpath.replace("\\", "/").strip().lstrip("/")
     abs_path = os.path.join(BASE_DIR, norm_path.replace("/", os.sep))
 
     if not os.path.exists(abs_path):
-        blob = get_uploaded_blob(norm_path) or get_uploaded_blob("assets/resume.pdf")
+        blob = get_uploaded_blob(norm_path)
         if blob:
             os.makedirs(os.path.dirname(abs_path), exist_ok=True)
             with open(abs_path, "wb") as f_out:
                 f_out.write(blob["bytes"])
 
-    # Fallback to local assets/resume.pdf so download never fails or redirects away
+    # Fallback to any available PDF in assets/uploads/resume/ so download never fails or redirects away
     if not os.path.exists(abs_path):
-        primary = os.path.join(BASE_DIR, "assets", "resume.pdf")
-        if os.path.exists(primary):
-            abs_path = primary
+        resume_dir = os.path.join(BASE_DIR, "assets", "uploads", "resume")
+        if os.path.exists(resume_dir):
+            pdfs = [os.path.join(resume_dir, f) for f in os.listdir(resume_dir) if f.lower().endswith(".pdf")]
+            if pdfs:
+                abs_path = sorted(pdfs, key=os.path.getmtime, reverse=True)[0]
 
     if os.path.exists(abs_path):
-        fname = (active.get("fileName") if active else "Subhankar_Giri_Resume.pdf")
+        fname = (active.get("fileName") if active else os.path.basename(abs_path))
         if not fname or not fname.lower().endswith(".pdf"):
-            fname = "Subhankar_Giri_Resume.pdf"
+            fname = "Subhankar_Giri_ATS_Resume_No_Photo.pdf"
         resp = send_file(abs_path, mimetype="application/pdf", as_attachment=True, download_name=fname)
         resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
         resp.headers["Pragma"] = "no-cache"
@@ -1316,28 +1316,9 @@ def manage_resumes():
         if is_active:
             for r in resumes:
                 r["isActive"] = (r.get("id") == resume_id)
-            active_src = os.path.join(BASE_DIR, existing["filePath"].replace("/", os.sep))
-            primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-            active_bytes = None
-            if os.path.exists(active_src):
-                try:
-                    with open(active_src, "rb") as rf:
-                        active_bytes = rf.read()
-                except Exception:
-                    pass
-            if not active_bytes:
-                blob = get_uploaded_blob(existing["filePath"])
-                if blob:
-                    active_bytes = blob["bytes"]
-                    os.makedirs(os.path.dirname(active_src), exist_ok=True)
-                    with open(active_src, "wb") as wf:
-                        wf.write(active_bytes)
-            if active_bytes:
-                with open(primary_pdf, "wb") as pf:
-                    pf.write(active_bytes)
-                save_uploaded_blob("assets/resume.pdf", active_bytes, existing.get("fileName", "resume.pdf"), "application/pdf")
             now_ts = int(time.time())
-            data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+            data.setdefault("resume", {})["filePath"] = existing["filePath"]
+            data.setdefault("resume", {})["fileName"] = existing.get("fileName", "Subhankar_Giri_ATS_Resume_No_Photo.pdf")
             data.setdefault("resume", {})["hasUploadedPdf"] = True
             data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
             data.setdefault("resume", {})["lastTimestamp"] = now_ts
@@ -1363,14 +1344,9 @@ def manage_resumes():
         new_resume["isActive"] = True
         for r in resumes:
             r["isActive"] = False
-        active_src = os.path.join(BASE_DIR, file_path.replace("/", os.sep))
-        primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-        if os.path.exists(active_src):
-            shutil.copyfile(active_src, primary_pdf)
-        if file_bytes:
-            save_uploaded_blob("assets/resume.pdf", file_bytes, file_name, "application/pdf")
         now_ts = int(time.time())
-        data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+        data.setdefault("resume", {})["filePath"] = file_path
+        data.setdefault("resume", {})["fileName"] = file_name
         data.setdefault("resume", {})["hasUploadedPdf"] = True
         data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
         data.setdefault("resume", {})["lastTimestamp"] = now_ts
@@ -1399,32 +1375,14 @@ def delete_resume_item(resume_id):
     now_ts = int(time.time())
     if was_active and len(resumes) > 0:
         resumes[0]["isActive"] = True
-        active_src = os.path.join(BASE_DIR, resumes[0]["filePath"].replace("/", os.sep))
-        primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-        active_bytes = None
-        if os.path.exists(active_src):
-            try:
-                with open(active_src, "rb") as rf:
-                    active_bytes = rf.read()
-            except Exception:
-                pass
-        if not active_bytes:
-            blob = get_uploaded_blob(resumes[0]["filePath"])
-            if blob:
-                active_bytes = blob["bytes"]
-                os.makedirs(os.path.dirname(active_src), exist_ok=True)
-                with open(active_src, "wb") as wf:
-                    wf.write(active_bytes)
-        if active_bytes:
-            with open(primary_pdf, "wb") as pf:
-                pf.write(active_bytes)
-            save_uploaded_blob("assets/resume.pdf", active_bytes, resumes[0].get("fileName", "resume.pdf"), "application/pdf")
-        data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+        now_ts = int(time.time())
+        data.setdefault("resume", {})["filePath"] = resumes[0].get("filePath", "")
+        data.setdefault("resume", {})["fileName"] = resumes[0].get("fileName", "Subhankar_Giri_ATS_Resume_No_Photo.pdf")
         data.setdefault("resume", {})["hasUploadedPdf"] = True
         data.setdefault("resume", {})["lastTimestamp"] = now_ts
     elif len(resumes) == 0:
-        delete_upload_file("assets/resume.pdf")
         data.setdefault("resume", {})["filePath"] = ""
+        data.setdefault("resume", {})["fileName"] = ""
         data.setdefault("resume", {})["hasUploadedPdf"] = False
         data.setdefault("resume", {})["lastTimestamp"] = now_ts
 
@@ -1444,29 +1402,9 @@ def activate_resume_item(resume_id):
         r["isActive"] = (r.get("id") == resume_id)
 
     fpath = target.get("filePath", "")
-    active_src = os.path.join(BASE_DIR, fpath.replace("/", os.sep))
-    primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-    active_bytes = None
-    if os.path.exists(active_src):
-        try:
-            with open(active_src, "rb") as rf:
-                active_bytes = rf.read()
-        except Exception:
-            pass
-    if not active_bytes:
-        blob = get_uploaded_blob(fpath)
-        if blob:
-            active_bytes = blob["bytes"]
-            os.makedirs(os.path.dirname(active_src), exist_ok=True)
-            with open(active_src, "wb") as wf:
-                wf.write(active_bytes)
-    if active_bytes:
-        with open(primary_pdf, "wb") as pf:
-            pf.write(active_bytes)
-        save_uploaded_blob("assets/resume.pdf", active_bytes, target.get("fileName", "resume.pdf"), "application/pdf")
-
     now_ts = int(time.time())
-    data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
+    data.setdefault("resume", {})["filePath"] = fpath
+    data.setdefault("resume", {})["fileName"] = target.get("fileName", "Subhankar_Giri_ATS_Resume_No_Photo.pdf")
     data.setdefault("resume", {})["hasUploadedPdf"] = True
     data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
     data.setdefault("resume", {})["lastTimestamp"] = now_ts

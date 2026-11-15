@@ -2606,12 +2606,12 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             if (!Array.isArray(resumes) || resumes.length === 0) {
                 const legacy = PORTFOLIO_DATA.resume || {};
                 resumes = [{
-                    id: 'resume_default',
-                    title: 'Subhankar Giri — Official CV / Resume',
-                    fileName: 'resume.pdf',
-                    filePath: legacy.filePath || 'assets/resume.pdf',
-                    fileSize: '1.1 KB',
-                    uploadedAt: legacy.lastUpdated || 'November 2026',
+                    id: 'resume_ats_live',
+                    title: 'Subhankar Giri — Data Scientist & AI/ML Resume',
+                    fileName: legacy.fileName || 'Subhankar_Giri_ATS_Resume_No_Photo.pdf',
+                    filePath: legacy.filePath || 'assets/uploads/resume/Subhankar_Giri_ATS_Resume_No_Photo.pdf',
+                    fileSize: '127.5 KB',
+                    uploadedAt: legacy.lastUpdated || '15 Nov 2026',
                     isActive: true
                 }];
             }
@@ -2654,7 +2654,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                             </div>
                             <h4 class="admin-card-title" style="margin: 0; font-size: 1.02rem; line-height: 1.35;" title="${escapeHtml(r.title)}">${escapeHtml(r.title)}</h4>
                             <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cyan, #00F2FE); display: block; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                /${escapeHtml(r.filePath || 'assets/resume.pdf')}
+                                /${escapeHtml(r.filePath || 'assets/uploads/resume/Subhankar_Giri_ATS_Resume_No_Photo.pdf')}
                             </span>
                             <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 3px;">
                                 Uploaded: ${escapeHtml(r.uploadedAt || 'Current')}

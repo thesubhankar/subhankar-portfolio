@@ -4401,7 +4401,7 @@ async function initDynamicPortfolioSync(isForced = false) {
                 }
                 if (downloadBtn) {
                     downloadBtn.href = `/api/resume/download?t=${ts}`;
-                    downloadBtn.setAttribute('download', 'Subhankar_Giri_Resume.pdf');
+                    downloadBtn.setAttribute('download', data.resume.fileName || 'Subhankar_Giri_ATS_Resume_No_Photo.pdf');
                     downloadBtn.setAttribute('target', '_blank');
                     downloadBtn.setAttribute('rel', 'noopener noreferrer');
                 }
