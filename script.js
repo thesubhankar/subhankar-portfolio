@@ -4279,6 +4279,28 @@ function getCertificateIconData(cert, idx) {
     };
 }
 
+function getEducationIconSvg(degreeName) {
+    const clean = (degreeName || '').toLowerCase();
+    if (clean.includes('b.tech') || clean.includes('btech') || clean.includes('engineering') || clean.includes('computer science') || clean.includes('bachelor') || clean.includes('college')) {
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+        </svg>`;
+    }
+    if (clean.includes('+2') || clean.includes('higher secondary') || clean.includes('chse') || clean.includes('intermediate') || clean.includes('12th')) {
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>`;
+    }
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+    </svg>`;
+}
+
 async function initDynamicPortfolioSync(isForced = false) {
     // Prevent dual concurrent sync runs
     if (window._isPortfolioSyncing) return;
@@ -4578,13 +4600,7 @@ async function initDynamicPortfolioSync(isForced = false) {
                             const badgeClass = isProgress ? 'status-badge-progress' : 'grade-badge';
                             const badgeText = edu.grade || edu.status || 'Verified';
 
-                            let iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
-                            const degLower = (edu.degree || '').toLowerCase();
-                            if (degLower.includes('secondary') || degLower.includes('+2') || degLower.includes('science')) {
-                                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`;
-                            } else if (degLower.includes('matric') || degLower.includes('10th') || degLower.includes('school')) {
-                                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
-                            }
+                            let iconSvg = getEducationIconSvg(edu.degree);
 
                             card.innerHTML = `
                                 <div class="edu-left-icon">

@@ -98,6 +98,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             const overlay = document.getElementById('loginOverlay');
             if (isKernelAuthenticated) {
                 if (overlay) overlay.classList.add('hidden');
+                renderFromLocalCache();
                 loadData();
             } else {
                 if (overlay) overlay.classList.remove('hidden');
@@ -227,42 +228,72 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 }
 
         // --- Data Fetching & Rendering ---
+        function renderFromLocalCache() {
+            try {
+                const cachedLogos = localStorage.getItem('sg_skill_logos');
+                if (cachedLogos && (!AVAILABLE_LOGOS || Object.keys(AVAILABLE_LOGOS).length === 0)) {
+                    AVAILABLE_LOGOS = JSON.parse(cachedLogos) || {};
+                }
+                const saved = localStorage.getItem('sg_portfolio_data');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data && (data.projects || data.certificates || data.skills || data.education)) {
+                        PORTFOLIO_DATA = data;
+                        window.PORTFOLIO_DATA = PORTFOLIO_DATA;
+                        renderProjects();
+                        renderCertificates();
+                        renderSkills();
+                        renderEducation();
+                        renderResume();
+                        return true;
+                    }
+                }
+            } catch (e) {}
+            return false;
+        }
+
         async function loadData() {
+            // Instant 0ms render from cache on startup
+            if (!window._initialCacheRendered) {
+                window._initialCacheRendered = renderFromLocalCache();
+            }
+
             const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
             if (statusDot) statusDot.className = 'status-indicator-dot busy';
             if (statusText) statusText.textContent = 'Python 3 | syncing...';
 
             try {
-                // Fetch official logo dictionary first so renderers can use it
-                try {
-                    const lRes = await fetch('/api/skill-logos?_t=' + Date.now(), { cache: 'no-store' });
-                    if (lRes.ok) {
-                        const lData = await lRes.json();
-                        AVAILABLE_LOGOS = lData.logos || {};
-                    }
-                } catch (e) {}
+                // 1. Skill Logos: Fetch once and cache in memory & localStorage (no redundant roundtrips)
+                let logoPromise = Promise.resolve(null);
+                if (!window._logosLoaded && (!AVAILABLE_LOGOS || Object.keys(AVAILABLE_LOGOS).length === 0)) {
+                    logoPromise = fetch('/api/skill-logos?_t=' + Date.now(), { cache: 'no-store' })
+                        .then(r => r.ok ? r.json() : null)
+                        .catch(() => null);
+                }
 
-                let res = null;
-                try {
-                    res = await fetch('/api/portfolio-data?_t=' + Date.now(), { cache: 'no-store' });
-                } catch (e) {}
+                // 2. Fetch fresh portfolio data in parallel
+                const dataPromise = fetch('/api/portfolio-data?_t=' + Date.now(), { cache: 'no-store' })
+                    .then(r => r.ok ? r.json() : null)
+                    .catch(() => null);
 
-                if (res && res.ok) {
-                    PORTFOLIO_DATA = await res.json();
+                const [lData, freshData] = await Promise.all([logoPromise, dataPromise]);
+
+                if (lData && lData.logos) {
+                    AVAILABLE_LOGOS = lData.logos;
+                    window._logosLoaded = true;
+                    try { localStorage.setItem('sg_skill_logos', JSON.stringify(AVAILABLE_LOGOS)); } catch (e) {}
+                }
+
+                if (freshData) {
+                    PORTFOLIO_DATA = freshData;
                     window.PORTFOLIO_DATA = PORTFOLIO_DATA;
                     try {
                         localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA));
                         localStorage.setItem('sg_portfolio_updated', String(Date.now()));
                     } catch (e) {}
-                } else {
-                    const saved = localStorage.getItem('sg_portfolio_data');
-                    if (saved) {
-                        try {
-                            PORTFOLIO_DATA = JSON.parse(saved);
-                            window.PORTFOLIO_DATA = PORTFOLIO_DATA;
-                        } catch (e) {}
-                    }
+                } else if (!window._initialCacheRendered) {
+                    renderFromLocalCache();
                 }
 
                 renderProjects();
@@ -429,13 +460,13 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         function getEducationIconSvg(degreeName, idx) {
             const clean = (degreeName || '').toLowerCase();
-            if (clean.includes('b.tech') || clean.includes('btech') || clean.includes('engineering') || clean.includes('computer science') || clean.includes('college')) {
+            if (clean.includes('b.tech') || clean.includes('btech') || clean.includes('engineering') || clean.includes('computer science') || clean.includes('bachelor') || clean.includes('college')) {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                     <path d="M6 12v5c3 3 9 3 12 0v-5"/>
                 </svg>`;
             }
-            if (clean.includes('+2') || clean.includes('higher secondary') || clean.includes('science') || clean.includes('chse')) {
+            if (clean.includes('+2') || clean.includes('higher secondary') || clean.includes('chse') || clean.includes('intermediate') || clean.includes('12th')) {
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
                     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
@@ -770,15 +801,23 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         async function deleteProject(id) {
             if (!confirm('Are you sure you want to delete this project from the live portfolio?')) return;
+            PORTFOLIO_DATA.projects = (PORTFOLIO_DATA.projects || []).filter(p => p.id !== id);
+            renderProjects();
+            try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+
             try {
                 const res = await fetch('/api/admin/projects/' + id, { method: 'DELETE' });
                 const d = await res.json();
                 if (d.success) {
                     showNotify('Project deleted successfully');
                     loadData();
+                } else {
+                    showNotify(d.message || 'Failed to delete project', false);
+                    loadData();
                 }
             } catch (err) {
                 showNotify('Failed to delete project', false);
+                loadData();
             }
         }
 
@@ -1033,15 +1072,23 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         async function deleteCert(id) {
             if (!confirm('Are you sure you want to delete this certificate?')) return;
+            PORTFOLIO_DATA.certificates = (PORTFOLIO_DATA.certificates || []).filter(c => c.id !== id);
+            renderCertificates();
+            try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+
             try {
                 const res = await fetch('/api/admin/certificates/' + id, { method: 'DELETE' });
                 const d = await res.json();
                 if (d.success) {
                     showNotify('Certificate deleted');
                     loadData();
+                } else {
+                    showNotify(d.message || 'Failed to delete certificate', false);
+                    loadData();
                 }
             } catch (err) {
                 showNotify('Failed to delete certificate', false);
+                loadData();
             }
         }
 
@@ -1288,7 +1335,10 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 if (d.success) {
                     showNotify(`Updated "${cat.category}" percentage to ${newBadge}!`);
                     closeSkillPercentageModal();
-                    await loadData();
+                    cat.badge = newBadge;
+                    renderSkills();
+                    try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+                    loadData();
                 } else {
                     showNotify(d.message || 'Error updating percentage', false);
                 }
@@ -1345,7 +1395,14 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 if (d.success) {
                     showNotify(`Category "${newName}" updated successfully!`);
                     editingSkillCatIdx = null;
-                    await loadData();
+                    const catObj = (PORTFOLIO_DATA.skills || []).find(c => (c.category || '').toLowerCase() === oldName.toLowerCase());
+                    if (catObj) {
+                        catObj.category = newName;
+                        catObj.badge = badge;
+                    }
+                    renderSkills();
+                    try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+                    loadData();
                 } else {
                     showNotify(d.message || 'Error updating category', false);
                 }
@@ -1557,6 +1614,12 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         async function deleteSkillCategory(catName) {
             if (!confirm(`Are you sure you want to delete the whole category "${catName}" and all its skills?`)) return;
+            // Instant optimistic removal from UI
+            PORTFOLIO_DATA.skills = (PORTFOLIO_DATA.skills || []).filter(c => (c.category || '').toLowerCase() !== catName.toLowerCase());
+            editingSkillCatIdx = null;
+            renderSkills();
+            try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+
             try {
                 const res = await fetch('/api/admin/skill-category', {
                     method: 'DELETE',
@@ -1566,13 +1629,14 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const d = await res.json();
                 if (d.success) {
                     showNotify(`Category "${catName}" removed`);
-                    editingSkillCatIdx = null;
                     loadData();
                 } else {
                     showNotify(d.message || 'Error deleting category', false);
+                    loadData();
                 }
             } catch (err) {
                 showNotify('Failed to delete category', false);
+                loadData();
             }
         }
 
@@ -1681,6 +1745,25 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 if (d.success) {
                     showNotify(d.message || 'Skill added successfully!');
                     document.getElementById('skillName').value = '';
+
+                    // Instant in-memory and UI update!
+                    const targetCat = (PORTFOLIO_DATA.skills || []).find(c => (c.category || '').toLowerCase() === cat.toLowerCase());
+                    const newSkillItem = { name: name, key: d.key, svg: d.svg };
+                    if (targetCat) {
+                        if (badgeVal) targetCat.badge = badgeVal;
+                        targetCat.skills = targetCat.skills || [];
+                        if (!targetCat.skills.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+                            targetCat.skills.unshift(newSkillItem);
+                        }
+                    } else {
+                        PORTFOLIO_DATA.skills.push({
+                            category: cat,
+                            badge: badgeVal || '90%',
+                            skills: [newSkillItem]
+                        });
+                    }
+                    renderSkills();
+                    try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
                     loadData();
                 } else {
                     showNotify(d.message || 'Failed to add skill', false);
@@ -1692,6 +1775,14 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         async function deleteSkill(category, name) {
             if (!confirm(`Delete skill "${name}" from ${category}?`)) return;
+            // Instant optimistic removal from UI
+            const catObj = (PORTFOLIO_DATA.skills || []).find(c => (c.category || '').toLowerCase() === category.toLowerCase());
+            if (catObj && catObj.skills) {
+                catObj.skills = catObj.skills.filter(s => (s.name || '').toLowerCase() !== name.toLowerCase());
+                renderSkills();
+                try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+            }
+
             try {
                 const res = await fetch('/api/admin/skills', {
                     method: 'DELETE',
@@ -1701,12 +1792,13 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const d = await res.json();
                 if (d.success) {
                     showNotify('Skill deleted');
-                    loadData();
                 } else {
                     showNotify(d.message || 'Failed to delete skill', false);
+                    loadData();
                 }
             } catch (err) {
                 showNotify('Failed to delete skill', false);
+                loadData();
             }
         }
 
@@ -1742,7 +1834,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     <div style="display: flex; flex-direction: column; gap: 0.65rem; flex: 1 1 auto;">
                         <div class="admin-card-header" style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <div class="edu-badge-circle ${edu.color || 'cyan'}" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25); color: ${dotColor}; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0, 242, 254, 0.1);">
+                                <div class="edu-badge-circle ${edu.color || 'cyan'}" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: ${dotColor}18; border: 1px solid ${dotColor}40; color: ${dotColor}; flex-shrink: 0; box-shadow: 0 4px 10px ${dotColor}25;">
                                     ${eduIconSvg}
                                 </div>
                                 <span class="tech-chip" style="color: ${dotColor}; border-color: ${dotColor}55;">
@@ -1856,6 +1948,18 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     if (d.success) {
                         showNotify(eduId ? 'Education milestone updated successfully!' : 'Education milestone published!');
                         cancelEduEdit();
+                        if (d.education) {
+                            const edus = PORTFOLIO_DATA.education || [];
+                            const eIdx = edus.findIndex(e => e.id === d.education.id);
+                            if (eIdx >= 0) {
+                                edus[eIdx] = d.education;
+                            } else {
+                                edus.push(d.education);
+                            }
+                            PORTFOLIO_DATA.education = edus;
+                            renderEducation();
+                            try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+                        }
                         loadData();
                     } else {
                         showNotify(d.message || 'Error saving education milestone', false);
@@ -1868,17 +1972,23 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         async function deleteEducation(id) {
             if (!confirm('Are you sure you want to delete this education milestone?')) return;
+            // Instant optimistic removal from UI
+            PORTFOLIO_DATA.education = (PORTFOLIO_DATA.education || []).filter(e => e.id !== id);
+            renderEducation();
+            try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
+
             try {
                 const res = await fetch('/api/admin/education/' + id, { method: 'DELETE' });
                 const d = await res.json();
                 if (d.success) {
                     showNotify('Education milestone deleted');
-                    loadData();
                 } else {
                     showNotify(d.message || 'Failed to delete education milestone', false);
+                    loadData();
                 }
             } catch (err) {
                 showNotify('Failed to delete education milestone', false);
+                loadData();
             }
         }
 
@@ -2213,6 +2323,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         // Check URL Hash for deep linking
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
+            renderFromLocalCache(); // Instantaneous 0ms render from cache!
             const hash = window.location.hash.replace('#', '');
             if (hash && ['projects', 'certificates', 'skills', 'education', 'resume'].includes(hash)) {
                 switchPage(hash);

@@ -425,9 +425,15 @@ except Exception as _e:
     print("[Database] Auto-init exception:", _e)
 
 # =========================================================================
-# Data Helpers (Hybrid Database with Seamless JSON Fallback)
+# Data Helpers (Hybrid Database with Seamless JSON Fallback & High-Speed Cache)
 # =========================================================================
-def load_data():
+_DATA_CACHE = None
+
+def load_data(force_refresh=False):
+    global _DATA_CACHE
+    if not force_refresh and _DATA_CACHE is not None:
+        return _DATA_CACHE
+
     conn = get_db_connection()
     if conn:
         try:
@@ -478,9 +484,10 @@ def load_data():
                         if "downloadLink" not in e:
                             e["downloadLink"] = ""
                             needs_save = True
+                    _DATA_CACHE = data
                     if needs_save:
                         save_data(data)
-                    return data
+                    return _DATA_CACHE
             conn.close()
         except Exception as e:
             print("[Database] Error loading from PostgreSQL, falling back to local file:", e)
@@ -496,13 +503,16 @@ def load_data():
             m = re.search(r"INSERT INTO portfolio_state \(id, data, updated_at\)\s+VALUES \('main',\s+'([\s\S]*?)'::jsonb", schema_content)
             if m:
                 raw_json = m.group(1).replace("''", "'")
-                return json.loads(raw_json)
+                _DATA_CACHE = json.loads(raw_json)
+                return _DATA_CACHE
         except Exception as e:
             print("[Database] Error reading from schema.sql fallback:", e)
 
     return {"projects": [], "certificates": [], "resume": {}, "skills": []}
 
 def save_data(data):
+    global _DATA_CACHE
+    _DATA_CACHE = data  # Instant in-memory cache update for sub-millisecond API response
     # 1. Update schema.sql fallback if present (keeps SQL file 100% updated with live state)
     schema_sql_path = os.path.join(BASE_DIR, "database", "schema.sql")
     if os.path.exists(schema_sql_path):
