@@ -4289,12 +4289,6 @@ async function initDynamicPortfolioSync(isForced = false) {
             response = await fetch('/api/portfolio-data?_t=' + Date.now(), { cache: 'no-store' });
         } catch (e) {}
 
-        if (!response || !response.ok) {
-            try {
-                response = await fetch('data/portfolio_data.json?_t=' + Date.now(), { cache: 'no-store' });
-            } catch (e) {}
-        }
-
         let data = null;
         if (response && response.ok) {
             data = await response.json();

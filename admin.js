@@ -248,12 +248,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     res = await fetch('/api/portfolio-data?_t=' + Date.now(), { cache: 'no-store' });
                 } catch (e) {}
 
-                if (!res || !res.ok) {
-                    try {
-                        res = await fetch('data/portfolio_data.json?_t=' + Date.now(), { cache: 'no-store' });
-                    } catch (e) {}
-                }
-
                 if (res && res.ok) {
                     PORTFOLIO_DATA = await res.json();
                     window.PORTFOLIO_DATA = PORTFOLIO_DATA;

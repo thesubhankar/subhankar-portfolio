@@ -8,7 +8,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_FILE = os.path.join(BASE_DIR, "data", "portfolio_data.json")
+SCHEMA_FILE = os.path.join(BASE_DIR, "database", "schema.sql")
 
 # Upload folders
 UPLOAD_PROJECTS = os.path.join(BASE_DIR, "assets", "uploads", "projects")
@@ -369,7 +369,7 @@ def get_db_connection():
 def init_db():
     conn = get_db_connection()
     if not conn:
-        print("[Database] DATABASE_URL not available or failed to connect. Falling back to portfolio_data.json.")
+        print("[Database] DATABASE_URL not available or failed to connect. Falling back to SQL schema (database/schema.sql).")
         return False
 
     try:
@@ -387,7 +387,7 @@ def init_db():
 
             # 2. Automatically execute schema.sql on startup without any manual run required!
             if needs_schema:
-                schema_file = os.path.join(BASE_DIR, "database", "schema.sql")
+                schema_file = SCHEMA_FILE
                 if os.path.exists(schema_file):
                     print("[Database] Auto-running database/schema.sql on startup to create all tables & seed data...")
                     with open(schema_file, "r", encoding="utf-8") as f:
@@ -401,13 +401,7 @@ def init_db():
                 if cur.fetchone()[0]:
                     cur.execute("SELECT id FROM portfolio_state WHERE id = 'main';")
                     if not cur.fetchone():
-                        initial_data = {}
-                        if os.path.exists(DATA_FILE):
-                            try:
-                                with open(DATA_FILE, "r", encoding="utf-8") as f:
-                                    initial_data = json.load(f)
-                            except Exception:
-                                pass
+                        initial_data = load_data()
                         import psycopg2.extras
                         cur.execute(
                             "INSERT INTO portfolio_state (id, data, updated_at) VALUES ('main', %s, CURRENT_TIMESTAMP);",
@@ -493,23 +487,36 @@ def load_data():
             if conn:
                 conn.close()
 
-    # File-based fallback
-    if not os.path.exists(DATA_FILE):
-        return {"projects": [], "certificates": [], "resume": {}, "skills": []}
-    try:
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print("Error reading data:", e)
-        return {"projects": [], "certificates": [], "resume": {}, "skills": []}
+    # SQL Database / Schema fallback (Zero JSON files required)
+    schema_sql_path = os.path.join(BASE_DIR, "database", "schema.sql")
+    if os.path.exists(schema_sql_path):
+        try:
+            with open(schema_sql_path, "r", encoding="utf-8") as f:
+                schema_content = f.read()
+            m = re.search(r"INSERT INTO portfolio_state \(id, data, updated_at\)\s+VALUES \('main',\s+'([\s\S]*?)'::jsonb", schema_content)
+            if m:
+                raw_json = m.group(1).replace("''", "'")
+                return json.loads(raw_json)
+        except Exception as e:
+            print("[Database] Error reading from schema.sql fallback:", e)
+
+    return {"projects": [], "certificates": [], "resume": {}, "skills": []}
 
 def save_data(data):
-    # 1. Always save locally to file as fallback backup
-    try:
-        with open(DATA_FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
-    except Exception as e:
-        print("Error saving local file backup:", e)
+    # 1. Update schema.sql fallback if present (keeps SQL file 100% updated with live state)
+    schema_sql_path = os.path.join(BASE_DIR, "database", "schema.sql")
+    if os.path.exists(schema_sql_path):
+        try:
+            with open(schema_sql_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            json_escaped = json.dumps(data, ensure_ascii=False).replace("'", "''")
+            new_insert = f"INSERT INTO portfolio_state (id, data, updated_at)\nVALUES ('main', '{json_escaped}'::jsonb, CURRENT_TIMESTAMP)\nON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = CURRENT_TIMESTAMP;"
+            pattern = r"INSERT INTO portfolio_state \(id, data, updated_at\)[\s\S]*?ON CONFLICT \(id\) DO UPDATE SET data = EXCLUDED\.data, updated_at = CURRENT_TIMESTAMP;"
+            new_content = re.sub(pattern, new_insert, content)
+            with open(schema_sql_path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+        except Exception as e:
+            print("[Database] Error updating schema.sql state:", e)
 
     # 2. Save directly to PostgreSQL if DATABASE_URL is active
     conn = get_db_connection()
@@ -554,9 +561,9 @@ def db_status():
     db_url = os.environ.get("DATABASE_URL", "").strip()
     if not db_url:
         return jsonify({
-            "database": "Local File (portfolio_data.json)",
+            "database": "Local SQL Engine (database/schema.sql)",
             "connected": False,
-            "message": "DATABASE_URL environment variable is not configured."
+            "message": "DATABASE_URL environment variable is not configured. Running offline via database/schema.sql."
         })
 
     conn = get_db_connection()
