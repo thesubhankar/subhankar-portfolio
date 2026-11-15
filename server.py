@@ -26,6 +26,15 @@ app = Flask(__name__, static_folder=BASE_DIR, static_url_path="")
 app.secret_key = os.environ.get("FLASK_SECRET", "subhankar_portfolio_secret_key_2026")
 CORS(app)
 
+@app.after_request
+def add_no_cache_headers(response):
+    path = request.path
+    if path.endswith(('.html', '.js', '.css')) or path in ('/', '/admin', '/index.html', '/admin.html'):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
 ADMIN_USERNAME = os.environ.get("ADMIN_USER", "admin")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASS", "admin123")
 
