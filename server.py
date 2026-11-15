@@ -14,9 +14,11 @@ SCHEMA_FILE = os.path.join(BASE_DIR, "database", "schema.sql")
 UPLOAD_PROJECTS = os.path.join(BASE_DIR, "assets", "uploads", "projects")
 UPLOAD_CERTS = os.path.join(BASE_DIR, "assets", "uploads", "certificates")
 UPLOAD_RESUME = os.path.join(BASE_DIR, "assets", "uploads", "resume")
+UPLOAD_EDUCATION = os.path.join(BASE_DIR, "assets", "uploads", "education")
 os.makedirs(UPLOAD_PROJECTS, exist_ok=True)
 os.makedirs(UPLOAD_CERTS, exist_ok=True)
 os.makedirs(UPLOAD_RESUME, exist_ok=True)
+os.makedirs(UPLOAD_EDUCATION, exist_ok=True)
 
 app = Flask(__name__, static_folder=BASE_DIR, static_url_path="")
 app.secret_key = os.environ.get("FLASK_SECRET", "subhankar_portfolio_secret_key_2026")
@@ -1383,8 +1385,62 @@ def add_or_update_education():
     view_link = req.get("viewLink", req.get("link", "")).strip()
     if "github.com/thesubhankar" in view_link and not req.get("viewLink"):
         view_link = ""
-    download_link = req.get("downloadLink", "").strip()
     color = req.get("color", "cyan").strip()
+
+    # 1. Collect preserved existing documents
+    existing_docs = []
+    existing_docs_json = request.form.get("existingDocsJson") or (req.get("existingDocsJson") if isinstance(req, dict) else None)
+    if existing_docs_json:
+        try:
+            parsed = json.loads(existing_docs_json) if isinstance(existing_docs_json, str) else existing_docs_json
+            if isinstance(parsed, list):
+                existing_docs = parsed
+        except Exception:
+            pass
+
+    # 2. Collect newly uploaded document files (up to 5 maximum)
+    new_docs = []
+    uploaded_files = request.files.getlist("documents")
+    for idx, f in enumerate(uploaded_files):
+        if f and f.filename:
+            safe_name = secure_filename(f.filename) or f"document_{idx+1}.pdf"
+            ext = safe_name.rsplit(".", 1)[-1].lower() if "." in safe_name else "pdf"
+            unique_name = f"{edu_id}_{int(time.time())}_{idx}_{safe_name}"
+            abs_dest = os.path.join(UPLOAD_EDUCATION, unique_name)
+            f.save(abs_dest)
+            sz_bytes = os.path.getsize(abs_dest)
+            sz_str = f"{sz_bytes / 1024:.1f} KB" if sz_bytes < 1048576 else f"{sz_bytes / (1024*1024):.2f} MB"
+            new_docs.append({
+                "fileName": safe_name,
+                "filePath": f"assets/uploads/education/{unique_name}",
+                "fileSize": sz_str,
+                "fileType": ext
+            })
+
+    # Combine existing + new documents, capped at 5
+    all_docs = (existing_docs + new_docs)[:5]
+
+    edu_list = data.setdefault("education", [])
+    existing_idx = next((i for i, e in enumerate(edu_list) if e.get("id") == edu_id), -1)
+
+    # 3. Clean up removed old files from disk
+    if existing_idx >= 0:
+        old_docs = edu_list[existing_idx].get("documents", [])
+        new_paths = {d.get("filePath") for d in all_docs if d.get("filePath")}
+        for od in old_docs:
+            old_p = od.get("filePath")
+            if old_p and old_p not in new_paths and "assets/uploads/education/" in old_p:
+                delete_upload_file(old_p)
+
+    # 4. Resolve downloadLink & viewLink with backwards compatibility
+    download_link = req.get("downloadLink", "").strip()
+    if all_docs:
+        # Default downloadLink points to the first/primary uploaded document
+        download_link = "/" + all_docs[0]["filePath"].lstrip("/")
+        if not view_link:
+            view_link = "/" + all_docs[0]["filePath"].lstrip("/")
+    elif existing_idx >= 0 and not download_link:
+        download_link = edu_list[existing_idx].get("downloadLink", "")
 
     new_edu = {
         "id": edu_id,
@@ -1397,11 +1453,9 @@ def add_or_update_education():
         "viewLink": view_link,
         "downloadLink": download_link,
         "link": view_link or download_link,
+        "documents": all_docs,
         "color": color
     }
-
-    edu_list = data.setdefault("education", [])
-    existing_idx = next((i for i, e in enumerate(edu_list) if e.get("id") == edu_id), -1)
 
     if existing_idx >= 0:
         edu_list[existing_idx] = new_edu
@@ -1414,6 +1468,15 @@ def add_or_update_education():
 @app.route("/api/admin/education/<edu_id>", methods=["DELETE"])
 def delete_education(edu_id):
     data = load_data()
+    existing = next((e for e in data.get("education", []) if e.get("id") == edu_id), None)
+    if existing:
+        for doc in existing.get("documents", []):
+            p = doc.get("filePath")
+            if p and "assets/uploads/education/" in p:
+                delete_upload_file(p)
+        if existing.get("downloadLink") and "assets/uploads/education/" in existing.get("downloadLink"):
+            delete_upload_file(existing.get("downloadLink"))
+
     data["education"] = [e for e in data.get("education", []) if e.get("id") != edu_id]
     save_data(data)
     return jsonify({"success": True, "message": "Education milestone deleted"})

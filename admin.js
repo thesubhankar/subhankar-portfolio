@@ -1805,8 +1805,125 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         }
 
         // =========================================================================
-        // 4. Education Manager (New Feature)
+        // 4. Education Manager (Multi-Document Upload Support: 1 to 5 Docs)
         // =========================================================================
+        let eduDocItems = [];
+
+        function renderEduDocsPreviews() {
+            const previewRow = document.getElementById('eduDocsPreviewRow');
+            const notice = document.getElementById('eduDocsNotice');
+            if (!previewRow) return;
+            previewRow.innerHTML = '';
+
+            const count = eduDocItems.length;
+            if (notice) {
+                if (count === 0) {
+                    notice.innerHTML = '⚠️ Please select at least 1 document (Max 5 documents allowed).';
+                    notice.style.color = '#F59E0B';
+                } else if (count > 5) {
+                    notice.innerHTML = `⚠️ <strong>${count} documents selected!</strong> Maximum 5 documents allowed. Please remove ${count - 5} document(s).`;
+                    notice.style.color = '#EF4444';
+                } else {
+                    notice.innerHTML = `✓ <strong>${count} document(s) ready</strong> (Max 5 allowed). Document #1 is the primary download file.`;
+                    notice.style.color = '#10B981';
+                }
+            }
+
+            eduDocItems.forEach((item, idx) => {
+                const isPrimary = (idx === 0);
+                const isNew = (item.type === 'new');
+                const card = document.createElement('div');
+                card.className = 'admin-preview-file-card' + (isPrimary ? ' is-primary' : '');
+
+                const fileName = escapeHtml(item.name || 'document');
+                const ext = (fileName.split('.').pop() || '').toLowerCase();
+                const sizeInfo = item.size ? formatFileSize(item.size) : '';
+
+                let thumbHtml = '';
+                if (['png', 'jpg', 'jpeg', 'webp'].includes(ext)) {
+                    const imgSrc = isNew ? (item.objectUrl || URL.createObjectURL(item.file)) : ('/' + item.path.replace(/^\//, ''));
+                    thumbHtml = `<img src="${imgSrc}" alt="${fileName}" style="width:100%; height:100%; object-fit:cover;" />`;
+                } else if (ext === 'pdf') {
+                    thumbHtml = `
+                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(239, 68, 68, 0.2); color:#EF4444;">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                        </div>`;
+                } else {
+                    thumbHtml = `
+                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(0, 242, 254, 0.15); color:#00F2FE;">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                        </div>`;
+                }
+
+                const tagHtml = isPrimary
+                    ? '<span class="preview-tag primary-tag">★ Primary</span>'
+                    : (isNew ? '<span class="preview-tag new-tag">New</span>' : '<span class="preview-tag existing-tag">Saved</span>');
+
+                card.innerHTML = `
+                    <div class="preview-card-thumb">
+                        ${thumbHtml}
+                        <span class="preview-badge-num ${isPrimary ? 'primary-badge' : ''}">#${idx + 1}</span>
+                    </div>
+                    <div class="preview-card-info">
+                        <span class="preview-card-name" title="${fileName}">${fileName}</span>
+                        <div class="preview-card-meta">
+                            ${tagHtml}
+                            ${sizeInfo ? `<span>${sizeInfo}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="preview-card-controls">
+                        ${idx > 0 ? `<button type="button" class="btn-move-preview" onclick="moveEduDoc(${idx}, -1)" title="Move earlier">◀</button>` : ''}
+                        ${idx < eduDocItems.length - 1 ? `<button type="button" class="btn-move-preview" onclick="moveEduDoc(${idx}, 1)" title="Move later">▶</button>` : ''}
+                        <button type="button" class="btn-remove-preview" onclick="removeEduDoc(${idx})" title="Remove document">✖</button>
+                    </div>
+                `;
+                previewRow.appendChild(card);
+            });
+        }
+
+        window.removeEduDoc = function(index) {
+            eduDocItems.splice(index, 1);
+            renderEduDocsPreviews();
+        };
+
+        window.moveEduDoc = function(index, delta) {
+            const target = index + delta;
+            if (target < 0 || target >= eduDocItems.length) return;
+            const temp = eduDocItems[index];
+            eduDocItems[index] = eduDocItems[target];
+            eduDocItems[target] = temp;
+            renderEduDocsPreviews();
+        };
+
+        const eduDocsInput = document.getElementById('eduDocuments');
+        if (eduDocsInput) {
+            eduDocsInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files || []);
+                if (files.length === 0) return;
+
+                if (eduDocItems.length + files.length > 5) {
+                    showNotify('Maximum 5 documents allowed! Only the first remaining slots will be added.', false);
+                }
+
+                files.forEach(f => {
+                    if (eduDocItems.length >= 5) return;
+                    const already = eduDocItems.some(i => i.type === 'new' && i.file.name === f.name && i.file.size === f.size);
+                    if (!already) {
+                        eduDocItems.push({
+                            type: 'new',
+                            file: f,
+                            name: f.name,
+                            size: f.size,
+                            objectUrl: URL.createObjectURL(f)
+                        });
+                    }
+                });
+
+                eduDocsInput.value = '';
+                renderEduDocsPreviews();
+            });
+        }
+
         function renderEducation() {
             const list = document.getElementById('educationList');
             if (!list) return;
@@ -1832,6 +1949,26 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const dotColor = colorDotMap[edu.color] || '#00F2FE';
                 const eduIconSvg = getEducationIconSvg(edu.degree, idx);
 
+                let docsListHtml = '';
+                if (Array.isArray(edu.documents) && edu.documents.length > 0) {
+                    docsListHtml = `
+                        <div style="display:flex; flex-direction:column; gap:4px; margin-top:0.4rem; padding:6px 8px; background:rgba(0,0,0,0.25); border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
+                            <span style="font-size:0.7rem; color:var(--text-muted); font-family:var(--font-mono); font-weight:600;">
+                                📁 Uploaded Documents (${edu.documents.length}/5):
+                            </span>
+                            <div style="display:flex; flex-wrap:wrap; gap:5px;">
+                                ${edu.documents.map((d, dIdx) => `
+                                    <a href="/${escapeHtml(d.filePath.replace(/^\//, ''))}" target="_blank" download style="display:inline-flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:0.72rem; color:var(--color-cyan, #00F2FE); background:rgba(0,242,254,0.08); border:1px solid rgba(0,242,254,0.25); border-radius:4px; padding:2px 7px; text-decoration:none;">
+                                        <span>📄</span>
+                                        <span title="${escapeHtml(d.fileName)}">${escapeHtml(d.fileName || 'Document ' + (dIdx+1))}</span>
+                                        ${d.fileSize ? `<span style="color:var(--text-muted); font-size:0.65rem;">(${escapeHtml(d.fileSize)})</span>` : ''}
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
                 card.innerHTML = `
                     <div style="display: flex; flex-direction: column; gap: 0.65rem; flex: 1 1 auto;">
                         <div class="admin-card-header" style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
@@ -1853,11 +1990,12 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         </p>
                         ${edu.grade ? `<p style="font-family: var(--font-mono); font-size: 0.74rem; color: #10B981; margin: 0; font-weight: 600;">${edu.grade}</p>` : ''}
                         <p class="admin-card-desc" style="margin-top: 0.25rem;">${edu.details || ''}</p>
+                        ${docsListHtml}
                     </div>
 
                     <div class="admin-card-footer" style="display: flex; justify-content: flex-end; align-items: center; gap: 0.45rem; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
                         <!-- 1. 3D View Button -->
-                        <a href="${edu.viewLink || edu.downloadLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#'}" target="_blank" class="btn-3d btn-3d-view" title="View Education Credential">
+                        <a href="${edu.viewLink || (edu.documents && edu.documents[0] ? '/' + edu.documents[0].filePath.replace(/^\//, '') : (edu.downloadLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#'))}" target="_blank" class="btn-3d btn-3d-view" title="View Education Credential">
                             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
@@ -1901,8 +2039,32 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             document.getElementById('eduStatus').value = edu.status || '';
             document.getElementById('eduGrade').value = edu.grade || '';
             document.getElementById('eduViewLink').value = edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '';
-            document.getElementById('eduDownloadLink').value = edu.downloadLink || '';
             document.getElementById('eduDetails').value = edu.details || '';
+
+            // Populate existing documents
+            eduDocItems = (edu.documents || []).map(d => ({
+                type: 'existing',
+                doc: d,
+                name: d.fileName || 'Academic Document',
+                path: d.filePath || '',
+                size: d.fileSize || ''
+            }));
+            // Backwards compatibility if milestone had downloadLink
+            if (eduDocItems.length === 0 && edu.downloadLink && edu.downloadLink !== '#') {
+                const name = edu.downloadLink.split('/').pop() || 'Academic Document.pdf';
+                eduDocItems.push({
+                    type: 'existing',
+                    doc: {
+                        fileName: name,
+                        filePath: edu.downloadLink.replace(/^\//, '')
+                    },
+                    name: name,
+                    path: edu.downloadLink.replace(/^\//, ''),
+                    size: ''
+                });
+            }
+            if (eduDocsInput) eduDocsInput.value = '';
+            renderEduDocsPreviews();
 
             const submitBtn = document.getElementById('eduSubmitBtn');
             if (submitBtn) submitBtn.innerHTML = '<span>💾 Save Education Changes</span>';
@@ -1915,6 +2077,10 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         function cancelEduEdit() {
             document.getElementById('eduForm').reset();
             document.getElementById('eduId').value = '';
+            eduDocItems = [];
+            if (eduDocsInput) eduDocsInput.value = '';
+            renderEduDocsPreviews();
+
             const submitBtn = document.getElementById('eduSubmitBtn');
             if (submitBtn) submitBtn.innerHTML = '<span>🎓 Publish Education Milestone</span>';
             const cancelBtn = document.getElementById('eduCancelBtn');
@@ -1925,30 +2091,44 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         if (eduForm) {
             eduForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                if (eduDocItems.length === 0) {
+                    showNotify('Please upload at least 1 academic document (maximum 5 documents allowed).', false);
+                    return;
+                }
+                if (eduDocItems.length > 5) {
+                    showNotify('Maximum 5 documents allowed per education milestone. Please remove excess files.', false);
+                    return;
+                }
+
                 const eduId = document.getElementById('eduId').value;
-                const payload = {
-                    id: eduId || undefined,
-                    degree: document.getElementById('eduDegree').value.trim(),
-                    institution: document.getElementById('eduInstitution').value.trim(),
-                    timeline: document.getElementById('eduTimeline').value.trim(),
-                    status: document.getElementById('eduStatus').value.trim(),
-                    grade: document.getElementById('eduGrade').value.trim(),
-                    color: (eduId && (PORTFOLIO_DATA.education || []).find(e => e.id === eduId)?.color) || 'cyan',
-                    viewLink: document.getElementById('eduViewLink').value.trim(),
-                    downloadLink: document.getElementById('eduDownloadLink').value.trim(),
-                    link: document.getElementById('eduViewLink').value.trim() || document.getElementById('eduDownloadLink').value.trim(),
-                    details: document.getElementById('eduDetails').value.trim()
-                };
+                const formData = new FormData();
+                if (eduId) formData.append('id', eduId);
+                formData.append('degree', document.getElementById('eduDegree').value.trim());
+                formData.append('institution', document.getElementById('eduInstitution').value.trim());
+                formData.append('timeline', document.getElementById('eduTimeline').value.trim());
+                formData.append('status', document.getElementById('eduStatus').value.trim());
+                formData.append('grade', document.getElementById('eduGrade').value.trim());
+                formData.append('color', (eduId && (PORTFOLIO_DATA.education || []).find(e => e.id === eduId)?.color) || 'cyan');
+                formData.append('viewLink', document.getElementById('eduViewLink').value.trim());
+                formData.append('details', document.getElementById('eduDetails').value.trim());
+
+                // Preserved existing documents
+                const existingDocs = eduDocItems.filter(i => i.type === 'existing').map(i => i.doc);
+                formData.append('existingDocsJson', JSON.stringify(existingDocs));
+
+                // Newly uploaded document files
+                eduDocItems.filter(i => i.type === 'new').forEach(i => {
+                    formData.append('documents', i.file);
+                });
 
                 try {
                     const res = await fetch('/api/admin/education', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: formData
                     });
                     const d = await res.json();
                     if (d.success) {
-                        showNotify(eduId ? 'Education milestone updated successfully!' : 'Education milestone published!');
                         cancelEduEdit();
                         if (d.education) {
                             const edus = PORTFOLIO_DATA.education || [];
@@ -1959,12 +2139,14 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                                 edus.push(d.education);
                             }
                             PORTFOLIO_DATA.education = edus;
+                            window.PORTFOLIO_DATA = PORTFOLIO_DATA;
                             renderEducation();
                             try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
                         }
+                        showNotify(eduId ? 'Education milestone updated successfully!' : 'Education milestone published successfully!');
                         loadData();
                     } else {
-                        showNotify(d.message || 'Error saving education milestone', false);
+                        showNotify(d.message || d.error || 'Error saving education milestone', false);
                     }
                 } catch (err) {
                     showNotify('Failed to save education milestone', false);
@@ -1976,6 +2158,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             if (!confirm('Are you sure you want to delete this education milestone?')) return;
             // Instant optimistic removal from UI
             PORTFOLIO_DATA.education = (PORTFOLIO_DATA.education || []).filter(e => e.id !== id);
+            window.PORTFOLIO_DATA = PORTFOLIO_DATA;
             renderEducation();
             try { localStorage.setItem('sg_portfolio_data', JSON.stringify(PORTFOLIO_DATA)); } catch (e) {}
 
@@ -1984,6 +2167,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const d = await res.json();
                 if (d.success) {
                     showNotify('Education milestone deleted');
+                    loadData();
                 } else {
                     showNotify(d.message || 'Failed to delete education milestone', false);
                     loadData();
@@ -2590,6 +2774,12 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 }
             });
         }
+
+        window.editEducation = editEducation;
+        window.deleteEducation = deleteEducation;
+        window.cancelEduEdit = cancelEduEdit;
+        window.removeEduDoc = removeEduDoc;
+        window.moveEduDoc = moveEduDoc;
 
         window.editExperience = editExperience;
         window.deleteExperience = deleteExperience;

@@ -4642,7 +4642,8 @@ async function initDynamicPortfolioSync(isForced = false) {
             if (eduGrid) {
                 const eduSig = data.education.map(e => {
                     const targetView = (e.viewLink || (e.link && !e.link.includes('github.com') ? e.link : '') || '#').trim();
-                    return `${(e.degree || '').trim()}:${(e.institution || '').trim()}:${(e.timeline || '').trim()}:${(e.grade || e.status || '').trim()}:${targetView}`;
+                    const docsSig = Array.isArray(e.documents) ? e.documents.map(d => (d.filePath || d.fileName || '').trim()).join(',') : '';
+                    return `${(e.degree || '').trim()}:${(e.institution || '').trim()}:${(e.timeline || '').trim()}:${(e.grade || e.status || '').trim()}:${targetView}:${docsSig}`;
                 }).join(';');
                 const currentDomEduSig = Array.from(eduGrid.querySelectorAll('.edu-card-interactive')).map(card => {
                     const degree = (card.querySelector('.edu-degree-title')?.textContent || '').trim();
@@ -4650,7 +4651,8 @@ async function initDynamicPortfolioSync(isForced = false) {
                     const timeline = (card.querySelector('.edu-timeline-pill')?.textContent || '').trim();
                     const badge = (card.querySelector('.grade-badge, .status-badge-progress')?.textContent || '').trim();
                     const view = (card.querySelector('a.btn-edu-view')?.getAttribute('href') || '#').trim();
-                    return `${degree}:${inst}:${timeline}:${badge}:${view}`;
+                    const docsSig = Array.from(card.querySelectorAll('.edu-doc-chip')).map(a => (a.getAttribute('href') || '').trim()).join(',');
+                    return `${degree}:${inst}:${timeline}:${badge}:${view}:${docsSig}`;
                 }).join(';');
 
                 if (isForced || currentDomEduSig !== eduSig) {
@@ -4671,6 +4673,37 @@ async function initDynamicPortfolioSync(isForced = false) {
 
                             let iconSvg = getEducationIconSvg(edu.degree);
 
+                            const docs = Array.isArray(edu.documents) ? edu.documents : [];
+                            const primaryDoc = docs.length > 0 ? docs[0] : null;
+                            const primaryPath = primaryDoc ? (primaryDoc.filePath.startsWith('/') ? primaryDoc.filePath : '/' + primaryDoc.filePath) : '';
+                            const viewLink = (edu.viewLink || primaryPath || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#');
+                            const downloadLink = (edu.downloadLink || primaryPath || viewLink || '#');
+
+                            let multiDocsHtml = '';
+                            if (docs.length > 1) {
+                                multiDocsHtml = `
+                                    <div class="edu-docs-pill-row">
+                                        <span class="edu-docs-label">
+                                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                            Documents (${docs.length}):
+                                        </span>
+                                        <div class="edu-docs-list">
+                                            ${docs.map((doc, dIdx) => {
+                                                const dPath = doc.filePath ? (doc.filePath.startsWith('/') ? doc.filePath : '/' + doc.filePath) : '#';
+                                                const dName = doc.fileName || `Document ${dIdx + 1}`;
+                                                return `
+                                                    <a href="${escapeHtml(dPath)}" target="_blank" rel="noopener noreferrer" class="edu-doc-chip" title="${escapeHtml(dName)} ${doc.fileSize ? `(${escapeHtml(doc.fileSize)})` : ''}">
+                                                        <span class="edu-doc-num">${dIdx + 1}</span>
+                                                        <span class="edu-doc-name">${escapeHtml(dName.length > 16 ? dName.slice(0, 13) + '...' : dName)}</span>
+                                                        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                                    </a>
+                                                `;
+                                            }).join('')}
+                                        </div>
+                                    </div>
+                                `;
+                            }
+
                             card.innerHTML = `
                                 <div class="edu-left-icon">
                                     <div class="edu-badge-circle ${colorClass}">
@@ -4685,15 +4718,16 @@ async function initDynamicPortfolioSync(isForced = false) {
                                     <h4 class="edu-degree-title">${escapeHtml(edu.degree || '')}</h4>
                                     <p class="edu-institute">${escapeHtml(edu.institution || '')}</p>
                                     <p class="edu-details-text">${escapeHtml(edu.details || '')}</p>
+                                    ${multiDocsHtml}
                                     <div class="edu-action-box">
-                                        <a href="${escapeHtml((edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#'))}" ${((edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '')) ? 'target="_blank" rel="noopener noreferrer"' : '')} class="btn-edu-3d btn-edu-view" title="View Education Document">
+                                        <a href="${escapeHtml(viewLink)}" ${(viewLink && viewLink !== '#') ? 'target="_blank" rel="noopener noreferrer"' : ''} class="btn-edu-3d btn-edu-view" title="View Education Document">
                                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
                                             </svg>
                                             <span>View</span>
                                         </a>
-                                        <a href="${escapeHtml((edu.downloadLink || edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '#'))}" download target="_blank" rel="noopener noreferrer" class="btn-edu-3d btn-edu-download" title="Download Education Document">
+                                        <a href="${escapeHtml(downloadLink)}" ${(downloadLink && downloadLink !== '#') ? 'download target="_blank" rel="noopener noreferrer"' : ''} class="btn-edu-3d btn-edu-download" title="Download Education Document">
                                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                                 <polyline points="7 10 12 15 17 10"></polyline>
