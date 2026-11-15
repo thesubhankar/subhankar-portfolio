@@ -4387,24 +4387,23 @@ async function initDynamicPortfolioSync(isForced = false) {
 
         if (!data) return;
 
-        // 1. Sync Resume Links (Dynamic Cache Busting & Real-time Neon Sync)
+        // 1. Sync Resume Links (Dynamic Cache Busting & Direct Download)
         if (data.resume) {
             const resumeSec = document.getElementById('page-resume');
             if (resumeSec) {
                 const viewBtn = resumeSec.querySelector('.btn-primary.btn-resume');
                 const downloadBtn = resumeSec.querySelector('.btn-secondary.btn-resume');
                 const ts = data.resume.lastTimestamp || Date.now();
-                if (data.resume.hasUploadedPdf || data.resume.filePath) {
-                    if (viewBtn) {
-                        viewBtn.href = `/api/resume/view?t=${ts}`;
-                    }
-                    if (downloadBtn) {
-                        downloadBtn.href = `/api/resume/download?t=${ts}`;
-                        downloadBtn.setAttribute('download', 'Subhankar_Giri_Resume.pdf');
-                    }
-                } else if (data.resume.driveUrl) {
-                    if (viewBtn) viewBtn.href = data.resume.driveUrl;
-                    if (downloadBtn) downloadBtn.href = data.resume.driveUrl;
+                if (viewBtn) {
+                    viewBtn.href = `/api/resume/view?t=${ts}`;
+                    viewBtn.setAttribute('target', '_blank');
+                    viewBtn.setAttribute('rel', 'noopener noreferrer');
+                }
+                if (downloadBtn) {
+                    downloadBtn.href = `/api/resume/download?t=${ts}`;
+                    downloadBtn.setAttribute('download', 'Subhankar_Giri_Resume.pdf');
+                    downloadBtn.setAttribute('target', '_blank');
+                    downloadBtn.setAttribute('rel', 'noopener noreferrer');
                 }
             }
         }
@@ -4610,7 +4609,7 @@ async function initDynamicPortfolioSync(isForced = false) {
                 const currentDomCertsSig = Array.from(certGrid.querySelectorAll('.cert-card-interactive')).map(card => {
                     const title = (card.querySelector('.cert-name')?.textContent || '').trim();
                     const issuer = (card.querySelector('.cert-issuer-badge')?.textContent || '').trim();
-                    const href = (card.querySelector('a.btn-cert-icon')?.getAttribute('href') || '').trim();
+                    const href = (card.querySelector('a.btn-edu-view')?.getAttribute('href') || card.querySelector('a.btn-cert-icon')?.getAttribute('href') || '').trim();
                     return `${title}:${issuer}:${href}`;
                 }).join(';');
 
@@ -4640,14 +4639,22 @@ async function initDynamicPortfolioSync(isForced = false) {
                                 </div>
                                 <h4 class="cert-name">${escapeHtml(cert.title)}</h4>
                                 <p class="cert-desc-text">${escapeHtml(cert.description || 'Verified credential in ' + (cert.category || 'Data Science') + '.')}</p>
-                                <div class="cert-btn-group">
-                                    ${credUrl !== '#' ? `
-                                    <a href="${escapeHtml(credUrl)}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-view" aria-label="View Certificate" title="View Certificate">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                <div class="edu-action-box cert-action-box" style="margin-top: auto; padding-top: 0.65rem;">
+                                    <a href="${escapeHtml(credUrl)}" ${(credUrl && credUrl !== '#') ? 'target="_blank" rel="noopener noreferrer"' : ''} class="btn-edu-3d btn-edu-view" title="View Certificate Document">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <span>View</span>
                                     </a>
-                                    <a href="${escapeHtml(credUrl)}" target="_blank" rel="noopener noreferrer" class="btn-cert-icon btn-cert-verify" aria-label="Verify Credential" title="Verify Credential">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
-                                    </a>` : ''}
+                                    <a href="${escapeHtml(credUrl)}" ${(credUrl && credUrl !== '#') ? 'download target="_blank" rel="noopener noreferrer"' : ''} class="btn-edu-3d btn-edu-download" title="Download Certificate">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="15"></line>
+                                        </svg>
+                                        <span>Download</span>
+                                    </a>
                                 </div>
                             `;
                             frag.appendChild(certCard);

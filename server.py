@@ -732,6 +732,12 @@ def api_view_resume():
                 with open(primary, "wb") as f_out:
                     f_out.write(blob["bytes"])
 
+    # Fallback to local assets/resume.pdf if target path is still missing
+    if not os.path.exists(abs_path):
+        primary = os.path.join(BASE_DIR, "assets", "resume.pdf")
+        if os.path.exists(primary):
+            abs_path = primary
+
     if os.path.exists(abs_path):
         resp = send_file(abs_path, mimetype="application/pdf")
         resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
@@ -746,7 +752,7 @@ def api_view_resume():
 
 @app.route("/api/resume/download", methods=["GET"])
 def api_download_resume():
-    """Direct resume download endpoint ensuring exact filename and no stale cache."""
+    """Direct resume download endpoint ensuring exact filename and direct binary attachment without redirecting."""
     data = load_data()
     resumes = data.get("resumes", [])
     active = next((r for r in resumes if r.get("isActive")), (resumes[0] if resumes else None))
@@ -761,10 +767,16 @@ def api_download_resume():
             with open(abs_path, "wb") as f_out:
                 f_out.write(blob["bytes"])
 
+    # Fallback to local assets/resume.pdf so download never fails or redirects away
+    if not os.path.exists(abs_path):
+        primary = os.path.join(BASE_DIR, "assets", "resume.pdf")
+        if os.path.exists(primary):
+            abs_path = primary
+
     if os.path.exists(abs_path):
         fname = (active.get("fileName") if active else "Subhankar_Giri_Resume.pdf")
-        if not fname.lower().endswith(".pdf"):
-            fname += ".pdf"
+        if not fname or not fname.lower().endswith(".pdf"):
+            fname = "Subhankar_Giri_Resume.pdf"
         resp = send_file(abs_path, mimetype="application/pdf", as_attachment=True, download_name=fname)
         resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
         resp.headers["Pragma"] = "no-cache"
