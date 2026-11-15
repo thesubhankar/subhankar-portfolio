@@ -135,6 +135,15 @@ CREATE TABLE IF NOT EXISTS portfolio_state (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS uploaded_files (
+    file_path TEXT PRIMARY KEY,
+    file_name VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(128) NOT NULL,
+    file_data TEXT NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_uploaded_files_path ON uploaded_files(file_path);
+
 -- -----------------------------------------------------------------------------
 -- 2. Data Insertion & Synchronization (DML)
 -- -----------------------------------------------------------------------------

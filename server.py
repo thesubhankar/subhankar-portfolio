@@ -3,7 +3,9 @@ import os
 import json
 import time
 import re
-from flask import Flask, request, jsonify, send_from_directory, session
+import base64
+import mimetypes
+from flask import Flask, request, jsonify, send_from_directory, session, redirect, send_file
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
@@ -410,6 +412,19 @@ def init_db():
                             (psycopg2.extras.Json(initial_data),)
                         )
                         conn.commit()
+
+                # Ensure uploaded_files table exists for persistent file storage across container restarts
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS uploaded_files (
+                        file_path TEXT PRIMARY KEY,
+                        file_name VARCHAR(255) NOT NULL,
+                        mime_type VARCHAR(128) NOT NULL,
+                        file_data TEXT NOT NULL,
+                        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                    );
+                    CREATE INDEX IF NOT EXISTS idx_uploaded_files_path ON uploaded_files(file_path);
+                """)
+                conn.commit()
                 print("[Database] PostgreSQL tables and state verified online.")
         conn.close()
         return True
@@ -601,19 +616,182 @@ def save_data(data):
                 conn.rollback()
                 conn.close()
 
+def save_uploaded_blob(rel_path, file_bytes, filename, mime_type="application/pdf"):
+    """Saves file blob to PostgreSQL so Render ephemeral resets NEVER lose uploaded files."""
+    if not rel_path or not file_bytes:
+        return
+    norm_path = rel_path.replace("\\", "/").strip().lstrip("/")
+    b64_data = base64.b64encode(file_bytes).decode("utf-8")
+    conn = get_db_connection()
+    if conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS uploaded_files (
+                        file_path TEXT PRIMARY KEY,
+                        file_name VARCHAR(255) NOT NULL,
+                        mime_type VARCHAR(128) NOT NULL,
+                        file_data TEXT NOT NULL,
+                        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                    );
+                """)
+                cur.execute("""
+                    INSERT INTO uploaded_files (file_path, file_name, mime_type, file_data, updated_at)
+                    VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
+                    ON CONFLICT (file_path) DO UPDATE SET
+                        file_name = EXCLUDED.file_name,
+                        mime_type = EXCLUDED.mime_type,
+                        file_data = EXCLUDED.file_data,
+                        updated_at = CURRENT_TIMESTAMP;
+                """, (norm_path, filename, mime_type, b64_data))
+                conn.commit()
+            conn.close()
+        except Exception as e:
+            print("[Database] Error saving uploaded file blob to PostgreSQL:", e)
+            if conn:
+                conn.rollback()
+                conn.close()
+
+def get_uploaded_blob(rel_path):
+    """Retrieves file from PostgreSQL if missing from local disk (e.g. after Render restart)."""
+    if not rel_path:
+        return None
+    norm_path = rel_path.replace("\\", "/").strip().lstrip("/")
+    conn = get_db_connection()
+    if not conn:
+        return None
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT file_name, mime_type, file_data FROM uploaded_files WHERE file_path = %s;", (norm_path,))
+            row = cur.fetchone()
+            conn.close()
+            if row:
+                fname, mtype, b64_data = row
+                file_bytes = base64.b64decode(b64_data)
+                return {"file_name": fname, "mime_type": mtype, "bytes": file_bytes}
+    except Exception as e:
+        print("[Database] Error getting file blob from PostgreSQL:", e)
+        if conn:
+            conn.close()
+    return None
+
 def delete_upload_file(rel_path):
-    """Safely delete an uploaded file from disk if it resides within assets/uploads/"""
+    """Safely delete an uploaded file from disk and PostgreSQL blob table"""
     if not rel_path or not isinstance(rel_path, str):
         return
-    norm_path = rel_path.replace("\\", "/").strip()
-    if norm_path.startswith("assets/uploads/"):
-        abs_path = os.path.join(BASE_DIR, norm_path.replace("/", os.sep))
-        if os.path.exists(abs_path) and os.path.isfile(abs_path):
-            try:
-                os.remove(abs_path)
-                print(f"[Cleanup] Deleted file from disk: {rel_path}")
-            except Exception as e:
-                print(f"Error removing upload file {rel_path}:", e)
+    norm_path = rel_path.replace("\\", "/").strip().lstrip("/")
+    abs_path = os.path.join(BASE_DIR, norm_path.replace("/", os.sep))
+    if os.path.exists(abs_path) and os.path.isfile(abs_path):
+        try:
+            os.remove(abs_path)
+            print(f"[Cleanup] Deleted file from disk: {rel_path}")
+        except Exception as e:
+            print(f"Error removing upload file {rel_path}:", e)
+    # Also delete from PostgreSQL uploaded_files table
+    conn = get_db_connection()
+    if conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM uploaded_files WHERE file_path = %s;", (norm_path,))
+                conn.commit()
+            conn.close()
+        except Exception:
+            if conn:
+                conn.close()
+
+# =========================================================================
+# Dedicated Resume & Static Asset Serving (Zero-Flicker, Zero-Cache)
+# =========================================================================
+@app.route("/api/resume/view", methods=["GET"])
+def api_view_resume():
+    """Serves real-time active resume with zero browser cache and automatic Neon DB restoration."""
+    data = load_data()
+    resumes = data.get("resumes", [])
+    active = next((r for r in resumes if r.get("isActive")), (resumes[0] if resumes else None))
+    fpath = (active.get("filePath") if active else "assets/resume.pdf") or "assets/resume.pdf"
+    norm_path = fpath.replace("\\", "/").strip().lstrip("/")
+    abs_path = os.path.join(BASE_DIR, norm_path.replace("/", os.sep))
+
+    if not os.path.exists(abs_path):
+        blob = get_uploaded_blob(norm_path) or get_uploaded_blob("assets/resume.pdf")
+        if blob:
+            os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+            with open(abs_path, "wb") as f_out:
+                f_out.write(blob["bytes"])
+            primary = os.path.join(BASE_DIR, "assets", "resume.pdf")
+            if abs_path != primary:
+                with open(primary, "wb") as f_out:
+                    f_out.write(blob["bytes"])
+
+    if os.path.exists(abs_path):
+        resp = send_file(abs_path, mimetype="application/pdf")
+        resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+        resp.headers["Pragma"] = "no-cache"
+        resp.headers["Expires"] = "0"
+        return resp
+
+    drive_url = (active.get("driveUrl") if active else None) or data.get("resume", {}).get("driveUrl")
+    if drive_url:
+        return redirect(drive_url)
+    return "Resume file not found", 404
+
+@app.route("/api/resume/download", methods=["GET"])
+def api_download_resume():
+    """Direct resume download endpoint ensuring exact filename and no stale cache."""
+    data = load_data()
+    resumes = data.get("resumes", [])
+    active = next((r for r in resumes if r.get("isActive")), (resumes[0] if resumes else None))
+    fpath = (active.get("filePath") if active else "assets/resume.pdf") or "assets/resume.pdf"
+    norm_path = fpath.replace("\\", "/").strip().lstrip("/")
+    abs_path = os.path.join(BASE_DIR, norm_path.replace("/", os.sep))
+
+    if not os.path.exists(abs_path):
+        blob = get_uploaded_blob(norm_path) or get_uploaded_blob("assets/resume.pdf")
+        if blob:
+            os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+            with open(abs_path, "wb") as f_out:
+                f_out.write(blob["bytes"])
+
+    if os.path.exists(abs_path):
+        fname = (active.get("fileName") if active else "Subhankar_Giri_Resume.pdf")
+        if not fname.lower().endswith(".pdf"):
+            fname += ".pdf"
+        resp = send_file(abs_path, mimetype="application/pdf", as_attachment=True, download_name=fname)
+        resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+        resp.headers["Pragma"] = "no-cache"
+        resp.headers["Expires"] = "0"
+        return resp
+
+    drive_url = (active.get("driveUrl") if active else None) or data.get("resume", {}).get("driveUrl")
+    if drive_url:
+        return redirect(drive_url)
+    return "Resume file not found", 404
+
+@app.route("/assets/resume.pdf", methods=["GET"])
+def serve_assets_resume():
+    return api_view_resume()
+
+@app.route("/assets/uploads/<path:rel_path>", methods=["GET"])
+def serve_uploaded_asset(rel_path):
+    full_rel = f"assets/uploads/{rel_path}"
+    norm_path = full_rel.replace("\\", "/").strip().lstrip("/")
+    abs_path = os.path.join(BASE_DIR, norm_path.replace("/", os.sep))
+
+    if not os.path.exists(abs_path):
+        blob = get_uploaded_blob(norm_path)
+        if blob:
+            os.makedirs(os.path.dirname(abs_path), exist_ok=True)
+            with open(abs_path, "wb") as f_out:
+                f_out.write(blob["bytes"])
+
+    if os.path.exists(abs_path):
+        mtype, _ = mimetypes.guess_type(abs_path)
+        resp = send_file(abs_path, mimetype=mtype or "application/octet-stream")
+        resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+        resp.headers["Pragma"] = "no-cache"
+        resp.headers["Expires"] = "0"
+        return resp
+    return "File not found", 404
 
 # =========================================================================
 # Static Site Routes & Diagnostic Endpoints
@@ -839,8 +1017,17 @@ def add_or_update_project():
             unique_name = f"{proj_id}_{int(time.time())}_{idx}_{fname}"
             fpath = os.path.join(UPLOAD_PROJECTS, unique_name)
             f.save(fpath)
+            slide_rel = f"assets/uploads/projects/{unique_name}"
+            try:
+                with open(fpath, "rb") as sf:
+                    s_bytes = sf.read()
+                ext = fname.rsplit(".", 1)[-1].lower() if "." in fname else "webp"
+                mtype = mimetypes.guess_type(fname)[0] or f"image/{ext}"
+                save_uploaded_blob(slide_rel, s_bytes, fname, mtype)
+            except Exception as _e:
+                pass
             new_slides.append({
-                "webp": f"assets/uploads/projects/{unique_name}",
+                "webp": slide_rel,
                 "alt": f"{title} Screenshot"
             })
 
@@ -969,6 +1156,8 @@ def add_certificate():
         cert_file_path = f"assets/uploads/certificates/{unique_name}"
         cert_file_name = safe_fname
         file_type = ext
+        with open(fpath, "rb") as f_in:
+            save_uploaded_blob(cert_file_path, f_in.read(), cert_file_name, "application/pdf" if ext == "pdf" else f"image/{ext}")
 
     existing_idx = next((i for i, c in enumerate(data.get("certificates", [])) if c.get("id") == cert_id), -1)
 
@@ -1027,9 +1216,6 @@ def delete_certificate(cert_id):
     data["certificates"] = [c for c in data.get("certificates", []) if c.get("id") != cert_id]
     save_data(data)
     return jsonify({"success": True, "message": "Certificate deleted successfully"})
-    data["certificates"] = [c for c in data.get("certificates", []) if c.get("id") != cert_id]
-    save_data(data)
-    return jsonify({"success": True, "message": "Certificate and its badge image deleted"})
 
 # =========================================================================
 # Resume Management
@@ -1072,6 +1258,7 @@ def manage_resumes():
     file_path = None
     file_size_str = None
     file_name = None
+    file_bytes = None
 
     if file and file.filename:
         safe_filename = secure_filename(file.filename) or "resume.pdf"
@@ -1083,6 +1270,12 @@ def manage_resumes():
         file_name = safe_filename
         sz_bytes = os.path.getsize(abs_dest)
         file_size_str = f"{sz_bytes / 1024:.1f} KB" if sz_bytes < 1048576 else f"{sz_bytes / (1024*1024):.2f} MB"
+        try:
+            with open(abs_dest, "rb") as rf:
+                file_bytes = rf.read()
+            save_uploaded_blob(file_path, file_bytes, file_name, "application/pdf")
+        except Exception as _e:
+            pass
 
     if resume_id:
         # Edit existing resume
@@ -1092,13 +1285,8 @@ def manage_resumes():
         existing["title"] = title
         if file_path:
             old_path = existing.get("filePath")
-            if old_path and old_path.startswith("assets/uploads/resume/"):
-                old_abs = os.path.join(BASE_DIR, old_path.replace("/", os.sep))
-                if os.path.exists(old_abs):
-                    try:
-                        os.remove(old_abs)
-                    except Exception:
-                        pass
+            if old_path:
+                delete_upload_file(old_path)
             existing["filePath"] = file_path
             existing["fileName"] = file_name
             existing["fileSize"] = file_size_str
@@ -1109,11 +1297,29 @@ def manage_resumes():
                 r["isActive"] = (r.get("id") == resume_id)
             active_src = os.path.join(BASE_DIR, existing["filePath"].replace("/", os.sep))
             primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-            if os.path.exists(active_src) and active_src != primary_pdf:
-                shutil.copyfile(active_src, primary_pdf)
+            active_bytes = None
+            if os.path.exists(active_src):
+                try:
+                    with open(active_src, "rb") as rf:
+                        active_bytes = rf.read()
+                except Exception:
+                    pass
+            if not active_bytes:
+                blob = get_uploaded_blob(existing["filePath"])
+                if blob:
+                    active_bytes = blob["bytes"]
+                    os.makedirs(os.path.dirname(active_src), exist_ok=True)
+                    with open(active_src, "wb") as wf:
+                        wf.write(active_bytes)
+            if active_bytes:
+                with open(primary_pdf, "wb") as pf:
+                    pf.write(active_bytes)
+                save_uploaded_blob("assets/resume.pdf", active_bytes, existing.get("fileName", "resume.pdf"), "application/pdf")
+            now_ts = int(time.time())
             data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
             data.setdefault("resume", {})["hasUploadedPdf"] = True
             data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
+            data.setdefault("resume", {})["lastTimestamp"] = now_ts
         save_data(data)
         return jsonify({"success": True, "message": "Resume updated successfully", "resume": existing})
 
@@ -1140,9 +1346,13 @@ def manage_resumes():
         primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
         if os.path.exists(active_src):
             shutil.copyfile(active_src, primary_pdf)
+        if file_bytes:
+            save_uploaded_blob("assets/resume.pdf", file_bytes, file_name, "application/pdf")
+        now_ts = int(time.time())
         data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
         data.setdefault("resume", {})["hasUploadedPdf"] = True
         data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
+        data.setdefault("resume", {})["lastTimestamp"] = now_ts
 
     resumes.insert(0, new_resume)
     save_data(data)
@@ -1159,28 +1369,43 @@ def delete_resume_item(resume_id):
 
     was_active = target.get("isActive", False)
     fpath = target.get("filePath", "")
-    if fpath and fpath.startswith("assets/uploads/resume/"):
-        abs_p = os.path.join(BASE_DIR, fpath.replace("/", os.sep))
-        if os.path.exists(abs_p):
-            try:
-                os.remove(abs_p)
-            except Exception:
-                pass
+    if fpath:
+        delete_upload_file(fpath)
 
     resumes = [r for r in resumes if r.get("id") != resume_id]
     data["resumes"] = resumes
 
+    now_ts = int(time.time())
     if was_active and len(resumes) > 0:
         resumes[0]["isActive"] = True
         active_src = os.path.join(BASE_DIR, resumes[0]["filePath"].replace("/", os.sep))
         primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-        if os.path.exists(active_src) and active_src != primary_pdf:
-            shutil.copyfile(active_src, primary_pdf)
+        active_bytes = None
+        if os.path.exists(active_src):
+            try:
+                with open(active_src, "rb") as rf:
+                    active_bytes = rf.read()
+            except Exception:
+                pass
+        if not active_bytes:
+            blob = get_uploaded_blob(resumes[0]["filePath"])
+            if blob:
+                active_bytes = blob["bytes"]
+                os.makedirs(os.path.dirname(active_src), exist_ok=True)
+                with open(active_src, "wb") as wf:
+                    wf.write(active_bytes)
+        if active_bytes:
+            with open(primary_pdf, "wb") as pf:
+                pf.write(active_bytes)
+            save_uploaded_blob("assets/resume.pdf", active_bytes, resumes[0].get("fileName", "resume.pdf"), "application/pdf")
         data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
         data.setdefault("resume", {})["hasUploadedPdf"] = True
+        data.setdefault("resume", {})["lastTimestamp"] = now_ts
     elif len(resumes) == 0:
+        delete_upload_file("assets/resume.pdf")
         data.setdefault("resume", {})["filePath"] = ""
         data.setdefault("resume", {})["hasUploadedPdf"] = False
+        data.setdefault("resume", {})["lastTimestamp"] = now_ts
 
     save_data(data)
     return jsonify({"success": True, "message": "Resume deleted successfully"})
@@ -1200,11 +1425,30 @@ def activate_resume_item(resume_id):
     fpath = target.get("filePath", "")
     active_src = os.path.join(BASE_DIR, fpath.replace("/", os.sep))
     primary_pdf = os.path.join(BASE_DIR, "assets", "resume.pdf")
-    if os.path.exists(active_src) and active_src != primary_pdf:
-        shutil.copyfile(active_src, primary_pdf)
+    active_bytes = None
+    if os.path.exists(active_src):
+        try:
+            with open(active_src, "rb") as rf:
+                active_bytes = rf.read()
+        except Exception:
+            pass
+    if not active_bytes:
+        blob = get_uploaded_blob(fpath)
+        if blob:
+            active_bytes = blob["bytes"]
+            os.makedirs(os.path.dirname(active_src), exist_ok=True)
+            with open(active_src, "wb") as wf:
+                wf.write(active_bytes)
+    if active_bytes:
+        with open(primary_pdf, "wb") as pf:
+            pf.write(active_bytes)
+        save_uploaded_blob("assets/resume.pdf", active_bytes, target.get("fileName", "resume.pdf"), "application/pdf")
+
+    now_ts = int(time.time())
     data.setdefault("resume", {})["filePath"] = "assets/resume.pdf"
     data.setdefault("resume", {})["hasUploadedPdf"] = True
     data.setdefault("resume", {})["lastUpdated"] = time.strftime("%B %Y")
+    data.setdefault("resume", {})["lastTimestamp"] = now_ts
 
     save_data(data)
     return jsonify({"success": True, "message": "Resume activated successfully", "resume": target})
@@ -1426,9 +1670,17 @@ def add_or_update_education():
             f.save(abs_dest)
             sz_bytes = os.path.getsize(abs_dest)
             sz_str = f"{sz_bytes / 1024:.1f} KB" if sz_bytes < 1048576 else f"{sz_bytes / (1024*1024):.2f} MB"
+            doc_rel = f"assets/uploads/education/{unique_name}"
+            try:
+                with open(abs_dest, "rb") as edf:
+                    e_bytes = edf.read()
+                mime_type = "application/pdf" if ext == "pdf" else (mimetypes.guess_type(safe_name)[0] or "application/octet-stream")
+                save_uploaded_blob(doc_rel, e_bytes, safe_name, mime_type)
+            except Exception as _e:
+                pass
             new_docs.append({
                 "fileName": safe_name,
-                "filePath": f"assets/uploads/education/{unique_name}",
+                "filePath": doc_rel,
                 "fileSize": sz_str,
                 "fileType": ext
             })

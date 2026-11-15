@@ -4387,21 +4387,24 @@ async function initDynamicPortfolioSync(isForced = false) {
 
         if (!data) return;
 
-        // 1. Sync Resume Links
+        // 1. Sync Resume Links (Dynamic Cache Busting & Real-time Neon Sync)
         if (data.resume) {
             const resumeSec = document.getElementById('page-resume');
             if (resumeSec) {
                 const viewBtn = resumeSec.querySelector('.btn-primary.btn-resume');
                 const downloadBtn = resumeSec.querySelector('.btn-secondary.btn-resume');
-                const targetUrl = data.resume.filePath ? ('/' + data.resume.filePath) : (data.resume.driveUrl || '');
-                if (viewBtn && targetUrl) {
-                    viewBtn.href = targetUrl;
-                }
-                if (downloadBtn && targetUrl) {
-                    downloadBtn.href = targetUrl;
-                    if (data.resume.filePath) {
+                const ts = data.resume.lastTimestamp || Date.now();
+                if (data.resume.hasUploadedPdf || data.resume.filePath) {
+                    if (viewBtn) {
+                        viewBtn.href = `/api/resume/view?t=${ts}`;
+                    }
+                    if (downloadBtn) {
+                        downloadBtn.href = `/api/resume/download?t=${ts}`;
                         downloadBtn.setAttribute('download', 'Subhankar_Giri_Resume.pdf');
                     }
+                } else if (data.resume.driveUrl) {
+                    if (viewBtn) viewBtn.href = data.resume.driveUrl;
+                    if (downloadBtn) downloadBtn.href = data.resume.driveUrl;
                 }
             }
         }
