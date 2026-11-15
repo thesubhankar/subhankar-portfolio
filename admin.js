@@ -426,26 +426,11 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     html: `<img src="/${escapeHtml(cert.image)}" alt="${escapeHtml(cert.title)}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`
                 };
             }
-            if (cert && cert.iconKey && OFFICIAL_CERT_ICONS[cert.iconKey]) {
-                return {
-                    color: cert.iconColor || OFFICIAL_CERT_ICONS[cert.iconKey].color,
-                    html: OFFICIAL_CERT_ICONS[cert.iconKey].svg
-                };
-            }
-            const id = (cert && cert.id) || `cert-${(idx !== undefined ? idx : 0) + 1}`;
-            if (OFFICIAL_CERT_ICONS[id]) {
-                return { color: OFFICIAL_CERT_ICONS[id].color, html: OFFICIAL_CERT_ICONS[id].svg };
-            }
-            const clean = ((cert && cert.title || '') + ' ' + (cert && cert.category || '')).toLowerCase();
-            if (clean.includes('python')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['python'].svg };
-            if (clean.includes('sql') || clean.includes('database')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['sql'].svg };
-            if (clean.includes('power bi') || clean.includes('tableau') || clean.includes('bi')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['powerbi'].svg };
-            if (clean.includes('excel')) return { color: 'green', html: OFFICIAL_CERT_ICONS['excel'].svg };
-            if (clean.includes('deep learning') || clean.includes('neural')) return { color: 'purple', html: OFFICIAL_CERT_ICONS['deeplearning'].svg };
-            if (clean.includes('encoder') || clean.includes('architecture')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['encoderdecoder'].svg };
-            if (clean.includes('generative ai') || clean.includes('genai')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['genai'].svg };
-            if (clean.includes('llm') || clean.includes('large language')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['llm'].svg };
-            return { color: 'cyan', html: OFFICIAL_CERT_ICONS['medal'].svg };
+            // Standardized official verified credential emblem across Portfolio & Admin (100% parity)
+            return {
+                color: (cert && (cert.color || cert.iconColor)) || 'cyan',
+                html: OFFICIAL_CERT_ICONS['medal'].svg
+            };
         }
 
         function getEducationIconSvg(degreeName, idx) {
@@ -1624,16 +1609,79 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             });
         }
 
+        // New Skill Percentage Controls
+        function onNewSkillPctSliderChange(val) {
+            const v = parseInt(val, 10) || 90;
+            const inp = document.getElementById('skillCategoryPercentage');
+            const disp = document.getElementById('newSkillPctDisplay');
+            if (inp) inp.value = v;
+            if (disp) disp.textContent = v + '%';
+            highlightNewSkillPreset(v);
+        }
+
+        function onNewSkillPctInputChange(val) {
+            let v = parseInt(val, 10);
+            if (isNaN(v)) return;
+            v = Math.max(1, Math.min(100, v));
+            const slider = document.getElementById('newSkillPctSlider');
+            const disp = document.getElementById('newSkillPctDisplay');
+            if (slider) slider.value = Math.max(50, Math.min(100, v));
+            if (disp) disp.textContent = v + '%';
+            highlightNewSkillPreset(v);
+        }
+
+        function setNewSkillPctPreset(val) {
+            const slider = document.getElementById('newSkillPctSlider');
+            const inp = document.getElementById('skillCategoryPercentage');
+            const disp = document.getElementById('newSkillPctDisplay');
+            if (slider) slider.value = val;
+            if (inp) inp.value = val;
+            if (disp) disp.textContent = val + '%';
+            highlightNewSkillPreset(val);
+        }
+
+        function highlightNewSkillPreset(val) {
+            document.querySelectorAll('#skillForm .pct-preset-chip').forEach(btn => {
+                if (parseInt(btn.textContent, 10) === val) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        window.onNewSkillPctSliderChange = onNewSkillPctSliderChange;
+        window.onNewSkillPctInputChange = onNewSkillPctInputChange;
+        window.setNewSkillPctPreset = setNewSkillPctPreset;
+
+        // Auto-detect existing category percentage when user types or selects category
+        const skillCatInputEl = document.getElementById('skillCategory');
+        if (skillCatInputEl) {
+            skillCatInputEl.addEventListener('input', () => {
+                const val = (skillCatInputEl.value || '').trim().toLowerCase();
+                if (!val || !PORTFOLIO_DATA || !Array.isArray(PORTFOLIO_DATA.skills)) return;
+                const matched = PORTFOLIO_DATA.skills.find(c => (c.category || '').toLowerCase() === val);
+                if (matched && matched.badge) {
+                    const num = parseInt(matched.badge, 10);
+                    if (!isNaN(num)) {
+                        setNewSkillPctPreset(num);
+                    }
+                }
+            });
+        }
+
         document.getElementById('skillForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const cat = document.getElementById('skillCategory').value.trim();
             const name = document.getElementById('skillName').value.trim();
+            const pctVal = (document.getElementById('skillCategoryPercentage')?.value || '').trim();
+            const badgeVal = pctVal ? (pctVal.endsWith('%') ? pctVal : `${pctVal}%`) : '90%';
 
             try {
                 const res = await fetch('/api/admin/skills', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ category: cat, name: name })
+                    body: JSON.stringify({ category: cat, name: name, badge: badgeVal })
                 });
                 const d = await res.json();
                 if (d.success) {

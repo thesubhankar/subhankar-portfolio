@@ -4272,26 +4272,11 @@ function getCertificateIconData(cert, idx) {
             html: `<img src="/${escapeHtml(cert.image)}" alt="${escapeHtml(cert.title)}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`
         };
     }
-    if (cert && cert.iconKey && OFFICIAL_CERT_ICONS[cert.iconKey]) {
-        return {
-            color: cert.iconColor || OFFICIAL_CERT_ICONS[cert.iconKey].color,
-            html: OFFICIAL_CERT_ICONS[cert.iconKey].svg
-        };
-    }
-    const id = (cert && cert.id) || `cert-${(idx !== undefined ? idx : 0) + 1}`;
-    if (OFFICIAL_CERT_ICONS[id]) {
-        return { color: OFFICIAL_CERT_ICONS[id].color, html: OFFICIAL_CERT_ICONS[id].svg };
-    }
-    const clean = ((cert && cert.title || '') + ' ' + (cert && cert.category || '')).toLowerCase();
-    if (clean.includes('python')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['python'].svg };
-    if (clean.includes('sql') || clean.includes('database')) return { color: 'blue', html: OFFICIAL_CERT_ICONS['sql'].svg };
-    if (clean.includes('power bi') || clean.includes('tableau') || clean.includes('bi')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['powerbi'].svg };
-    if (clean.includes('excel')) return { color: 'green', html: OFFICIAL_CERT_ICONS['excel'].svg };
-    if (clean.includes('deep learning') || clean.includes('neural')) return { color: 'purple', html: OFFICIAL_CERT_ICONS['deeplearning'].svg };
-    if (clean.includes('encoder') || clean.includes('architecture')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['encoderdecoder'].svg };
-    if (clean.includes('generative ai') || clean.includes('genai')) return { color: 'orange', html: OFFICIAL_CERT_ICONS['genai'].svg };
-    if (clean.includes('llm') || clean.includes('large language')) return { color: 'cyan', html: OFFICIAL_CERT_ICONS['llm'].svg };
-    return { color: 'cyan', html: OFFICIAL_CERT_ICONS['medal'].svg };
+    // Unified verified credential emblem across Portfolio & Admin (100% parity)
+    return {
+        color: (cert && (cert.color || cert.iconColor)) || 'cyan',
+        html: OFFICIAL_CERT_ICONS['medal'].svg
+    };
 }
 
 async function initDynamicPortfolioSync(isForced = false) {
@@ -4601,10 +4586,10 @@ async function initDynamicPortfolioSync(isForced = false) {
 
                             let iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
                             const degLower = (edu.degree || '').toLowerCase();
-                            if (degLower.includes('secondary') || degLower.includes('+2')) {
+                            if (degLower.includes('secondary') || degLower.includes('+2') || degLower.includes('science')) {
                                 iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`;
-                            } else if (degLower.includes('matric') || degLower.includes('10th')) {
-                                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`;
+                            } else if (degLower.includes('matric') || degLower.includes('10th') || degLower.includes('school')) {
+                                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
                             }
 
                             card.innerHTML = `

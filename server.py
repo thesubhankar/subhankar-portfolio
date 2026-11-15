@@ -903,7 +903,9 @@ def add_certificate():
         "category": category,
         "credentialUrl": credential_url,
         "description": description,
-        "image": cert_image
+        "image": cert_image,
+        "iconKey": "medal",
+        "color": "cyan"
     }
 
     if existing_idx >= 0:
@@ -1163,7 +1165,8 @@ def add_skill():
     if not any(s.get("name", "").lower() == skill_name.lower() for s in target_cat.get("skills", [])):
         # Insert at index 0 so new skill appears first while keeping all existing skills preserved
         target_cat.setdefault("skills", []).insert(0, skill_item)
-        save_data(data)
+        
+    save_data(data)
         
     return jsonify({
         "success": True,
