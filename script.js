@@ -4276,10 +4276,29 @@ OFFICIAL_CERT_ICONS['cert-8'] = OFFICIAL_CERT_ICONS['genai'];
 OFFICIAL_CERT_ICONS['cert-9'] = OFFICIAL_CERT_ICONS['llm'];
 
 function getCertificateIconData(cert, idx) {
-    if (cert && cert.image) {
+    const file = (cert && (cert.documentPath || cert.image)) || '';
+    const ext = file.split('.').pop().toLowerCase();
+    const isImg = ['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(ext);
+    const isPdf = ext === 'pdf';
+    const isDoc = ['doc', 'docx'].includes(ext);
+
+    if (file && isImg) {
+        const imgSrc = file.startsWith('/') ? file : '/' + file;
         return {
             color: 'cyan',
-            html: `<img src="/${escapeHtml(cert.image)}" alt="${escapeHtml(cert.title)}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`
+            html: `<img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(cert.title)}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`
+        };
+    }
+    if (file && isPdf) {
+        return {
+            color: 'pink',
+            html: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#FF2D95" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>`
+        };
+    }
+    if (file && isDoc) {
+        return {
+            color: 'blue',
+            html: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`
         };
     }
     // Unified verified credential emblem across Portfolio & Admin (100% parity)
@@ -4608,7 +4627,7 @@ async function initDynamicPortfolioSync(isForced = false) {
                             const badgeHtml = iconData.html;
                             const badgeColorClass = iconData.color;
 
-                            const credUrl = cert.credentialUrl || cert.link || '#';
+                            const credUrl = cert.credentialUrl || (cert.documentPath ? '/' + cert.documentPath.replace(/^\//, '') : '') || (cert.image ? '/' + cert.image.replace(/^\//, '') : '') || cert.link || '#';
                             certCard.innerHTML = `
                                 <div class="cert-top-header">
                                     <div class="cert-badge-circle ${badgeColorClass}">
@@ -4641,7 +4660,9 @@ async function initDynamicPortfolioSync(isForced = false) {
             const eduGrid = document.querySelector('.education-timeline-grid');
             if (eduGrid) {
                 const eduSig = data.education.map(e => {
-                    const targetView = (e.viewLink || (e.link && !e.link.includes('github.com') ? e.link : '') || '#').trim();
+                    const primaryDoc = (Array.isArray(e.documents) && e.documents.length > 0) ? e.documents[0] : null;
+                    const primaryPath = primaryDoc ? (primaryDoc.filePath.startsWith('/') ? primaryDoc.filePath : '/' + primaryDoc.filePath) : '';
+                    const targetView = (primaryPath || e.viewLink || (e.link && !e.link.includes('github.com') ? e.link : '') || '#').trim();
                     const docsSig = Array.isArray(e.documents) ? e.documents.map(d => (d.filePath || d.fileName || '').trim()).join(',') : '';
                     return `${(e.degree || '').trim()}:${(e.institution || '').trim()}:${(e.timeline || '').trim()}:${(e.grade || e.status || '').trim()}:${targetView}:${docsSig}`;
                 }).join(';');

@@ -447,10 +447,29 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         OFFICIAL_CERT_ICONS['cert-9'] = OFFICIAL_CERT_ICONS['llm'];
 
         function getCertificateIconData(cert, idx) {
-            if (cert && cert.image) {
+            const file = (cert && (cert.documentPath || cert.image)) || '';
+            const ext = file.split('.').pop().toLowerCase();
+            const isImg = ['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(ext);
+            const isPdf = ext === 'pdf';
+            const isDoc = ['doc', 'docx'].includes(ext);
+
+            if (file && isImg) {
+                const imgSrc = file.startsWith('/') ? file : '/' + file;
                 return {
                     color: 'cyan',
-                    html: `<img src="/${escapeHtml(cert.image)}" alt="${escapeHtml(cert.title)}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`
+                    html: `<img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(cert.title)}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;" />`
+                };
+            }
+            if (file && isPdf) {
+                return {
+                    color: 'pink',
+                    html: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#FF2D95" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>`
+                };
+            }
+            if (file && isDoc) {
+                return {
+                    color: 'blue',
+                    html: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`
                 };
             }
             // Standardized official verified credential emblem across Portfolio & Admin (100% parity)
@@ -889,7 +908,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
                     <div class="admin-card-footer" style="display: flex; justify-content: flex-end; align-items: center; gap: 0.45rem; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
                         <!-- 1. 3D View Button -->
-                        <a href="${c.credentialUrl || '#'}" target="_blank" class="btn-3d btn-3d-view" title="View Certificate Document">
+                        <a href="${c.credentialUrl || (c.documentPath ? '/' + c.documentPath.replace(/^\//, '') : (c.image ? '/' + c.image.replace(/^\//, '') : '#'))}" target="_blank" class="btn-3d btn-3d-view" title="View Certificate Document">
                             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
@@ -922,79 +941,110 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             });
         }
 
-        // Certificate badge image preview state & handling
+        // Certificate document/badge preview state & handling (PDF, Images, Word Docs)
         let certSelectedFile = null;
-        let certExistingImage = '';
-        const certImageInput = document.getElementById('certImage');
-        const certImagePreviewRow = document.getElementById('certImagePreviewRow');
+        let certExistingFile = '';
+        const certFileInput = document.getElementById('certFile') || document.getElementById('certImage');
+        const certFilePreviewRow = document.getElementById('certFilePreviewRow') || document.getElementById('certImagePreviewRow');
 
-        function renderCertImagePreview() {
-            if (!certImagePreviewRow) return;
-            certImagePreviewRow.innerHTML = '';
+        function renderCertFilePreview() {
+            if (!certFilePreviewRow) return;
+            certFilePreviewRow.innerHTML = '';
 
             if (certSelectedFile) {
-                const objUrl = URL.createObjectURL(certSelectedFile);
+                const fname = certSelectedFile.name || 'Certificate Document';
+                const ext = (fname.split('.').pop() || '').toLowerCase();
+                const isPdf = ext === 'pdf';
+                const isDoc = ['doc', 'docx'].includes(ext);
+                const isImg = ['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(ext);
+
+                let thumbHtml = '';
+                if (isImg) {
+                    const objUrl = URL.createObjectURL(certSelectedFile);
+                    thumbHtml = `<img src="${objUrl}" alt="${escapeHtml(fname)}" style="width:100%; height:100%; object-fit:cover;" />`;
+                } else if (isPdf) {
+                    thumbHtml = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(239,68,68,0.2); color:#EF4444;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></div>`;
+                } else {
+                    thumbHtml = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(0,242,254,0.15); color:#00F2FE;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>`;
+                }
+
+                const tagLabel = isPdf ? 'PDF Document' : (isDoc ? 'Word Document' : 'Badge Image');
                 const card = document.createElement('div');
-                card.className = 'admin-single-card';
+                card.className = 'admin-single-card' + (isPdf ? ' pdf-card' : '');
                 card.innerHTML = `
                     <div class="single-card-thumb">
-                        <img src="${objUrl}" alt="${certSelectedFile.name}" />
+                        ${thumbHtml}
                     </div>
                     <div class="single-card-info">
-                        <div class="single-card-title" title="${certSelectedFile.name}">${certSelectedFile.name}</div>
+                        <div class="single-card-title" title="${escapeHtml(fname)}">${escapeHtml(fname)}</div>
                         <div class="single-card-meta">
-                            <span class="preview-tag new-tag">Badge Image</span>
+                            <span class="preview-tag new-tag">${tagLabel}</span>
                             <span class="single-card-size">${formatFileSize(certSelectedFile.size)}</span>
                             <span class="single-card-status">✓ Ready to upload</span>
                         </div>
                     </div>
-                    <button type="button" class="btn-remove-single" title="Remove image" onclick="removeCertImage()">
+                    <button type="button" class="btn-remove-single" title="Remove file" onclick="removeCertFile()">
                         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         <span>Remove</span>
                     </button>
                 `;
-                certImagePreviewRow.appendChild(card);
-            } else if (certExistingImage) {
-                const imgUrl = '/' + certExistingImage;
-                const fname = certExistingImage.split('/').pop() || 'Certificate Badge';
+                certFilePreviewRow.appendChild(card);
+            } else if (certExistingFile) {
+                const fname = certExistingFile.split('/').pop() || 'Certificate File';
+                const ext = (fname.split('.').pop() || '').toLowerCase();
+                const isPdf = ext === 'pdf';
+                const isDoc = ['doc', 'docx'].includes(ext);
+                const isImg = ['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(ext);
+                const fileUrl = certExistingFile.startsWith('/') ? certExistingFile : '/' + certExistingFile;
+
+                let thumbHtml = '';
+                if (isImg) {
+                    thumbHtml = `<img src="${fileUrl}" alt="${escapeHtml(fname)}" style="width:100%; height:100%; object-fit:cover;" />`;
+                } else if (isPdf) {
+                    thumbHtml = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(239,68,68,0.2); color:#EF4444;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></div>`;
+                } else {
+                    thumbHtml = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(0,242,254,0.15); color:#00F2FE;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>`;
+                }
+
+                const tagLabel = isPdf ? 'Active PDF' : (isDoc ? 'Active Doc' : 'Active Image');
                 const card = document.createElement('div');
-                card.className = 'admin-single-card';
+                card.className = 'admin-single-card' + (isPdf ? ' pdf-card' : '');
                 card.innerHTML = `
                     <div class="single-card-thumb">
-                        <img src="${imgUrl}" alt="${fname}" />
+                        ${thumbHtml}
                     </div>
                     <div class="single-card-info">
-                        <div class="single-card-title" title="${fname}">${fname}</div>
+                        <div class="single-card-title" title="${escapeHtml(fname)}">${escapeHtml(fname)}</div>
                         <div class="single-card-meta">
-                            <span class="preview-tag existing-tag">Active Badge</span>
-                            <span class="single-card-size">Saved on Server</span>
-                            <span class="single-card-status">✓ Live Image</span>
+                            <span class="preview-tag existing-tag">${tagLabel}</span>
+                            <a href="${fileUrl}" target="_blank" style="font-size:0.7rem; color:#00F2FE; text-decoration:none;">↗ Open Live File</a>
                         </div>
                     </div>
-                    <button type="button" class="btn-remove-single" title="Remove badge image" onclick="removeCertImage()">
+                    <button type="button" class="btn-remove-single" title="Remove file" onclick="removeCertFile()">
                         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         <span>Remove</span>
                     </button>
                 `;
-                certImagePreviewRow.appendChild(card);
+                certFilePreviewRow.appendChild(card);
             }
         }
 
-        window.removeCertImage = function() {
+        window.removeCertFile = function() {
             certSelectedFile = null;
-            certExistingImage = '';
-            if (certImageInput) certImageInput.value = '';
-            renderCertImagePreview();
+            certExistingFile = '';
+            if (certFileInput) certFileInput.value = '';
+            renderCertFilePreview();
         };
+        window.removeCertImage = window.removeCertFile;
 
-        if (certImageInput) {
-            certImageInput.addEventListener('change', () => {
-                if (certImageInput.files && certImageInput.files[0]) {
-                    certSelectedFile = certImageInput.files[0];
+        if (certFileInput) {
+            certFileInput.addEventListener('change', () => {
+                if (certFileInput.files && certFileInput.files[0]) {
+                    certSelectedFile = certFileInput.files[0];
                 } else {
                     certSelectedFile = null;
                 }
-                renderCertImagePreview();
+                renderCertFilePreview();
             });
         }
 
@@ -1007,13 +1057,12 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             document.getElementById('certIssuer').value = cert.issuer || '';
             document.getElementById('certDate').value = cert.date || '';
             document.getElementById('certCategory').value = cert.category || '';
-            document.getElementById('certUrl').value = cert.credentialUrl || '';
             document.getElementById('certDesc').value = cert.description || '';
 
             certSelectedFile = null;
-            certExistingImage = cert.image || '';
-            if (certImageInput) certImageInput.value = '';
-            renderCertImagePreview();
+            certExistingFile = cert.documentPath || cert.image || cert.credentialUrl || '';
+            if (certFileInput) certFileInput.value = '';
+            renderCertFilePreview();
 
             const submitBtn = document.getElementById('certSubmitBtn');
             if (submitBtn) submitBtn.innerHTML = '<span>💾 Save Certificate Changes</span>';
@@ -1027,9 +1076,9 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             document.getElementById('certForm').reset();
             document.getElementById('certId').value = '';
             certSelectedFile = null;
-            certExistingImage = '';
-            if (certImageInput) certImageInput.value = '';
-            renderCertImagePreview();
+            certExistingFile = '';
+            if (certFileInput) certFileInput.value = '';
+            renderCertFilePreview();
             const submitBtn = document.getElementById('certSubmitBtn');
             if (submitBtn) submitBtn.innerHTML = '<span>📜 Publish Certificate</span>';
             const cancelBtn = document.getElementById('certCancelBtn');
@@ -1038,23 +1087,28 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         document.getElementById('certForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            if (!certSelectedFile && !certExistingFile) {
+                showNotify('Please upload a certificate document (PDF, Image, or Word doc).', false);
+                return;
+            }
+
             const form = new FormData();
             const certId = document.getElementById('certId').value;
             if (certId) form.append('id', certId);
 
-            form.append('title', document.getElementById('certTitle').value);
-            form.append('issuer', document.getElementById('certIssuer').value);
-            form.append('date', document.getElementById('certDate').value);
-            form.append('category', document.getElementById('certCategory').value);
-            form.append('credentialUrl', document.getElementById('certUrl').value);
-            form.append('description', document.getElementById('certDesc').value);
+            form.append('title', document.getElementById('certTitle').value.trim());
+            form.append('issuer', document.getElementById('certIssuer').value.trim());
+            form.append('date', document.getElementById('certDate').value.trim());
+            form.append('category', document.getElementById('certCategory').value.trim());
+            form.append('description', document.getElementById('certDesc').value.trim());
 
             if (certSelectedFile) {
+                form.append('file', certSelectedFile);
                 form.append('image', certSelectedFile);
-            } else if (certExistingImage) {
-                form.append('existingImage', certExistingImage);
-            } else {
-                form.append('existingImage', '');
+            } else if (certExistingFile) {
+                form.append('existingFile', certExistingFile);
+                form.append('existingImage', certExistingFile);
             }
 
             try {
@@ -2038,7 +2092,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
             document.getElementById('eduTimeline').value = edu.timeline || '';
             document.getElementById('eduStatus').value = edu.status || '';
             document.getElementById('eduGrade').value = edu.grade || '';
-            document.getElementById('eduViewLink').value = edu.viewLink || (edu.link && !edu.link.includes('github.com') ? edu.link : '') || '';
             document.getElementById('eduDetails').value = edu.details || '';
 
             // Populate existing documents
@@ -2110,7 +2163,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 formData.append('status', document.getElementById('eduStatus').value.trim());
                 formData.append('grade', document.getElementById('eduGrade').value.trim());
                 formData.append('color', (eduId && (PORTFOLIO_DATA.education || []).find(e => e.id === eduId)?.color) || 'cyan');
-                formData.append('viewLink', document.getElementById('eduViewLink').value.trim());
                 formData.append('details', document.getElementById('eduDetails').value.trim());
 
                 // Preserved existing documents
@@ -2774,6 +2826,12 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 }
             });
         }
+
+        window.editCert = editCert;
+        window.deleteCert = deleteCert;
+        window.cancelCertEdit = cancelCertEdit;
+        window.removeCertFile = removeCertFile;
+        window.removeCertImage = removeCertFile;
 
         window.editEducation = editEducation;
         window.deleteEducation = deleteEducation;

@@ -325,7 +325,7 @@
                                 </div>
                             </div>
 
-                            <div class="admin-grid-3col">
+                            <div class="admin-grid-2col">
                                 <div class="form-group">
                                     <label class="form-label">Issue Year / Date *</label>
                                     <input type="text" id="certDate" class="form-input" placeholder="e.g. 2024" required />
@@ -342,17 +342,17 @@
                                         <option value="Big Data Engineering"></option>
                                     </datalist>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Certificate Badge Image</label>
-                                    <input type="file" id="certImage" class="form-input form-file-input" accept="image/*" />
-                                    <div id="certImageNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Upload badge image (PNG, JPG, SVG):</div>
-                                    <div id="certImagePreviewRow" class="admin-single-preview-wrap"></div>
-                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Verification / Credential URL</label>
-                                <input type="url" id="certUrl" class="form-input" placeholder="https://coursera.org/verify/... or Google Drive URL" />
+                                <label class="form-label" for="certFile">
+                                    Upload Certificate Document / Badge (PDF, Images, Word Docs) *
+                                </label>
+                                <input type="file" id="certFile" class="form-input form-file-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.svg" />
+                                <div id="certFileNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
+                                    Upload certificate as PDF, Image (PNG, JPG, WEBP), or Word Doc (DOC, DOCX).
+                                </div>
+                                <div id="certFilePreviewRow" class="admin-single-preview-wrap" style="margin-top: 8px;"></div>
                             </div>
 
                             <div class="form-group">
@@ -550,24 +550,15 @@
                                 </div>
                             </div>
 
-                            <div class="admin-grid-2col">
-                                <div class="form-group">
-                                    <label class="form-label">View Document / Credential Link</label>
-                                    <input type="url" id="eduViewLink" class="form-input" placeholder="https://drive.google.com/file/... or website (Optional)" />
-                                    <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 4px; display: block;">
-                                        Optional external URL. If left empty, the uploaded document will open directly.
-                                    </span>
+                            <div class="form-group">
+                                <label class="form-label" for="eduDocuments">
+                                    Upload Academic Documents (Min 1, Max 5: PDF, Images, DOC) *
+                                </label>
+                                <input type="file" id="eduDocuments" class="form-input form-file-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp" />
+                                <div id="eduDocsNotice" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+                                    Select 1 to 5 academic documents (marksheets, degrees, certificates).
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="eduDocuments">
-                                        Upload Academic Documents (Min 1, Max 5: PDF, Images, DOC) *
-                                    </label>
-                                    <input type="file" id="eduDocuments" class="form-input form-file-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp" />
-                                    <div id="eduDocsNotice" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
-                                        Select 1 to 5 academic documents (marksheets, degrees, certificates).
-                                    </div>
-                                    <div id="eduDocsPreviewRow" class="admin-images-preview-row admin-preview-cards-container" style="margin-top: 8px;"></div>
-                                </div>
+                                <div id="eduDocsPreviewRow" class="admin-images-preview-row admin-preview-cards-container" style="margin-top: 8px;"></div>
                             </div>
 
                             <div class="form-group">

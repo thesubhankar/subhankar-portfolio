@@ -948,7 +948,6 @@ def add_certificate():
     issuer = request.form.get("issuer", "").strip()
     date = request.form.get("date", "").strip()
     category = request.form.get("category", "Data Science").strip()
-    credential_url = request.form.get("credentialUrl", "").strip()
     description = request.form.get("description", "").strip()
 
     if not title or not issuer:
@@ -956,23 +955,33 @@ def add_certificate():
 
     cert_id = request.form.get("id") or ("cert_" + str(int(time.time())))
     
-    # Handle image upload if provided
-    img_file = request.files.get("image")
-    cert_image = ""
-    if img_file and img_file.filename:
-        fname = secure_filename(img_file.filename)
-        unique_name = f"{cert_id}_{int(time.time())}_{fname}"
+    # Handle certificate file upload (PDF, Image, Word Doc)
+    uploaded_file = request.files.get("file") or request.files.get("image")
+    cert_file_path = ""
+    cert_file_name = ""
+    file_type = ""
+    if uploaded_file and uploaded_file.filename:
+        safe_fname = secure_filename(uploaded_file.filename) or f"certificate_{int(time.time())}.pdf"
+        ext = safe_fname.rsplit(".", 1)[-1].lower() if "." in safe_fname else "pdf"
+        unique_name = f"{cert_id}_{int(time.time())}_{safe_fname}"
         fpath = os.path.join(UPLOAD_CERTS, unique_name)
-        img_file.save(fpath)
-        cert_image = f"assets/uploads/certificates/{unique_name}"
+        uploaded_file.save(fpath)
+        cert_file_path = f"assets/uploads/certificates/{unique_name}"
+        cert_file_name = safe_fname
+        file_type = ext
 
     existing_idx = next((i for i, c in enumerate(data.get("certificates", [])) if c.get("id") == cert_id), -1)
 
-    existing_image_param = request.form.get("existingImage")
-    if not cert_image and existing_image_param is not None:
-        cert_image = existing_image_param.strip()
-    elif not cert_image and existing_idx >= 0 and data["certificates"][existing_idx].get("image"):
-        cert_image = data["certificates"][existing_idx]["image"]
+    existing_file_param = request.form.get("existingFile") or request.form.get("existingImage")
+    if not cert_file_path and existing_file_param is not None:
+        cert_file_path = existing_file_param.strip()
+    elif not cert_file_path and existing_idx >= 0:
+        cert_file_path = data["certificates"][existing_idx].get("documentPath") or data["certificates"][existing_idx].get("image") or ""
+
+    # View / credential link is automatically the uploaded certificate document
+    credential_url = ("/" + cert_file_path.lstrip("/")) if cert_file_path else ""
+    if not credential_url and existing_idx >= 0:
+        credential_url = data["certificates"][existing_idx].get("credentialUrl", "")
 
     new_cert = {
         "id": cert_id,
@@ -981,18 +990,21 @@ def add_certificate():
         "date": date or "2024",
         "category": category,
         "credentialUrl": credential_url,
+        "link": credential_url,
+        "documentPath": cert_file_path,
+        "fileName": cert_file_name or (cert_file_path.split("/")[-1] if cert_file_path else ""),
+        "fileType": file_type or (cert_file_path.rsplit(".", 1)[-1].lower() if "." in cert_file_path else ""),
         "description": description,
-        "image": cert_image,
+        "image": cert_file_path,
         "iconKey": "medal",
         "color": "cyan"
     }
 
     if existing_idx >= 0:
         old_cert = data["certificates"][existing_idx]
-        old_image = old_cert.get("image")
-        if old_image and cert_image and old_image != cert_image:
-            delete_upload_file(old_image)
-        # Move updated certificate to top (index 0) so it's shown first in certificates section!
+        old_file = old_cert.get("documentPath") or old_cert.get("image")
+        if old_file and cert_file_path and old_file != cert_file_path and "assets/uploads/certificates/" in old_file:
+            delete_upload_file(old_file)
         data["certificates"].pop(existing_idx)
         data["certificates"].insert(0, new_cert)
     else:
@@ -1006,8 +1018,15 @@ def delete_certificate(cert_id):
     data = load_data()
     target_cert = next((c for c in data.get("certificates", []) if c.get("id") == cert_id), None)
     if target_cert:
-        cert_img = target_cert.get("image")
-        delete_upload_file(cert_img)
+        old_f = target_cert.get("documentPath") or target_cert.get("image")
+        if old_f and "assets/uploads/certificates/" in old_f:
+            delete_upload_file(old_f)
+        if target_cert.get("credentialUrl") and "assets/uploads/certificates/" in target_cert.get("credentialUrl"):
+            delete_upload_file(target_cert.get("credentialUrl"))
+
+    data["certificates"] = [c for c in data.get("certificates", []) if c.get("id") != cert_id]
+    save_data(data)
+    return jsonify({"success": True, "message": "Certificate deleted successfully"})
     data["certificates"] = [c for c in data.get("certificates", []) if c.get("id") != cert_id]
     save_data(data)
     return jsonify({"success": True, "message": "Certificate and its badge image deleted"})
@@ -1382,9 +1401,6 @@ def add_or_update_education():
     status = req.get("status", "Completed").strip()
     grade = req.get("grade", "").strip()
     details = req.get("details", "").strip()
-    view_link = req.get("viewLink", req.get("link", "")).strip()
-    if "github.com/thesubhankar" in view_link and not req.get("viewLink"):
-        view_link = ""
     color = req.get("color", "cyan").strip()
 
     # 1. Collect preserved existing documents
@@ -1432,15 +1448,16 @@ def add_or_update_education():
             if old_p and old_p not in new_paths and "assets/uploads/education/" in old_p:
                 delete_upload_file(old_p)
 
-    # 4. Resolve downloadLink & viewLink with backwards compatibility
-    download_link = req.get("downloadLink", "").strip()
+    # 4. Resolve downloadLink & viewLink directly to the primary uploaded document
+    download_link = ""
+    view_link = ""
     if all_docs:
-        # Default downloadLink points to the first/primary uploaded document
-        download_link = "/" + all_docs[0]["filePath"].lstrip("/")
-        if not view_link:
-            view_link = "/" + all_docs[0]["filePath"].lstrip("/")
-    elif existing_idx >= 0 and not download_link:
+        primary_doc_path = "/" + all_docs[0]["filePath"].lstrip("/")
+        download_link = primary_doc_path
+        view_link = primary_doc_path
+    elif existing_idx >= 0:
         download_link = edu_list[existing_idx].get("downloadLink", "")
+        view_link = edu_list[existing_idx].get("viewLink", "") or download_link
 
     new_edu = {
         "id": edu_id,
