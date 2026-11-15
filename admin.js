@@ -2599,7 +2599,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         function renderResume() {
             const grid = document.getElementById('resumeCardsList');
             const badge = document.getElementById('resumeCountBadge');
-            const activeBanner = document.getElementById('activeResumeBannerContent');
             if (!grid) return;
             grid.innerHTML = '';
 
@@ -2619,51 +2618,6 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
             if (badge) {
                 badge.textContent = `${resumes.length} Resume${resumes.length === 1 ? '' : 's'} Available`;
-            }
-
-            // Render Active Live Resume Showcase Banner at top of Resume Manager
-            const activeResume = resumes.find(r => r.isActive) || resumes[0];
-            if (activeBanner && activeResume) {
-                const ts = Date.now();
-                activeBanner.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;">
-                        <div style="display: flex; align-items: center; gap: 1rem; min-width: 260px;">
-                            <div class="method-icon-box method-icon-3d method-icon-emerald" style="width: 52px; height: 52px; min-width: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 style="font-size: 1.1rem; font-weight: 700; color: #FFFFFF; margin: 0 0 4px 0; font-family: var(--font-sans);">${escapeHtml(activeResume.title || 'Official Resume')}</h4>
-                                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                                    <span style="font-family: var(--font-mono); font-size: 0.78rem; color: #10B981; font-weight: 600;">● ${escapeHtml(activeResume.fileName || 'resume.pdf')}</span>
-                                    <span style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">${escapeHtml(activeResume.fileSize || '')}</span>
-                                    <span style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted);">Updated: ${escapeHtml(activeResume.uploadedAt || 'Recently')}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                            <a href="/api/resume/view?t=${ts}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="background: linear-gradient(135deg, #00F2FE 0%, #0072FF 100%); color: #000; font-weight: 700; border: none; padding: 0.55rem 1.25rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; box-shadow: 0 4px 14px rgba(0, 242, 254, 0.4);">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                <span>👁️ View Live Resume</span>
-                            </a>
-                            <a href="/api/resume/download?t=${ts}" download="Subhankar_Giri_Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="border: 1.5px solid #10B981; color: #10B981; font-weight: 700; padding: 0.55rem 1.25rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                    <polyline points="7 10 12 15 17 10"></polyline>
-                                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                                </svg>
-                                <span>⬇️ Download Live Resume</span>
-                            </a>
-                        </div>
-                    </div>
-                `;
             }
 
             resumes.forEach(r => {
