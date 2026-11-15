@@ -958,10 +958,14 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const isDoc = ['doc', 'docx'].includes(ext);
                 const isImg = ['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(ext);
 
+                let previewUrl = '';
+                if (isImg || isPdf) {
+                    try { previewUrl = URL.createObjectURL(certSelectedFile); } catch (e) {}
+                }
+
                 let thumbHtml = '';
-                if (isImg) {
-                    const objUrl = URL.createObjectURL(certSelectedFile);
-                    thumbHtml = `<img src="${objUrl}" alt="${escapeHtml(fname)}" style="width:100%; height:100%; object-fit:cover;" />`;
+                if (isImg && previewUrl) {
+                    thumbHtml = `<img src="${previewUrl}" alt="${escapeHtml(fname)}" style="width:100%; height:100%; object-fit:cover;" />`;
                 } else if (isPdf) {
                     thumbHtml = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(239,68,68,0.2); color:#EF4444;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></div>`;
                 } else {
@@ -969,10 +973,12 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 }
 
                 const tagLabel = isPdf ? 'PDF Document' : (isDoc ? 'Word Document' : 'Badge Image');
+                const viewBtnHtml = previewUrl ? `<a href="${previewUrl}" target="_blank" rel="noopener noreferrer" style="font-size:0.72rem; color:#00F2FE; text-decoration:none; display:inline-flex; align-items:center; gap:3px;">👁️ View ${isPdf ? 'PDF' : 'File'}</a>` : '';
+
                 const card = document.createElement('div');
                 card.className = 'admin-single-card' + (isPdf ? ' pdf-card' : '');
                 card.innerHTML = `
-                    <div class="single-card-thumb">
+                    <div class="single-card-thumb ${isPdf ? 'pdf-thumb' : ''}">
                         ${thumbHtml}
                     </div>
                     <div class="single-card-info">
@@ -981,6 +987,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                             <span class="preview-tag new-tag">${tagLabel}</span>
                             <span class="single-card-size">${formatFileSize(certSelectedFile.size)}</span>
                             <span class="single-card-status">✓ Ready to upload</span>
+                            ${viewBtnHtml}
                         </div>
                     </div>
                     <button type="button" class="btn-remove-single" title="Remove file" onclick="removeCertFile()">
@@ -1010,14 +1017,14 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const card = document.createElement('div');
                 card.className = 'admin-single-card' + (isPdf ? ' pdf-card' : '');
                 card.innerHTML = `
-                    <div class="single-card-thumb">
+                    <div class="single-card-thumb ${isPdf ? 'pdf-thumb' : ''}">
                         ${thumbHtml}
                     </div>
                     <div class="single-card-info">
                         <div class="single-card-title" title="${escapeHtml(fname)}">${escapeHtml(fname)}</div>
                         <div class="single-card-meta">
                             <span class="preview-tag existing-tag">${tagLabel}</span>
-                            <a href="${fileUrl}" target="_blank" style="font-size:0.7rem; color:#00F2FE; text-decoration:none;">↗ Open Live File</a>
+                            <a href="${fileUrl}" target="_blank" rel="noopener noreferrer" style="font-size:0.72rem; color:#00F2FE; text-decoration:none; display:inline-flex; align-items:center; gap:3px;">👁️ View ${isPdf ? 'PDF' : 'File'}</a>
                         </div>
                     </div>
                     <button type="button" class="btn-remove-single" title="Remove file" onclick="removeCertFile()">
@@ -1026,6 +1033,24 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     </button>
                 `;
                 certFilePreviewRow.appendChild(card);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'admin-preview-placeholder';
+                placeholder.innerHTML = `
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="placeholder-info">
+                        <span class="placeholder-title">No document uploaded yet</span>
+                        <span class="placeholder-desc">Uploaded PDF or certificate badge preview will show here</span>
+                    </div>
+                `;
+                certFilePreviewRow.appendChild(placeholder);
             }
         }
 
@@ -1046,6 +1071,8 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 }
                 renderCertFilePreview();
             });
+            // Initial call to show empty placeholder
+            renderCertFilePreview();
         }
 
         function editCert(id) {
@@ -1883,6 +1910,25 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 }
             }
 
+            if (count === 0) {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'admin-preview-placeholder';
+                placeholder.innerHTML = `
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="placeholder-info">
+                        <span class="placeholder-title">No academic documents uploaded yet</span>
+                        <span class="placeholder-desc">Upload 1 to 5 documents (marksheets, degrees, PDFs). Previews will appear here.</span>
+                    </div>
+                `;
+                previewRow.appendChild(placeholder);
+                return;
+            }
+
             eduDocItems.forEach((item, idx) => {
                 const isPrimary = (idx === 0);
                 const isNew = (item.type === 'new');
@@ -1893,10 +1939,14 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 const ext = (fileName.split('.').pop() || '').toLowerCase();
                 const sizeInfo = item.size ? formatFileSize(item.size) : '';
 
+                let fileHref = '';
+                try {
+                    fileHref = isNew ? (item.objectUrl || (item.file ? URL.createObjectURL(item.file) : '')) : ('/' + item.path.replace(/^\//, ''));
+                } catch (e) {}
+
                 let thumbHtml = '';
                 if (['png', 'jpg', 'jpeg', 'webp'].includes(ext)) {
-                    const imgSrc = isNew ? (item.objectUrl || URL.createObjectURL(item.file)) : ('/' + item.path.replace(/^\//, ''));
-                    thumbHtml = `<img src="${imgSrc}" alt="${fileName}" style="width:100%; height:100%; object-fit:cover;" />`;
+                    thumbHtml = `<img src="${fileHref}" alt="${fileName}" style="width:100%; height:100%; object-fit:cover;" />`;
                 } else if (ext === 'pdf') {
                     thumbHtml = `
                         <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(239, 68, 68, 0.2); color:#EF4444;">
@@ -1913,6 +1963,10 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                     ? '<span class="preview-tag primary-tag">★ Primary</span>'
                     : (isNew ? '<span class="preview-tag new-tag">New</span>' : '<span class="preview-tag existing-tag">Saved</span>');
 
+                const viewLinkHtml = fileHref
+                    ? `<a href="${fileHref}" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; color:#00F2FE; text-decoration:none; display:inline-flex; align-items:center; gap:2px; margin-left:4px;">👁️ View</a>`
+                    : '';
+
                 card.innerHTML = `
                     <div class="preview-card-thumb">
                         ${thumbHtml}
@@ -1923,6 +1977,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                         <div class="preview-card-meta">
                             ${tagHtml}
                             ${sizeInfo ? `<span>${sizeInfo}</span>` : ''}
+                            ${viewLinkHtml}
                         </div>
                     </div>
                     <div class="preview-card-controls">
@@ -1976,6 +2031,8 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 eduDocsInput.value = '';
                 renderEduDocsPreviews();
             });
+            // Initial call to show empty placeholder
+            renderEduDocsPreviews();
         }
 
         function renderEducation() {
@@ -2786,6 +2843,27 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                 switchPage(hash);
             }
             checkAuth();
+
+            // Interactive Drag & Drop visual states for compact upload dropzones
+            document.querySelectorAll('.admin-compact-dropzone').forEach(dropzone => {
+                const hiddenInput = dropzone.querySelector('input[type="file"]');
+                ['dragenter', 'dragover'].forEach(evt => {
+                    dropzone.addEventListener(evt, (e) => {
+                        e.preventDefault();
+                        dropzone.classList.add('dragover');
+                    });
+                });
+                ['dragleave', 'drop'].forEach(evt => {
+                    dropzone.addEventListener(evt, (e) => {
+                        e.preventDefault();
+                        dropzone.classList.remove('dragover');
+                    });
+                });
+                if (hiddenInput) {
+                    hiddenInput.addEventListener('focus', () => dropzone.classList.add('dragover'));
+                    hiddenInput.addEventListener('blur', () => dropzone.classList.remove('dragover'));
+                }
+            });
         
         // Handle More Certificates Drive Folder Form Submission
         const moreCertsForm = document.getElementById('moreCertsFolderForm');

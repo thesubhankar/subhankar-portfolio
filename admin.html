@@ -345,14 +345,33 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="certFile">
-                                    Upload Certificate Document / Badge (PDF, Images, Word Docs) *
+                                <label class="form-label">
+                                    Certificate Document / Badge (PDF, Images, Word Docs) *
                                 </label>
-                                <input type="file" id="certFile" class="form-input form-file-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.svg" />
-                                <div id="certFileNotice" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
-                                    Upload certificate as PDF, Image (PNG, JPG, WEBP), or Word Doc (DOC, DOCX).
+                                <div class="admin-upload-split">
+                                    <div class="admin-upload-box">
+                                        <label for="certFile" class="admin-compact-dropzone">
+                                            <input type="file" id="certFile" class="admin-dropzone-hidden-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.svg" />
+                                            <div class="dropzone-icon">
+                                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                                </svg>
+                                            </div>
+                                            <div class="dropzone-text">
+                                                <span class="dropzone-title">Click to Upload Document</span>
+                                                <span class="dropzone-subtitle">PDF, Images (PNG, JPG), Word Docs</span>
+                                            </div>
+                                        </label>
+                                        <div id="certFileNotice" class="admin-upload-notice">
+                                            Upload certificate as PDF, Image, or Word Document.
+                                        </div>
+                                    </div>
+                                    <div class="admin-upload-preview-area">
+                                        <div id="certFilePreviewRow" class="admin-single-preview-wrap"></div>
+                                    </div>
                                 </div>
-                                <div id="certFilePreviewRow" class="admin-single-preview-wrap" style="margin-top: 8px;"></div>
                             </div>
 
                             <div class="form-group">
@@ -551,14 +570,34 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="eduDocuments">
-                                    Upload Academic Documents (Min 1, Max 5: PDF, Images, DOC) *
+                                <label class="form-label">
+                                    Academic Documents (Min 1, Max 5: PDF, Images, DOC) *
                                 </label>
-                                <input type="file" id="eduDocuments" class="form-input form-file-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp" />
-                                <div id="eduDocsNotice" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
-                                    Select 1 to 5 academic documents (marksheets, degrees, certificates).
+                                <div class="admin-upload-split">
+                                    <div class="admin-upload-box">
+                                        <label for="eduDocuments" class="admin-compact-dropzone">
+                                            <input type="file" id="eduDocuments" class="admin-dropzone-hidden-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp" />
+                                            <div class="dropzone-icon">
+                                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                                                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                                                </svg>
+                                            </div>
+                                            <div class="dropzone-text">
+                                                <span class="dropzone-title">Click to Upload Documents</span>
+                                                <span class="dropzone-subtitle">Select 1 to 5 files (PDF, Images, DOC)</span>
+                                            </div>
+                                        </label>
+                                        <div id="eduDocsNotice" class="admin-upload-notice">
+                                            Select 1 to 5 academic documents (marksheets, degrees, certificates).
+                                        </div>
+                                    </div>
+                                    <div class="admin-upload-preview-area">
+                                        <div id="eduDocsPreviewRow" class="admin-images-preview-row admin-preview-cards-container"></div>
+                                    </div>
                                 </div>
-                                <div id="eduDocsPreviewRow" class="admin-images-preview-row admin-preview-cards-container" style="margin-top: 8px;"></div>
                             </div>
 
                             <div class="form-group">
