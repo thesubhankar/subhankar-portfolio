@@ -232,6 +232,13 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
             window.location.hash = pageId;
 
+            // Scroll to top of content on section switch
+            try {
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                const mainEl = document.getElementById('notebookMain');
+                if (mainEl) mainEl.scrollTop = 0;
+            } catch(e) {}
+
             // 5. Close mobile sidebar and overlay if open
             const sidebar = document.getElementById('notebookSidebar');
             const overlay = document.getElementById('mobileDrawerOverlay');

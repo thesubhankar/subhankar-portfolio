@@ -38,7 +38,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=18">
-    <link rel="stylesheet" href="admin.css?v=38">
+    <link rel="stylesheet" href="admin.css?v=39">
 </head>
 
 <body data-theme="dark">
@@ -65,13 +65,13 @@
                     </div>
                     <div class="mobile-brand-text">
                         <span class="mobile-name">Admin Studio</span>
-                        <span class="mobile-title">Subhankar Giri • Control Center</span>
+                        <span class="mobile-title">Control Center</span>
                     </div>
                 </div>
             </div>
             <div class="mobile-actions">
-                <a href="/" target="_self" class="btn-liquid-icon btn-liquid-portfolio" title="Return to Live Portfolio" aria-label="Return to Live Portfolio" style="width: 34px; height: 34px; min-width: 34px; min-height: 34px;">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="/" target="_self" class="btn-liquid-icon btn-liquid-portfolio" title="Return to Live Portfolio" aria-label="Return to Live Portfolio" style="width: 32px; height: 32px; min-width: 32px; min-height: 32px;">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-5h-4v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
                     </svg>
                 </a>
@@ -80,14 +80,44 @@
                     <span class="toggle-icon moon-icon">🌙</span>
                     <span class="toggle-slider"></span>
                 </button>
-                <button type="button" onclick="logoutAdmin()" class="btn-liquid-icon btn-liquid-lock" title="Lock Admin & Logout" aria-label="Lock Admin & Logout" style="width: 34px; height: 34px; min-width: 34px; min-height: 34px;">
-                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <button type="button" onclick="logoutAdmin()" class="btn-liquid-icon btn-liquid-lock" title="Lock Admin & Logout" aria-label="Lock Admin & Logout" style="width: 32px; height: 32px; min-width: 32px; min-height: 32px;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                     </svg>
                 </button>
             </div>
         </div>
+
+        <!-- Mobile Horizontal Quick Section Navigation Pills (<1024px) -->
+        <nav class="admin-mobile-section-nav" id="adminMobileSectionNav" aria-label="Admin Sections Quick Navigation">
+            <div class="admin-mobile-nav-scroll">
+                <a href="#projects" class="admin-mobile-nav-pill active" data-page="projects" onclick="switchPage('projects', event)">
+                    <span class="pill-num">[1]</span>
+                    <span class="pill-text">Projects</span>
+                </a>
+                <a href="#certificates" class="admin-mobile-nav-pill" data-page="certificates" onclick="switchPage('certificates', event)">
+                    <span class="pill-num">[2]</span>
+                    <span class="pill-text">Certificates</span>
+                </a>
+                <a href="#skills" class="admin-mobile-nav-pill" data-page="skills" onclick="switchPage('skills', event)">
+                    <span class="pill-num">[3]</span>
+                    <span class="pill-text">Skills</span>
+                </a>
+                <a href="#education" class="admin-mobile-nav-pill" data-page="education" onclick="switchPage('education', event)">
+                    <span class="pill-num">[4]</span>
+                    <span class="pill-text">Education</span>
+                </a>
+                <a href="#experience" class="admin-mobile-nav-pill" data-page="experience" onclick="switchPage('experience', event)">
+                    <span class="pill-num">[5]</span>
+                    <span class="pill-text">Experience</span>
+                </a>
+                <a href="#resume" class="admin-mobile-nav-pill" data-page="resume" onclick="switchPage('resume', event)">
+                    <span class="pill-num">[6]</span>
+                    <span class="pill-text">Resume</span>
+                </a>
+            </div>
+        </nav>
     </header>
 
     <!-- Main App Container (Desktop Split Layout / Mobile Left Drawer) -->
@@ -195,36 +225,6 @@
 
         <!-- Main Content Area -->
         <main class="notebook-main" id="notebookMain">
-
-            <!-- Mobile Horizontal Quick Section Navigation Pills (<1024px) -->
-            <nav class="admin-mobile-section-nav" id="adminMobileSectionNav" aria-label="Admin Sections Quick Navigation">
-                <div class="admin-mobile-nav-scroll">
-                    <a href="#projects" class="admin-mobile-nav-pill active" data-page="projects" onclick="switchPage('projects', event)">
-                        <span class="pill-num">[1]</span>
-                        <span class="pill-text">Projects</span>
-                    </a>
-                    <a href="#certificates" class="admin-mobile-nav-pill" data-page="certificates" onclick="switchPage('certificates', event)">
-                        <span class="pill-num">[2]</span>
-                        <span class="pill-text">Certificates</span>
-                    </a>
-                    <a href="#skills" class="admin-mobile-nav-pill" data-page="skills" onclick="switchPage('skills', event)">
-                        <span class="pill-num">[3]</span>
-                        <span class="pill-text">Skills</span>
-                    </a>
-                    <a href="#education" class="admin-mobile-nav-pill" data-page="education" onclick="switchPage('education', event)">
-                        <span class="pill-num">[4]</span>
-                        <span class="pill-text">Education</span>
-                    </a>
-                    <a href="#experience" class="admin-mobile-nav-pill" data-page="experience" onclick="switchPage('experience', event)">
-                        <span class="pill-num">[5]</span>
-                        <span class="pill-text">Experience</span>
-                    </a>
-                    <a href="#resume" class="admin-mobile-nav-pill" data-page="resume" onclick="switchPage('resume', event)">
-                        <span class="pill-num">[6]</span>
-                        <span class="pill-text">Resume</span>
-                    </a>
-                </div>
-            </nav>
 
             <!-- Top Kernel Action Toolbar -->
             <div class="kernel-topbar" role="toolbar" aria-label="Admin Action Controls">
@@ -462,7 +462,7 @@
                             <div class="form-group">
                                 <label class="form-label">Google Drive Folder URL (Used for "View All Verified Certificates & Folders" button)</label>
                                 <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                                    <input type="url" id="moreCertsFolderUrl" class="form-input" style="flex: 1; min-width: 260px;" placeholder="https://drive.google.com/drive/folders/..." />
+                                    <input type="url" id="moreCertsFolderUrl" class="form-input" style="flex: 1 1 200px; min-width: 0;" placeholder="https://drive.google.com/drive/folders/..." />
                                     <a id="moreCertsDrivePreviewLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="display: none; padding: 0.45rem 0.8rem; font-size: 0.78rem; white-space: nowrap;">
                                         <span>Open Folder ↗</span>
                                     </a>
@@ -823,7 +823,7 @@
                         <span id="resumeCountBadge" class="tech-chip" style="color: #10B981; border-color: rgba(16, 185, 129, 0.4);">Loading...</span>
                     </div>
                     <div class="cell-output-card">
-                        <div id="resumeCardsList" class="admin-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem;">
+                        <div id="resumeCardsList" class="admin-cards-grid">
                             <!-- Rendered dynamically: Each uploaded resume has View, Edit, Delete -->
                         </div>
                     </div>
@@ -983,6 +983,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-    <script src="admin.js?v=38"></script>
+    <script src="admin.js?v=39"></script>
 </body>
 </html>

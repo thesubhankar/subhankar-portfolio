@@ -2619,64 +2619,102 @@
 }
 
 /* ==========================================================================
-   ADMIN MOBILE RESPONSIVE NAVIGATION & DRAWER SYSTEM (<1024px)
+   ADMIN MOBILE RESPONSIVE MASTER SYSTEM (<1024px, <768px, <480px)
+   Comprehensive Phone Optimization for ALL 6 Sections:
+   [1] Projects, [2] Certificates, [3] Skills, [4] Education, [5] Experience, [6] Resume
    ========================================================================== */
 
-/* Mobile Top Header Styling */
+/* 1. Mobile Fixed Top Header (Header Row + Horizontal Quick Navigation Pills) */
 .admin-mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     background: var(--bg-sidebar);
-    border-bottom: var(--border-card);
-    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     z-index: 950;
+    padding-top: var(--safe-top);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+}
+
+.admin-mobile-header .mobile-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.85rem;
+    height: 52px;
+    box-sizing: border-box;
+}
+
+.admin-mobile-header .mobile-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.admin-mobile-header .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.admin-mobile-header .mobile-brand-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.2;
 }
 
 .admin-mobile-header .mobile-brand-text .mobile-name {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 700;
     color: var(--text-main);
-    display: block;
-    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .admin-mobile-header .mobile-brand-text .mobile-title {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--text-muted);
     font-family: var(--font-mono);
-    display: block;
-    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .admin-mobile-header .mobile-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
-/* Horizontal Quick Section Navigation Bar (Sticky below header) */
+/* 2. Horizontal Quick Section Navigation Bar (Integrated into Header) */
 .admin-mobile-section-nav {
-    display: none;
-    margin: -0.65rem -0.5rem 1.25rem -0.5rem;
-    padding: 0.5rem 0.65rem 0.65rem 0.65rem;
-    position: sticky;
-    top: 56px;
-    z-index: 880;
-    background: var(--bg-main);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 0.65rem 0.5rem 0.65rem;
+    background: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .admin-mobile-nav-scroll {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-bottom: 2px;
+    padding: 3px 0;
 }
 
 .admin-mobile-nav-scroll::-webkit-scrollbar {
@@ -2686,18 +2724,18 @@
 .admin-mobile-nav-pill {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 7px 15px;
+    gap: 5px;
+    padding: 5px 12px;
     border-radius: 999px;
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     font-weight: 600;
     text-decoration: none;
     color: var(--text-muted);
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     flex-shrink: 0;
     cursor: pointer;
     user-select: none;
@@ -2705,41 +2743,42 @@
 
 .admin-mobile-nav-pill .pill-num {
     color: #00F2FE;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    transition: color 0.2s ease;
 }
 
 .admin-mobile-nav-pill:hover {
     color: var(--text-main);
     border-color: rgba(0, 242, 254, 0.4);
-    transform: translateY(-1px);
 }
 
 .admin-mobile-nav-pill.active {
     color: #FFFFFF !important;
-    background: linear-gradient(135deg, rgba(0, 242, 254, 0.28) 0%, rgba(79, 172, 254, 0.42) 100%) !important;
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.3) 0%, rgba(79, 172, 254, 0.45) 100%) !important;
     border-color: #00F2FE !important;
-    box-shadow: 0 3px 14px rgba(0, 242, 254, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
+    box-shadow: 0 2px 10px rgba(0, 242, 254, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
 }
 
 .admin-mobile-nav-pill.active .pill-num {
     color: #FFFFFF !important;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
 }
 
-/* Light Mode Overrides for Mobile Pills */
+/* Light Theme Overrides */
+[data-theme="light"] .admin-mobile-header {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom-color: rgba(226, 232, 240, 0.9);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
 [data-theme="light"] .admin-mobile-section-nav {
-    background: rgba(248, 250, 252, 0.94);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    border-top-color: rgba(0, 0, 0, 0.05);
 }
 
 [data-theme="light"] .admin-mobile-nav-pill {
-    background: #FFFFFF;
+    background: #F8FAFC;
     border-color: #E2E8F0;
     color: #64748B;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="light"] .admin-mobile-nav-pill .pill-num {
@@ -2750,20 +2789,16 @@
     background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%) !important;
     border-color: #0284C7 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 3px 12px rgba(2, 132, 199, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.28) !important;
 }
 
 [data-theme="light"] .admin-mobile-nav-pill.active .pill-num {
     color: #E0F2FE !important;
 }
 
-/* Media Queries for Admin Studio Mobile Responsiveness */
+/* 3. Media Queries for Screens <= 1023px (Tablets & Landscape) */
 @media (max-width: 1023px) {
     .admin-mobile-header {
-        display: block !important;
-    }
-
-    .admin-mobile-section-nav {
         display: block !important;
     }
 
@@ -2793,82 +2828,270 @@
     .notebook-main {
         margin-left: 0 !important;
         width: 100% !important;
-        max-width: 100% !important;
-        padding-top: calc(3.8rem + var(--safe-top)) !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding-top: calc(98px + var(--safe-top)) !important;
         padding-left: clamp(10px, 3vw, 18px) !important;
         padding-right: clamp(10px, 3vw, 18px) !important;
+        padding-bottom: calc(2.5rem + var(--safe-bottom)) !important;
     }
 
-    /* Keep admin action toolbar clean on mobile */
-    .kernel-topbar {
-        margin-top: 0.25rem;
-        margin-bottom: 1.25rem;
+    .admin-grid-2col,
+    .admin-grid-3col {
+        grid-template-columns: 1fr !important;
+        gap: 0.9rem !important;
     }
 }
 
+/* 4. Media Queries for Screens <= 768px (Standard Phones & Phablets) */
 @media (max-width: 768px) {
     .admin-panel-card {
-        border-radius: 14px;
-        margin-bottom: 1.25rem;
+        border-radius: 14px !important;
+        margin-bottom: 1.15rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .admin-card-header {
-        padding: 0.95rem 1.15rem;
+        padding: 0.85rem 1rem !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .admin-card-title {
+        font-size: 0.98rem !important;
+        word-break: break-word !important;
     }
 
     .cell-output-card {
-        padding: 1rem 1.15rem;
+        padding: 0.95rem 1rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
-    .admin-cards-grid {
+    /* ALL CARD GRIDS IN ALL 6 SECTIONS */
+    .admin-cards-grid,
+    .admin-items-grid,
+    #projectsList,
+    #certsList,
+    #skillsCategoriesList,
+    #educationList,
+    #experienceList,
+    #resumeCardsList {
+        display: grid !important;
         grid-template-columns: 1fr !important;
-        gap: 1rem !important;
+        gap: 0.95rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
-    .admin-card-actions {
-        flex-wrap: wrap;
-        gap: 0.5rem;
+    .admin-item-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 1rem !important;
+        min-height: auto !important;
+        overflow: hidden !important;
     }
 
+    .admin-item-thumb {
+        height: 140px !important;
+        width: 100% !important;
+    }
+
+    /* Form Inputs on Phone */
+    .form-group {
+        margin-bottom: 0.8rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .form-input,
+    .form-textarea,
+    select.form-input {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        font-size: 16px !important; /* Prevents auto-zoom on mobile */
+    }
+
+    /* Upload Box & Previews in All Sections */
+    .admin-upload-split {
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    .admin-upload-box {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    .admin-compact-dropzone {
+        width: 100% !important;
+        padding: 12px 10px !important;
+        min-height: 85px !important;
+    }
+
+    .admin-upload-preview-area {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .admin-single-card {
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 10px !important;
+        gap: 8px !important;
+    }
+
+    /* Kernel Top Action Bar */
     .kernel-topbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.75rem;
-        padding: 0.75rem 1rem;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.65rem !important;
+        padding: 0.65rem 0.85rem !important;
+        margin-bottom: 1rem !important;
     }
 
     .kernel-controls-left,
     .kernel-info-right {
-        justify-content: space-between;
-        width: 100%;
+        justify-content: space-between !important;
+        width: 100% !important;
     }
 
     .kernel-doc-status {
-        font-size: 0.72rem;
+        font-size: 0.72rem !important;
+    }
+
+    /* 3D Action Buttons in Card Footers */
+    .admin-card-footer {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        width: 100% !important;
+        padding-top: 0.75rem !important;
+        margin-top: 0.75rem !important;
+        box-sizing: border-box !important;
+    }
+
+    .admin-card-footer > div {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+
+    .admin-card-footer .btn-3d {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 0 !important;
+        padding: 0.5rem 0.55rem !important;
+        font-size: 0.76rem !important;
+        text-align: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Form Action Buttons at bottom of all forms */
+    .admin-form-panel > div:last-child {
+        flex-direction: column-reverse !important;
+        width: 100% !important;
+        gap: 0.55rem !important;
+        margin-top: 0.75rem !important;
+    }
+
+    .admin-form-panel > div:last-child .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 42px !important;
+    }
+
+    /* Section 3 (Skills) Mobile */
+    .skill-cat-card-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.6rem !important;
+    }
+
+    .skill-cat-header-title-group {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+
+    .skill-cat-header-actions {
+        width: 100% !important;
+        justify-content: flex-end !important;
+        border-top: 1px dashed rgba(255, 255, 255, 0.08) !important;
+        padding-top: 0.45rem !important;
+    }
+
+    .skill-pills-wrap {
+        gap: 5px !important;
+    }
+
+    .skill-cat-admin-card .skill-pill {
+        padding: 5px 8px !important;
+        font-size: 0.74rem !important;
+    }
+
+    .skill-live-matcher {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+        padding: 0.75rem !important;
     }
 }
 
+/* 5. Media Queries for Screens <= 480px (Compact Mobile Phones) */
 @media (max-width: 480px) {
-    .admin-mobile-header .mobile-brand-text .mobile-title {
-        display: none;
-    }
-
-    .admin-mobile-nav-pill {
-        padding: 6px 12px;
-        font-size: 0.76rem;
+    .notebook-main {
+        padding-top: calc(96px + var(--safe-top)) !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
     }
 
     .cell-output-card {
-        padding: 0.85rem;
+        padding: 0.75rem !important;
     }
 
-    .form-group {
-        margin-bottom: 0.85rem;
+    .admin-mobile-header .mobile-brand-text .mobile-title {
+        display: none !important;
     }
 
-    .admin-card-actions .btn {
-        flex: 1 1 auto;
-        justify-content: center;
+    .admin-mobile-nav-pill {
+        padding: 4px 10px !important;
+        font-size: 0.72rem !important;
+    }
+
+    .admin-single-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    .single-card-actions {
+        width: 100% !important;
+        justify-content: flex-end !important;
+        padding-top: 6px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .admin-card-footer .btn-3d {
+        flex: 1 1 100% !important;
+    }
+
+    /* Modal Responsiveness */
+    .skill-pct-modal-card,
+    .copyright-modal-card {
+        width: 95vw !important;
+        max-width: 95vw !important;
+        padding: 0.75rem !important;
+        box-sizing: border-box !important;
     }
 }
 
