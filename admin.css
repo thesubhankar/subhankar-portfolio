@@ -2618,3 +2618,258 @@
     box-shadow: 0 4px 14px rgba(31, 41, 55, 0.3) !important;
 }
 
+/* ==========================================================================
+   ADMIN MOBILE RESPONSIVE NAVIGATION & DRAWER SYSTEM (<1024px)
+   ========================================================================== */
+
+/* Mobile Top Header Styling */
+.admin-mobile-header {
+    background: var(--bg-sidebar);
+    border-bottom: var(--border-card);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+    z-index: 950;
+}
+
+.admin-mobile-header .mobile-brand-text .mobile-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: block;
+    line-height: 1.2;
+}
+
+.admin-mobile-header .mobile-brand-text .mobile-title {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    display: block;
+    line-height: 1.2;
+}
+
+.admin-mobile-header .mobile-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Horizontal Quick Section Navigation Bar (Sticky below header) */
+.admin-mobile-section-nav {
+    display: none;
+    margin: -0.65rem -0.5rem 1.25rem -0.5rem;
+    padding: 0.5rem 0.65rem 0.65rem 0.65rem;
+    position: sticky;
+    top: 56px;
+    z-index: 880;
+    background: var(--bg-main);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+.admin-mobile-nav-scroll {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+
+.admin-mobile-nav-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.admin-mobile-nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 15px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.admin-mobile-nav-pill .pill-num {
+    color: #00F2FE;
+    font-size: 0.74rem;
+    font-weight: 700;
+    transition: color 0.2s ease;
+}
+
+.admin-mobile-nav-pill:hover {
+    color: var(--text-main);
+    border-color: rgba(0, 242, 254, 0.4);
+    transform: translateY(-1px);
+}
+
+.admin-mobile-nav-pill.active {
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.28) 0%, rgba(79, 172, 254, 0.42) 100%) !important;
+    border-color: #00F2FE !important;
+    box-shadow: 0 3px 14px rgba(0, 242, 254, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
+}
+
+.admin-mobile-nav-pill.active .pill-num {
+    color: #FFFFFF !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Light Mode Overrides for Mobile Pills */
+[data-theme="light"] .admin-mobile-section-nav {
+    background: rgba(248, 250, 252, 0.94);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .admin-mobile-nav-pill {
+    background: #FFFFFF;
+    border-color: #E2E8F0;
+    color: #64748B;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .admin-mobile-nav-pill .pill-num {
+    color: #0284C7;
+}
+
+[data-theme="light"] .admin-mobile-nav-pill.active {
+    background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%) !important;
+    border-color: #0284C7 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 3px 12px rgba(2, 132, 199, 0.3) !important;
+}
+
+[data-theme="light"] .admin-mobile-nav-pill.active .pill-num {
+    color: #E0F2FE !important;
+}
+
+/* Media Queries for Admin Studio Mobile Responsiveness */
+@media (max-width: 1023px) {
+    .admin-mobile-header {
+        display: block !important;
+    }
+
+    .admin-mobile-section-nav {
+        display: block !important;
+    }
+
+    .notebook-sidebar {
+        display: flex !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: min(84vw, 320px) !important;
+        max-width: 86vw !important;
+        z-index: 1002 !important;
+        background-color: var(--bg-sidebar) !important;
+        border-right: var(--border-card) !important;
+        transform: translateX(-100%) !important;
+        transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.6) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: calc(1rem + var(--safe-top)) 1.15rem calc(1.5rem + var(--safe-bottom)) !important;
+    }
+
+    .notebook-sidebar.drawer-open {
+        transform: translateX(0) !important;
+    }
+
+    .notebook-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-top: calc(3.8rem + var(--safe-top)) !important;
+        padding-left: clamp(10px, 3vw, 18px) !important;
+        padding-right: clamp(10px, 3vw, 18px) !important;
+    }
+
+    /* Keep admin action toolbar clean on mobile */
+    .kernel-topbar {
+        margin-top: 0.25rem;
+        margin-bottom: 1.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-panel-card {
+        border-radius: 14px;
+        margin-bottom: 1.25rem;
+    }
+
+    .admin-card-header {
+        padding: 0.95rem 1.15rem;
+    }
+
+    .cell-output-card {
+        padding: 1rem 1.15rem;
+    }
+
+    .admin-cards-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .admin-card-actions {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .kernel-topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .kernel-controls-left,
+    .kernel-info-right {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .kernel-doc-status {
+        font-size: 0.72rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-mobile-header .mobile-brand-text .mobile-title {
+        display: none;
+    }
+
+    .admin-mobile-nav-pill {
+        padding: 6px 12px;
+        font-size: 0.76rem;
+    }
+
+    .cell-output-card {
+        padding: 0.85rem;
+    }
+
+    .form-group {
+        margin-bottom: 0.85rem;
+    }
+
+    .admin-card-actions .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+}
+
+

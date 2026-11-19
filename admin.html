@@ -38,13 +38,57 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=18">
-    <link rel="stylesheet" href="admin.css?v=37">
+    <link rel="stylesheet" href="admin.css?v=38">
 </head>
 
 <body data-theme="dark">
 
     <!-- Toast Notification Banner -->
     <div id="notifyBanner" class="admin-notification-toast success" style="display: none;"></div>
+
+    <!-- Mobile Drawer Overlay -->
+    <div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
+
+    <!-- Mobile Top Header (<1024px) with Collapsed Sidebar Toggle (>>) -->
+    <header class="mobile-header admin-mobile-header" id="mobileHeader">
+        <div class="mobile-header-top">
+            <div class="mobile-header-left">
+                <button class="mobile-sidebar-toggle-btn" id="mobileSidebarToggle" aria-label="Open navigation sidebar" title="Open Sidebar">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="13 17 18 12 13 7"></polyline>
+                        <polyline points="6 17 11 12 6 7"></polyline>
+                    </svg>
+                </button>
+                <div class="mobile-brand">
+                    <div class="avatar-badge-sm">
+                        <img src="assets/images/profile.jpg" alt="Subhankar Giri" class="avatar-profile-img">
+                    </div>
+                    <div class="mobile-brand-text">
+                        <span class="mobile-name">Admin Studio</span>
+                        <span class="mobile-title">Subhankar Giri • Control Center</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mobile-actions">
+                <a href="/" target="_self" class="btn-liquid-icon btn-liquid-portfolio" title="Return to Live Portfolio" aria-label="Return to Live Portfolio" style="width: 34px; height: 34px; min-width: 34px; min-height: 34px;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-5h-4v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+                    </svg>
+                </a>
+                <button class="theme-toggle-pill" id="mobileThemeToggle" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+                    <span class="toggle-icon sun-icon">☀️</span>
+                    <span class="toggle-icon moon-icon">🌙</span>
+                    <span class="toggle-slider"></span>
+                </button>
+                <button type="button" onclick="logoutAdmin()" class="btn-liquid-icon btn-liquid-lock" title="Lock Admin & Logout" aria-label="Lock Admin & Logout" style="width: 34px; height: 34px; min-width: 34px; min-height: 34px;">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
 
     <!-- Main App Container (Desktop Split Layout / Mobile Left Drawer) -->
     <div class="notebook-app-container" id="adminApp">
@@ -152,30 +196,35 @@
         <!-- Main Content Area -->
         <main class="notebook-main" id="notebookMain">
 
-            <!-- Mobile Topbar for small screens -->
-            <div class="mobile-drawer-header" style="display: none; padding: 0.75rem 1rem; border-bottom: var(--border-card); background: var(--bg-sidebar);" id="mobileTopbar">
-                <button class="drawer-close-btn" id="mobileDrawerOpenBtn" aria-label="Open navigation sidebar" style="transform: rotate(180deg);">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
-                <div class="sidebar-brand-mini">🛡️ Admin Studio</div>
-                <div style="display: inline-flex; align-items: center; gap: 6px;">
-                    <a href="/" target="_self" class="btn-liquid-icon btn-liquid-portfolio" title="Return to Live Portfolio" aria-label="Return to Live Portfolio" style="width: 32px; height: 32px; min-width: 32px; min-height: 32px;">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-5h-4v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-                        </svg>
+            <!-- Mobile Horizontal Quick Section Navigation Pills (<1024px) -->
+            <nav class="admin-mobile-section-nav" id="adminMobileSectionNav" aria-label="Admin Sections Quick Navigation">
+                <div class="admin-mobile-nav-scroll">
+                    <a href="#projects" class="admin-mobile-nav-pill active" data-page="projects" onclick="switchPage('projects', event)">
+                        <span class="pill-num">[1]</span>
+                        <span class="pill-text">Projects</span>
                     </a>
-                    <button type="button" onclick="logoutAdmin()" class="btn-liquid-icon btn-liquid-lock" title="Lock Admin & Logout" aria-label="Lock Admin & Logout" style="width: 32px; height: 32px; min-width: 32px; min-height: 32px;">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                    </button>
+                    <a href="#certificates" class="admin-mobile-nav-pill" data-page="certificates" onclick="switchPage('certificates', event)">
+                        <span class="pill-num">[2]</span>
+                        <span class="pill-text">Certificates</span>
+                    </a>
+                    <a href="#skills" class="admin-mobile-nav-pill" data-page="skills" onclick="switchPage('skills', event)">
+                        <span class="pill-num">[3]</span>
+                        <span class="pill-text">Skills</span>
+                    </a>
+                    <a href="#education" class="admin-mobile-nav-pill" data-page="education" onclick="switchPage('education', event)">
+                        <span class="pill-num">[4]</span>
+                        <span class="pill-text">Education</span>
+                    </a>
+                    <a href="#experience" class="admin-mobile-nav-pill" data-page="experience" onclick="switchPage('experience', event)">
+                        <span class="pill-num">[5]</span>
+                        <span class="pill-text">Experience</span>
+                    </a>
+                    <a href="#resume" class="admin-mobile-nav-pill" data-page="resume" onclick="switchPage('resume', event)">
+                        <span class="pill-num">[6]</span>
+                        <span class="pill-text">Resume</span>
+                    </a>
                 </div>
-            </div>
+            </nav>
 
             <!-- Top Kernel Action Toolbar -->
             <div class="kernel-topbar" role="toolbar" aria-label="Admin Action Controls">
@@ -934,6 +983,6 @@
     <!-- ============================================================
          ADMIN SCRIPTS & LOGIC
          ============================================================ -->
-    <script src="admin.js?v=37"></script>
+    <script src="admin.js?v=38"></script>
 </body>
 </html>

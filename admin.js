@@ -192,40 +192,57 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
 
         // --- Tab / Page Switcher ---
         function switchPage(pageId, ev) {
-    if (ev) ev.preventDefault();
+            if (ev) ev.preventDefault();
 
-    // 1. Hide all pages, activate target page
-    document.querySelectorAll('.notebook-page').forEach(page => {
-        page.classList.remove('active');
-    });
-    const targetPage = document.getElementById('page-' + pageId);
-    if (targetPage) {
-        targetPage.classList.add('active');
-    }
+            // 1. Hide all pages, activate target page
+            document.querySelectorAll('.notebook-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
 
-    // 2. Update active highlight and color on sidebar navigation buttons
-    document.querySelectorAll('.sidebar-nav-item, .sidebar-admin-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    const targetNav = document.querySelector(`.sidebar-nav-item[data-page="${pageId}"], .sidebar-admin-item[data-page="${pageId}"]`);
-    if (targetNav) {
-        targetNav.classList.add('active');
-    }
+            // 2. Update active highlight and color on sidebar navigation buttons
+            document.querySelectorAll('.sidebar-nav-item, .sidebar-admin-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const targetNav = document.querySelector(`.sidebar-nav-item[data-page="${pageId}"], .sidebar-admin-item[data-page="${pageId}"]`);
+            if (targetNav) {
+                targetNav.classList.add('active');
+            }
 
-    // 3. Update document status
-    const docStatus = document.getElementById('kernelDocStatus');
-    if (docStatus) {
-        docStatus.textContent = `admin.ipynb · ${pageId}`;
-    }
+            // 3. Update active highlight on mobile section navigation pills
+            document.querySelectorAll('.admin-mobile-nav-pill').forEach(pill => {
+                if (pill.getAttribute('data-page') === pageId) {
+                    pill.classList.add('active');
+                    try {
+                        pill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    } catch(e) {}
+                } else {
+                    pill.classList.remove('active');
+                }
+            });
 
-    window.location.hash = pageId;
+            // 4. Update document status
+            const docStatus = document.getElementById('kernelDocStatus');
+            if (docStatus) {
+                docStatus.textContent = `admin.ipynb · ${pageId}`;
+            }
 
-    // 4. Close mobile sidebar if open
-    const sidebar = document.getElementById('notebookSidebar');
-    if (sidebar && sidebar.classList.contains('drawer-open')) {
-        sidebar.classList.remove('drawer-open');
-    }
-}
+            window.location.hash = pageId;
+
+            // 5. Close mobile sidebar and overlay if open
+            const sidebar = document.getElementById('notebookSidebar');
+            const overlay = document.getElementById('mobileDrawerOverlay');
+            if (sidebar && sidebar.classList.contains('drawer-open')) {
+                sidebar.classList.remove('drawer-open');
+            }
+            if (overlay && overlay.classList.contains('active')) {
+                overlay.classList.remove('active');
+            }
+            document.body.style.overflow = '';
+        }
 
         // --- Data Fetching & Rendering ---
         function renderFromLocalCache() {
@@ -2893,25 +2910,56 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
         }
 
 
-        // --- Mobile Drawer Handlers ---
-        const drawerOpenBtn = document.getElementById('mobileDrawerOpenBtn');
-        const drawerCloseBtn = document.getElementById('mobileDrawerCloseBtn');
-        const sidebar = document.getElementById('notebookSidebar');
+        // --- Mobile Drawer & Navigation Handlers ---
+        function initAdminMobileDrawer() {
+            const openBtn = document.getElementById('mobileSidebarToggle') || document.getElementById('mobileDrawerOpenBtn');
+            const closeBtn = document.getElementById('mobileDrawerCloseBtn');
+            const sidebar = document.getElementById('notebookSidebar');
+            const overlay = document.getElementById('mobileDrawerOverlay');
 
-        if (drawerOpenBtn && sidebar) {
-            drawerOpenBtn.addEventListener('click', () => {
-                sidebar.classList.add('drawer-open');
+            function openDrawer(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                if (sidebar) sidebar.classList.add('drawer-open');
+                if (overlay) overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeDrawer(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                if (sidebar) sidebar.classList.remove('drawer-open');
+                if (overlay) overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (openBtn) openBtn.addEventListener('click', openDrawer);
+            if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+            if (overlay) overlay.addEventListener('click', closeDrawer);
+
+            // Escape key closes drawer
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sidebar && sidebar.classList.contains('drawer-open')) {
+                    closeDrawer();
+                }
             });
-        }
-        if (drawerCloseBtn && sidebar) {
-            drawerCloseBtn.addEventListener('click', () => {
-                sidebar.classList.remove('drawer-open');
+
+            // Auto-close drawer when clicking any link/button inside sidebar (except close button)
+            document.querySelectorAll('.notebook-sidebar a, .notebook-sidebar button:not(#mobileDrawerCloseBtn):not(#desktopThemeToggle)').forEach(el => {
+                el.addEventListener('click', () => {
+                    setTimeout(closeDrawer, 120);
+                });
             });
         }
 
         // Check URL Hash for deep linking
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
+            initAdminMobileDrawer();
             renderFromLocalCache(); // Instantaneous 0ms render from cache!
             const hash = window.location.hash.replace('#', '');
             if (hash && ['projects', 'certificates', 'skills', 'education', 'experience', 'resume'].includes(hash)) {
