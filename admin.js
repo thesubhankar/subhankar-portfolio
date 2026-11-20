@@ -2777,7 +2777,7 @@ let PORTFOLIO_DATA = { projects: [], certificates: [], resume: {}, skills: [], e
                                     <span>Set Active</span>
                                 </button>
                             ` : `
-                                <div style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 8px;">
+                                <div style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 999px;">
                                     <span style="font-family: var(--font-mono); font-size: 0.73rem; color: #10B981; font-weight: 700;">✓ Live on Site</span>
                                 </div>
                             `}
