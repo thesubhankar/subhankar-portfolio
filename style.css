@@ -6595,11 +6595,32 @@ body[data-theme="light"] .toggle-slider {
 }
 
 /* Contribution Graph Section */
-
 .github-graph-section {
-
+    position: relative;
     margin-top: 0.5rem;
+}
 
+/* Ambient Back Glow Behind 3D Glass Card */
+.github-graph-section::before {
+    content: '';
+    position: absolute;
+    top: 35px;
+    left: 4%;
+    right: 4%;
+    bottom: 5px;
+    background: radial-gradient(ellipse at 50% 50%, rgba(0, 242, 254, 0.22) 0%, rgba(255, 45, 149, 0.18) 45%, rgba(139, 92, 246, 0.12) 70%, transparent 100%);
+    filter: blur(55px);
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 40px;
+    opacity: 0.88;
+    transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .github-graph-section::before {
+    background: radial-gradient(ellipse at 50% 50%, rgba(2, 132, 199, 0.18) 0%, rgba(236, 72, 153, 0.14) 45%, rgba(147, 51, 234, 0.1) 70%, transparent 100%);
+    filter: blur(45px);
+    opacity: 0.92;
 }
 
 .github-graph-top-row {
@@ -6738,19 +6759,21 @@ body[data-theme="light"] .toggle-slider {
 /* Inner Contribution Grid Frame - Ultra-Premium Liquid Glassmorphic Container */
 .snake-grid-wrapper {
     position: relative;
+    z-index: 1;
     border-radius: 20px;
     padding: 1.6rem 1.4rem 1.35rem;
-    background: rgba(10, 15, 26, 0.75) !important;
-    backdrop-filter: blur(20px) saturate(190%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    background: rgba(8, 14, 28, 0.44) !important;
+    backdrop-filter: blur(24px) saturate(210%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(210%) !important;
     border: 1.5px solid transparent !important;
     background-clip: padding-box !important;
     box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.7),
-        0 0 35px rgba(0, 242, 254, 0.14),
-        0 0 30px rgba(255, 45, 149, 0.14),
-        inset 0 1px 1.5px rgba(255, 255, 255, 0.22),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.5) !important;
+        0 20px 50px rgba(0, 0, 0, 0.65),
+        0 0 50px rgba(0, 242, 254, 0.32),
+        0 0 90px rgba(255, 45, 149, 0.24),
+        0 0 130px rgba(139, 92, 246, 0.16),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.4) !important;
     overflow: hidden;
     transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
 }
@@ -6787,56 +6810,43 @@ body[data-theme="light"] .toggle-slider {
 .snake-grid-wrapper:hover {
     transform: translateY(-3px);
     box-shadow: 
-        0 24px 60px rgba(0, 0, 0, 0.8),
-        0 0 45px rgba(0, 242, 254, 0.25),
-        0 0 40px rgba(255, 45, 149, 0.25),
-        inset 0 1px 2px rgba(255, 255, 255, 0.35) !important;
+        0 26px 65px rgba(0, 0, 0, 0.75),
+        0 0 65px rgba(0, 242, 254, 0.42),
+        0 0 100px rgba(255, 45, 149, 0.32),
+        0 0 140px rgba(139, 92, 246, 0.22),
+        inset 0 1px 2px rgba(255, 255, 255, 0.42) !important;
 }
 
+/* Daytime (Light Mode) Glassmorphic Optimization */
 [data-theme="light"] .snake-grid-wrapper {
-    background: rgba(255, 255, 255, 0.82) !important;
-    backdrop-filter: blur(20px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    background: rgba(255, 255, 255, 0.54) !important;
+    backdrop-filter: blur(24px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
     border-color: transparent !important;
     box-shadow: 
-        0 14px 38px rgba(0, 0, 0, 0.08),
-        0 0 24px rgba(0, 123, 167, 0.15),
-        inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+        0 16px 40px rgba(15, 23, 42, 0.07),
+        0 0 35px rgba(2, 132, 199, 0.22),
+        0 0 70px rgba(236, 72, 153, 0.14),
+        inset 0 1px 2px rgba(255, 255, 255, 0.95),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.04) !important;
 }
 
 [data-theme="light"] .snake-grid-wrapper::before {
-    background: linear-gradient(135deg, rgba(2, 132, 199, 0.5) 0%, rgba(236, 72, 153, 0.5) 100%) !important;
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.65) 0%, rgba(147, 51, 234, 0.45) 50%, rgba(236, 72, 153, 0.65) 100%) !important;
 }
 
 [data-theme="light"] .snake-grid-wrapper::after {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9) 30%, rgba(2, 132, 199, 0.7) 50%, transparent) !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95) 25%, rgba(2, 132, 199, 0.7) 50%, rgba(236, 72, 153, 0.5) 75%, transparent) !important;
+    filter: drop-shadow(0 0 4px rgba(2, 132, 199, 0.4));
 }
 
 [data-theme="light"] .snake-grid-wrapper:hover {
+    transform: translateY(-3px);
     box-shadow: 
-        0 18px 46px rgba(0, 0, 0, 0.12),
-        0 0 30px rgba(0, 123, 167, 0.22),
-        inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
-}
-
-[data-theme="light"] .snake-grid-wrapper::before {
-
-    background: linear-gradient(90deg, transparent, #007BA7 30%, #00F2FE 70%, transparent) !important;
-
-}
-
-[data-theme="light"] .snake-grid-wrapper::after {
-
-    background: linear-gradient(90deg, transparent, #00F2FE 30%, #007BA7 70%, transparent) !important;
-
-}
-
-[data-theme="light"] .snake-grid-wrapper:hover {
-
-    border-color: #007BA7 !important;
-
-    box-shadow: 0 14px 34px rgba(0, 123, 167, 0.18), 0 0 24px rgba(0, 123, 167, 0.18) !important;
-
+        0 20px 48px rgba(15, 23, 42, 0.1),
+        0 0 45px rgba(2, 132, 199, 0.32),
+        0 0 85px rgba(236, 72, 153, 0.24),
+        inset 0 1px 2px rgba(255, 255, 255, 1) !important;
 }
 
 .snake-calendar-scroll-area {
@@ -7030,9 +7040,10 @@ body[data-theme="light"] .toggle-slider {
 }
 
 [data-theme="light"] .matrix-cell.lvl-0 {
-    background-color: rgba(0, 0, 0, 0.045);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background-color: rgba(226, 232, 240, 0.65) !important;
+    border: 1px solid rgba(203, 213, 225, 0.75) !important;
     border-radius: 3px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
 }
 
 .matrix-cell.lvl-1 {
@@ -7225,6 +7236,92 @@ body[data-theme="light"] .toggle-slider {
 .matrix-cell.snake-eat-burst {
     animation: snakeEatPulse 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
     z-index: 20 !important;
+}
+
+/* --------------------------------------------------------------------------
+   Daytime (Light Mode) 3D Cyber Serpent Optimization
+   -------------------------------------------------------------------------- */
+[data-theme="light"] .matrix-cell.snake-head {
+    background: radial-gradient(circle at 35% 30%, #FF66B2 0%, #FF1493 55%, #C2185B 100%) !important;
+    box-shadow: 
+        0 3px 12px rgba(219, 39, 119, 0.65),
+        0 0 20px rgba(255, 45, 149, 0.5),
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
+        inset 0 -1.5px 2px rgba(136, 19, 55, 0.35) !important;
+    border: 1.2px solid rgba(255, 255, 255, 0.95) !important;
+}
+
+[data-theme="light"] .matrix-cell.snake-head::before,
+[data-theme="light"] .matrix-cell.snake-head::after {
+    background: #00F2FE;
+    box-shadow: 0 0 3px #00F2FE, 0 0 6px rgba(0, 180, 216, 0.9), 0 0 1px #0A0A0A;
+    border: 0.5px solid #0369A1;
+}
+
+[data-theme="light"] .matrix-cell.snake-body-1 {
+    background: radial-gradient(circle at 35% 30%, #F472B6 0%, #E11D48 60%, #9F1239 100%) !important;
+    box-shadow: 0 3px 10px rgba(225, 29, 72, 0.5), 0 0 14px rgba(244, 114, 182, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+}
+
+[data-theme="light"] .matrix-cell.snake-body-2 {
+    background: radial-gradient(circle at 35% 30%, #C084FC 0%, #9333EA 60%, #6B21A8 100%) !important;
+    box-shadow: 0 3px 10px rgba(147, 51, 234, 0.45), 0 0 12px rgba(192, 132, 252, 0.25), inset 0 1px 1.5px rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+}
+
+[data-theme="light"] .matrix-cell.snake-body-3 {
+    background: radial-gradient(circle at 35% 30%, #818CF8 0%, #4F46E5 60%, #312E81 100%) !important;
+    box-shadow: 0 3px 9px rgba(79, 70, 229, 0.45), 0 0 12px rgba(129, 140, 248, 0.25), inset 0 1px 1.5px rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+}
+
+[data-theme="light"] .matrix-cell.snake-body-4 {
+    background: radial-gradient(circle at 35% 30%, #38BDF8 0%, #0284C7 60%, #075985 100%) !important;
+    box-shadow: 0 3px 9px rgba(2, 132, 199, 0.5), 0 0 12px rgba(56, 189, 248, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.65) !important;
+}
+
+[data-theme="light"] .matrix-cell.snake-tail {
+    background: radial-gradient(circle at 35% 30%, #67E8F9 0%, #06B6D4 70%, #0E7490 100%) !important;
+    box-shadow: 0 2px 8px rgba(6, 182, 212, 0.55), inset 0 1px 1.2px rgba(255, 255, 255, 0.85) !important;
+}
+
+[data-theme="light"] .matrix-cell.snake-trail {
+    box-shadow: 
+        0 0 8px rgba(2, 132, 199, 0.55),
+        0 0 14px rgba(236, 72, 153, 0.35),
+        inset 0 0 4px rgba(2, 132, 199, 0.3) !important;
+    border-color: rgba(2, 132, 199, 0.55) !important;
+    filter: brightness(1.15);
+}
+
+[data-theme="light"] .matrix-cell.snake-eat-burst {
+    animation: snakeEatPulseLight 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+}
+
+@keyframes snakeEatPulseLight {
+    0% {
+        transform: scale(1.6);
+        box-shadow: 0 0 14px #0284C7, 0 0 24px #10B981, inset 0 0 6px #ffffff !important;
+        filter: brightness(1.25);
+    }
+    50% {
+        transform: scale(1.3);
+        box-shadow: 0 0 18px #E11D48, 0 0 26px #0284C7 !important;
+        filter: brightness(1.12);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+/* Daytime Month & Day Labels Clarity */
+[data-theme="light"] .calendar-months-header,
+[data-theme="light"] .calendar-days-column {
+    color: #475569 !important;
+    font-weight: 600 !important;
 }
 
 /* Floating Tooltip */
@@ -9878,6 +9975,33 @@ body[data-theme="light"] .toggle-slider {
     .matrix-cell.snake-trail {
         box-shadow: 0 0 6px rgba(0, 242, 254, 0.65) !important;
         filter: brightness(1.25);
+    }
+
+    /* Daytime Mobile 3D Serpent Tuning */
+    [data-theme="light"] .matrix-cell.snake-head {
+        background: radial-gradient(circle at 35% 30%, #FF66B2 0%, #FF1493 55%, #C2185B 100%) !important;
+        box-shadow: 0 2px 8px rgba(219, 39, 119, 0.6), 0 0 14px rgba(255, 45, 149, 0.45) !important;
+        border: 1px solid rgba(255, 255, 255, 0.95) !important;
+    }
+
+    [data-theme="light"] .matrix-cell.snake-body-1 {
+        background: radial-gradient(circle at 35% 30%, #F472B6 0%, #E11D48 60%, #9F1239 100%) !important;
+        box-shadow: 0 2px 6px rgba(225, 29, 72, 0.45) !important;
+    }
+
+    [data-theme="light"] .matrix-cell.snake-body-2 {
+        background: radial-gradient(circle at 35% 30%, #C084FC 0%, #9333EA 60%, #6B21A8 100%) !important;
+        box-shadow: 0 2px 5px rgba(147, 51, 234, 0.4) !important;
+    }
+
+    [data-theme="light"] .matrix-cell.snake-body-3 {
+        background: radial-gradient(circle at 35% 30%, #818CF8 0%, #4F46E5 60%, #312E81 100%) !important;
+        box-shadow: 0 2px 5px rgba(79, 70, 229, 0.4) !important;
+    }
+
+    [data-theme="light"] .matrix-cell.snake-body-4 {
+        background: radial-gradient(circle at 35% 30%, #38BDF8 0%, #0284C7 60%, #075985 100%) !important;
+        box-shadow: 0 2px 5px rgba(2, 132, 199, 0.45) !important;
     }
 
     .snake-grid-wrapper {
