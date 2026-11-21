@@ -6659,213 +6659,164 @@ body[data-theme="light"] .toggle-slider {
 }
 
 .snake-status-pill {
-
     font-family: var(--font-mono);
-
-    font-size: 0.72rem;
-
-    font-weight: 600;
-
-    color: #FF2D95;
-
-    border: 1px solid rgba(255, 45, 149, 0.4);
-
-    background: rgba(255, 45, 149, 0.08);
-
-    box-shadow: 0 0 10px rgba(255, 45, 149, 0.25);
-
-    padding: 0.28rem 0.75rem;
-
+    font-size: 0.73rem;
+    font-weight: 700;
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    background: rgba(16, 185, 129, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    padding: 0.32rem 0.85rem;
     border-radius: 9999px;
-
     display: inline-flex;
-
     align-items: center;
-
-    gap: 6px;
-
+    gap: 7px;
     transition: all 0.2s ease;
-
 }
 
 .snake-radar-pulse {
-
-    width: 6px;
-
-    height: 6px;
-
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-
-    background: #FF2D95;
-
-    box-shadow: 0 0 8px #FF2D95;
-
-    animation: pulsePinkRadar 1.5s infinite;
-
+    background: #10B981;
+    box-shadow: 0 0 8px #10B981, 0 0 14px #10B981;
+    animation: pulseEmeraldRadar 1.5s infinite;
 }
 
-@keyframes pulsePinkRadar {
-
-    0% { transform: scale(0.9); opacity: 1; }
-
-    50% { transform: scale(1.4); opacity: 0.4; }
-
-    100% { transform: scale(0.9); opacity: 1; }
-
+@keyframes pulseEmeraldRadar {
+    0% { transform: scale(0.9); opacity: 1; box-shadow: 0 0 6px #10B981; }
+    50% { transform: scale(1.45); opacity: 0.35; box-shadow: 0 0 14px #10B981; }
+    100% { transform: scale(0.9); opacity: 1; box-shadow: 0 0 6px #10B981; }
 }
 
 .graph-sync-pill {
-
     font-family: var(--font-mono);
-
-    font-size: 0.76rem;
-
+    font-size: 0.75rem;
     font-weight: 600;
-
-    color: #007BA7;
-
-    border: 1px solid rgba(0, 123, 167, 0.35);
-
-    background: rgba(0, 123, 167, 0.08);
-
-    box-shadow: 0 0 12px rgba(0, 123, 167, 0.2);
-
+    color: #00F2FE;
+    border: 1px solid rgba(0, 242, 254, 0.38);
+    background: rgba(0, 242, 254, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 0 14px rgba(0, 242, 254, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.2);
     padding: 0.32rem 0.95rem;
-
     border-radius: 9999px;
-
     transition: all 0.2s ease;
-
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .graph-sync-pill:hover {
+    border-color: #00F2FE;
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
 
-    border-color: #007BA7;
-
-    box-shadow: 0 0 18px rgba(0, 123, 167, 0.4);
-
+[data-theme="light"] .snake-status-pill {
+    color: #059669;
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(5, 150, 105, 0.4);
+    box-shadow: 0 0 10px rgba(5, 150, 105, 0.15);
 }
 
 [data-theme="light"] .graph-sync-pill {
-
-    color: #007BA7;
-
-    border-color: #E5E7EB;
-
-    background: #FAFAFC;
-
-    box-shadow: 0 0 8px rgba(0, 123, 167, 0.15);
-
+    color: #0284C7;
+    border-color: rgba(2, 132, 199, 0.35);
+    background: rgba(2, 132, 199, 0.08);
+    box-shadow: 0 0 10px rgba(2, 132, 199, 0.15);
 }
 
 [data-theme="light"] .graph-sync-pill:hover {
-
-    border-color: #007BA7;
-
-    box-shadow: 0 0 14px rgba(0, 123, 167, 0.25);
-
+    border-color: #0284C7;
+    box-shadow: 0 0 16px rgba(2, 132, 199, 0.3);
+    color: #0369A1;
 }
 
-/* Inner Contribution Grid Frame - Crisp, High-Performance Neon Glow */
-
+/* Inner Contribution Grid Frame - Ultra-Premium Liquid Glassmorphic Container */
 .snake-grid-wrapper {
-
     position: relative;
-
-    border: 1.5px solid rgba(255, 45, 149, 0.45);
-
-    border-radius: 16px;
-
-    padding: 1.5rem 1.4rem 1.25rem;
-
-    background: #0A0A0A;
-
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6), 
-
-                0 0 20px rgba(255, 45, 149, 0.2),
-
-                inset 0 0 14px rgba(255, 45, 149, 0.05);
-
+    border-radius: 20px;
+    padding: 1.6rem 1.4rem 1.35rem;
+    background: rgba(10, 15, 26, 0.75) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    border: 1.5px solid transparent !important;
+    background-clip: padding-box !important;
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.7),
+        0 0 35px rgba(0, 242, 254, 0.14),
+        0 0 30px rgba(255, 45, 149, 0.14),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.22),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.5) !important;
     overflow: hidden;
-
-    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
-
-                border-color 0.2s ease,
-
-                box-shadow 0.2s ease;
-
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
 }
 
+/* Dual-Neon Prismatic Glass Border */
 .snake-grid-wrapper::before {
-
     content: '';
-
     position: absolute;
-
-    top: 0;
-
-    left: 8%;
-
-    right: 8%;
-
-    height: 2px;
-
-    background: linear-gradient(90deg, transparent, #FF2D95 30%, #007BA7 70%, transparent);
-
-    opacity: 0.9;
-
-    filter: blur(1px);
-
+    inset: 0;
+    border-radius: 20px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.65) 0%, rgba(168, 85, 247, 0.5) 50%, rgba(255, 45, 149, 0.65) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
     pointer-events: none;
-
+    z-index: 1;
 }
 
+/* Top Specular Glass Reflection Sheen */
 .snake-grid-wrapper::after {
-
     content: '';
-
     position: absolute;
-
-    bottom: 0;
-
+    top: 0;
     left: 8%;
-
     right: 8%;
-
-    height: 2px;
-
-    background: linear-gradient(90deg, transparent, #007BA7 30%, #FF2D95 70%, transparent);
-
-    opacity: 0.8;
-
-    filter: blur(1px);
-
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8) 30%, rgba(0, 242, 254, 0.9) 50%, rgba(255, 45, 149, 0.8) 70%, transparent);
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
     pointer-events: none;
-
+    z-index: 2;
 }
 
 .snake-grid-wrapper:hover {
-
     transform: translateY(-3px);
-
-    border-color: #FF2D95;
-
-    box-shadow: 0 18px 46px rgba(0, 0, 0, 0.7), 
-
-                0 0 28px rgba(255, 45, 149, 0.35);
-
+    box-shadow: 
+        0 24px 60px rgba(0, 0, 0, 0.8),
+        0 0 45px rgba(0, 242, 254, 0.25),
+        0 0 40px rgba(255, 45, 149, 0.25),
+        inset 0 1px 2px rgba(255, 255, 255, 0.35) !important;
 }
 
 [data-theme="light"] .snake-grid-wrapper {
+    background: rgba(255, 255, 255, 0.82) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border-color: transparent !important;
+    box-shadow: 
+        0 14px 38px rgba(0, 0, 0, 0.08),
+        0 0 24px rgba(0, 123, 167, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+}
 
-    border-color: #CBD5E1 !important;
+[data-theme="light"] .snake-grid-wrapper::before {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.5) 0%, rgba(236, 72, 153, 0.5) 100%) !important;
+}
 
-    background: #ffffff !important;
+[data-theme="light"] .snake-grid-wrapper::after {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9) 30%, rgba(2, 132, 199, 0.7) 50%, transparent) !important;
+}
 
-    box-shadow: 0 8px 28px rgba(10, 10, 10, 0.06), 
-
-                0 0 18px rgba(0, 123, 167, 0.14) !important;
-
+[data-theme="light"] .snake-grid-wrapper:hover {
+    box-shadow: 
+        0 18px 46px rgba(0, 0, 0, 0.12),
+        0 0 30px rgba(0, 123, 167, 0.22),
+        inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
 }
 
 [data-theme="light"] .snake-grid-wrapper::before {
@@ -7070,220 +7021,210 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
-/* Contribution Intensity Tiers */
-
+/* Contribution Intensity Tiers - Glassy Vibrance */
 .matrix-cell.lvl-0 {
-
-    background-color: #141418;
-
-    border: 1px solid #222228;
-
+    background-color: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.04);
 }
 
 [data-theme="light"] .matrix-cell.lvl-0 {
-
-    background-color: #E5E7EB;
-
-    border-color: transparent;
-
+    background-color: rgba(0, 0, 0, 0.045);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 3px;
 }
 
 .matrix-cell.lvl-1 {
-
-    background-color: #008f42;
-
-    border: 1px solid rgba(0, 255, 120, 0.4);
-
-    box-shadow: 0 0 6px #00a84d, 0 0 12px rgba(0, 168, 77, 0.5);
-
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    border: 1px solid rgba(52, 211, 153, 0.65);
+    border-radius: 3px;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.65), 0 0 12px rgba(16, 185, 129, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.6);
 }
 
 [data-theme="light"] .matrix-cell.lvl-1 {
-
-    background-color: #15803d;
-
-    box-shadow: 0 0 5px rgba(21, 128, 61, 0.45);
-
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    box-shadow: 0 0 5px rgba(21, 128, 61, 0.35);
 }
 
 .matrix-cell.lvl-2 {
-
-    background-color: #00e659;
-
-    border: 1px solid rgba(160, 255, 180, 0.7);
-
-    box-shadow: 0 0 8px #00ff66, 0 0 16px rgba(0, 255, 102, 0.7), 0 0 22px rgba(0, 255, 102, 0.35);
-
+    background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+    border: 1px solid rgba(110, 231, 183, 0.85);
+    border-radius: 3px;
+    box-shadow: 0 0 8px #10B981, 0 0 16px rgba(16, 185, 129, 0.65), inset 0 1px 1.5px rgba(255, 255, 255, 0.7);
 }
 
 [data-theme="light"] .matrix-cell.lvl-2 {
-
-    background-color: #22c55e;
-
-    box-shadow: 0 0 7px rgba(34, 197, 94, 0.55);
-
+    background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+    box-shadow: 0 0 7px rgba(34, 197, 94, 0.45);
 }
 
 .matrix-cell.lvl-3 {
-
-    background-color: #007BA7;
-
-    border: 1px solid rgba(200, 250, 255, 0.85);
-
-    box-shadow: 0 0 10px #007BA7, 0 0 20px rgba(0, 123, 167, 0.8);
-
+    background: linear-gradient(135deg, #0284C7 0%, #00F2FE 100%);
+    border: 1px solid rgba(125, 211, 252, 0.9);
+    border-radius: 3px;
+    box-shadow: 0 0 10px #00F2FE, 0 0 18px rgba(0, 242, 254, 0.7), inset 0 1px 1.5px rgba(255, 255, 255, 0.75);
 }
 
 [data-theme="light"] .matrix-cell.lvl-3 {
-
-    background-color: #007BA7;
-
-    box-shadow: 0 0 8px rgba(0, 123, 167, 0.65);
-
+    background: linear-gradient(135deg, #0284C7 0%, #00F2FE 100%);
+    box-shadow: 0 0 8px rgba(0, 123, 167, 0.5);
 }
 
 .matrix-cell.lvl-4 {
-
-    background-color: #FF2D95;
-
-    border: 1px solid rgba(255, 180, 220, 0.9);
-
-    box-shadow: 0 0 12px #FF2D95, 0 0 22px rgba(255, 45, 149, 0.9);
-
+    background: linear-gradient(135deg, #00F2FE 0%, #38BDF8 50%, #A855F7 100%);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 3px;
+    box-shadow: 0 0 12px #00F2FE, 0 0 22px rgba(168, 85, 247, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
 [data-theme="light"] .matrix-cell.lvl-4 {
-
-    background-color: #007BA7 !important;
-
+    background: linear-gradient(135deg, #0284C7 0%, #00F2FE 100%) !important;
     box-shadow: 0 0 9px rgba(0, 123, 167, 0.45) !important;
-
 }
 
-/* Light Pink Neon Moving Snake */
+/* ==========================================================================
+   REALISTIC 3D BIOLUMINESCENT CYBER SERPENT
+   ========================================================================== */
 
 .matrix-cell.snake-head {
-
-    background-color: #FF2D95 !important;
-
+    background: radial-gradient(circle at 35% 30%, #FF70B8 0%, #FF2D95 55%, #D81B60 100%) !important;
     box-shadow:
-
-        0 0 10px #FF2D95,
-
-        0 0 22px rgba(255, 45, 149, 0.95),
-
-        0 0 34px rgba(255, 45, 149, 0.5) !important;
-
-    border: 1.5px solid #ffffff !important;
-
-    border-radius: 3.5px !important;
-
-    z-index: 10 !important;
-
-    transform: scale(1.22);
-
-    position: relative;
-
-    transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.12s ease;
-
+        0 0 14px #FF2D95,
+        0 0 26px rgba(255, 45, 149, 0.95),
+        0 0 38px rgba(255, 45, 149, 0.5),
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.8),
+        inset 0 -1.5px 2px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    z-index: 15 !important;
+    transform: scale(1.35) !important;
+    position: relative !important;
+    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
+    overflow: visible !important;
 }
 
-/* Eye indication on the neon snake head */
+/* Directional Head Contours (Smooth rounded snout in move direction) */
+.matrix-cell.snake-head.dir-right { border-radius: 3px 8px 8px 3px !important; }
+.matrix-cell.snake-head.dir-left  { border-radius: 8px 3px 3px 8px !important; }
+.matrix-cell.snake-head.dir-down  { border-radius: 3px 3px 8px 8px !important; }
+.matrix-cell.snake-head.dir-up    { border-radius: 8px 8px 3px 3px !important; }
 
+/* Glowing Dual Cyber Optic Eyes */
+.matrix-cell.snake-head::before,
 .matrix-cell.snake-head::after {
-
     content: '';
-
     position: absolute;
-
-    top: 22%;
-
-    right: 22%;
-
-    width: 28%;
-
-    height: 28%;
-
-    background-color: #0A0A0A;
-
-    border: 1px solid rgba(255, 255, 255, 0.9);
-
+    width: 3.5px;
+    height: 3.5px;
     border-radius: 50%;
-
-    box-shadow: 0 0 3px #fff;
-
+    background: #00F2FE;
+    box-shadow: 0 0 4px #00F2FE, 0 0 8px rgba(0, 242, 254, 0.95), 0 0 1px #ffffff;
+    z-index: 16;
+    pointer-events: none;
 }
 
+/* Directional Eye Placement */
+.matrix-cell.snake-head.dir-right::before { top: 16%; right: 18%; }
+.matrix-cell.snake-head.dir-right::after  { bottom: 16%; right: 18%; }
+
+.matrix-cell.snake-head.dir-left::before  { top: 16%; left: 18%; }
+.matrix-cell.snake-head.dir-left::after   { bottom: 16%; left: 18%; }
+
+.matrix-cell.snake-head.dir-down::before  { bottom: 18%; left: 16%; }
+.matrix-cell.snake-head.dir-down::after   { bottom: 18%; right: 16%; }
+
+.matrix-cell.snake-head.dir-up::before    { top: 18%; left: 16%; }
+.matrix-cell.snake-head.dir-up::after     { top: 18%; right: 16%; }
+
+/* Default fallback eye placement */
+.matrix-cell.snake-head:not([class*="dir-"])::before { top: 16%; right: 18%; }
+.matrix-cell.snake-head:not([class*="dir-"])::after  { bottom: 16%; right: 18%; }
+
+/* Segment 1: Neck (Magenta to Fuchsia) */
 .matrix-cell.snake-body-1 {
-
-    background-color: #FF4FA7 !important;
-
-    box-shadow: 0 0 8px rgba(255, 79, 167, 0.85), 0 0 16px rgba(255, 79, 167, 0.4) !important;
-
-    border-radius: 3px !important;
-
-    z-index: 9 !important;
-
-    transform: scale(1.12);
-
-    transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.12s ease;
-
+    background: radial-gradient(circle at 35% 30%, #FF80BF 0%, #E0247C 60%, #9D174D 100%) !important;
+    box-shadow: 0 0 10px rgba(255, 45, 149, 0.85), 0 0 18px rgba(255, 45, 149, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    border-radius: 5px !important;
+    z-index: 14 !important;
+    transform: scale(1.24) !important;
+    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
 }
 
+/* Segment 2: Upper Mid-Torso (Electric Purple / Violet) */
 .matrix-cell.snake-body-2 {
-
-    background-color: #FF70B8 !important;
-
-    box-shadow: 0 0 7px rgba(255, 112, 184, 0.75), 0 0 12px rgba(255, 112, 184, 0.35) !important;
-
-    border-radius: 2.5px !important;
-
-    z-index: 8 !important;
-
-    transform: scale(1.06);
-
-    transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.12s ease;
-
+    background: radial-gradient(circle at 35% 30%, #C084FC 0%, #A855F7 60%, #7E22CE 100%) !important;
+    box-shadow: 0 0 9px rgba(168, 85, 247, 0.8), 0 0 16px rgba(168, 85, 247, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    border-radius: 4.5px !important;
+    z-index: 13 !important;
+    transform: scale(1.16) !important;
+    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
 }
 
+/* Segment 3: Lower Mid-Torso (Vibrant Indigo) */
 .matrix-cell.snake-body-3 {
-
-    background-color: #FF94C9 !important;
-
-    box-shadow: 0 0 5px rgba(255, 148, 201, 0.65) !important;
-
-    border-radius: 2px !important;
-
-    z-index: 7 !important;
-
-    transform: scale(1.02);
-
-    transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.12s ease;
-
+    background: radial-gradient(circle at 35% 30%, #818CF8 0%, #6366F1 60%, #4338CA 100%) !important;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.75), 0 0 14px rgba(99, 102, 241, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: 4px !important;
+    z-index: 12 !important;
+    transform: scale(1.10) !important;
+    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
 }
 
+/* Segment 4: Tail Lead (Electric Cyan / Sky Blue) */
 .matrix-cell.snake-body-4 {
-
-    background-color: #FFB8DA !important;
-
-    box-shadow: 0 0 4px rgba(255, 184, 218, 0.55) !important;
-
-    border-radius: 2px !important;
-
-    z-index: 6 !important;
-
-    transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.12s ease;
-
+    background: radial-gradient(circle at 35% 30%, #38BDF8 0%, #00F2FE 60%, #0284C7 100%) !important;
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.8), 0 0 14px rgba(0, 242, 254, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border-radius: 3.5px !important;
+    z-index: 11 !important;
+    transform: scale(1.05) !important;
+    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
 }
 
-/* Phosphorescent Trail when Snake Departs */
+/* Tapered Tail Tip */
+.matrix-cell.snake-tail {
+    border-radius: 50% !important;
+    transform: scale(0.92) !important;
+    background: radial-gradient(circle at 35% 30%, #67E8F9 0%, #00F2FE 70%, #0369A1 100%) !important;
+    box-shadow: 0 0 6px rgba(0, 242, 254, 0.75), 0 0 12px rgba(0, 242, 254, 0.4) !important;
+    z-index: 10 !important;
+}
 
+/* Phosphorescent Liquid Light Wake / Trail */
 .matrix-cell.snake-trail {
+    box-shadow: 
+        0 0 10px rgba(0, 242, 254, 0.8),
+        0 0 20px rgba(255, 45, 149, 0.45),
+        inset 0 0 6px rgba(0, 242, 254, 0.4) !important;
+    border-color: rgba(0, 242, 254, 0.6) !important;
+    filter: brightness(1.35);
+    transition: box-shadow 0.32s ease, filter 0.32s ease, border-color 0.32s ease;
+}
 
-    box-shadow: 0 0 8px rgba(255, 45, 149, 0.65) !important;
+/* Eating Energy Shockwave Pulse */
+@keyframes snakeEatPulse {
+    0% {
+        transform: scale(1.6);
+        box-shadow: 0 0 16px #00F2FE, 0 0 28px #10B981, inset 0 0 10px #ffffff !important;
+        filter: brightness(2);
+    }
+    50% {
+        transform: scale(1.3);
+        box-shadow: 0 0 22px #FF2D95, 0 0 32px #00F2FE !important;
+        filter: brightness(1.6);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
 
-    transition: box-shadow 0.16s ease;
-
+.matrix-cell.snake-eat-burst {
+    animation: snakeEatPulse 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+    z-index: 20 !important;
 }
 
 /* Floating Tooltip */
@@ -9891,66 +9832,61 @@ body[data-theme="light"] .toggle-slider {
 
     }
 
-    /* Lightweight Mobile Snake Glow */
-
+    /* Responsive Mobile Realistic 3D Cyber Serpent */
     .matrix-cell.snake-head {
+        background: radial-gradient(circle at 35% 30%, #FF70B8 0%, #FF2D95 55%, #D81B60 100%) !important;
+        transform: scale(1.22) !important;
+        box-shadow: 0 0 8px #FF2D95, 0 0 16px rgba(255, 45, 149, 0.8) !important;
+        border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    }
 
-        background-color: #FF2D95 !important;
-
-        transform: scale(1.15);
-
-        box-shadow: 0 0 6px #FF2D95, 0 0 12px rgba(255, 45, 149, 0.85) !important;
-
-        border: 1.5px solid #ffffff !important;
-
+    .matrix-cell.snake-head::before,
+    .matrix-cell.snake-head::after {
+        width: 2.8px;
+        height: 2.8px;
+        box-shadow: 0 0 3px #00F2FE;
     }
 
     .matrix-cell.snake-body-1 {
-
-        background-color: #FF4FA7 !important;
-
-        box-shadow: 0 0 5px rgba(255, 133, 179, 0.75) !important;
-
+        background: radial-gradient(circle at 35% 30%, #FF80BF 0%, #E0247C 60%, #9D174D 100%) !important;
+        transform: scale(1.15) !important;
+        box-shadow: 0 0 6px rgba(255, 45, 149, 0.7) !important;
     }
 
     .matrix-cell.snake-body-2 {
-
-        background-color: #FF70B8 !important;
-
-        box-shadow: 0 0 4px rgba(255, 158, 196, 0.65) !important;
-
+        background: radial-gradient(circle at 35% 30%, #C084FC 0%, #A855F7 60%, #7E22CE 100%) !important;
+        transform: scale(1.10) !important;
+        box-shadow: 0 0 5px rgba(168, 85, 247, 0.65) !important;
     }
 
     .matrix-cell.snake-body-3 {
-
-        background-color: #FF94C9 !important;
-
-        box-shadow: 0 0 3px rgba(255, 179, 209, 0.55) !important;
-
+        background: radial-gradient(circle at 35% 30%, #818CF8 0%, #6366F1 60%, #4338CA 100%) !important;
+        transform: scale(1.06) !important;
+        box-shadow: 0 0 5px rgba(99, 102, 241, 0.6) !important;
     }
 
     .matrix-cell.snake-body-4 {
+        background: radial-gradient(circle at 35% 30%, #38BDF8 0%, #00F2FE 60%, #0284C7 100%) !important;
+        transform: scale(1.03) !important;
+        box-shadow: 0 0 5px rgba(0, 242, 254, 0.65) !important;
+    }
 
-        background-color: #FFB8DA !important;
-
-        box-shadow: 0 0 3px rgba(255, 204, 224, 0.45) !important;
-
+    .matrix-cell.snake-tail {
+        transform: scale(0.92) !important;
     }
 
     .matrix-cell.snake-trail {
-
-        box-shadow: none !important;
-
-        filter: brightness(1.2);
-
+        box-shadow: 0 0 6px rgba(0, 242, 254, 0.65) !important;
+        filter: brightness(1.25);
     }
 
     .snake-grid-wrapper {
+        padding: 1rem 0.75rem 0.9rem;
+        border-radius: 14px;
+    }
 
-        padding: 0.85rem 0.6rem 0.75rem;
-
-        border-radius: 12px;
-
+    .snake-grid-wrapper::before {
+        border-radius: 14px;
     }
 
     .snake-calendar-inner {

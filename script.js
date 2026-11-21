@@ -2654,22 +2654,15 @@ class GitHubSnakeEngine {
 
         }
 
-        // Initialize 4-segment light pink snake at top-left
-
+        // Initialize 4-segment 3D cyber serpent at top-left
+        this.currentDir = 'right';
         this.snake = [
-
             { r: 0, c: 3 },
-
             { r: 0, c: 2 },
-
             { r: 0, c: 1 },
-
             { r: 0, c: 0 }
-
         ];
-
         this.phase = 'hunting';
-
         this.renderSnake();
 
     }
@@ -2849,155 +2842,113 @@ class GitHubSnakeEngine {
                 }
 
                 const nextStep = this.findNextStep(head, nearestFood);
-
                 if (!nextStep) return;
 
-                // Move head forward
+                // Track movement direction for realistic 3D head & cyber optic eyes orientation
+                const dr = nextStep.r - head.r;
+                const dc = nextStep.c - head.c;
+                if (dc > 0) this.currentDir = 'right';
+                else if (dc < 0) this.currentDir = 'left';
+                else if (dr > 0) this.currentDir = 'down';
+                else if (dr < 0) this.currentDir = 'up';
 
+                // Move head forward
                 this.snake.unshift(nextStep);
 
                 // Check if snake head lands on uneaten food
-
                 const cell = this.grid[nextStep.r]?.[nextStep.c];
-
                 let ateFood = false;
-
                 if (cell && cell.originalLevel > 0 && !cell.isEaten) {
-
                     cell.isEaten = true;
-
                     cell.currentLevel = 0;
-
                     ateFood = true;
 
+                    // Trigger bio-luminescent eating energy pulse
+                    if (cell.el) {
+                        cell.el.classList.add('snake-eat-burst');
+                        setTimeout(() => {
+                            if (cell && cell.el) cell.el.classList.remove('snake-eat-burst');
+                        }, 320);
+                    }
                 }
 
                 // If ate food, maintain length up to 5; otherwise pop tail
-
                 if (!ateFood || this.snake.length > 5) {
-
                     const oldTail = this.snake.pop();
-
                     this.restoreCell(oldTail);
-
                 }
 
                 this.renderSnake();
-
                 return;
-
             }
-
         }
 
         if (this.phase === 'exiting') {
-
             // Snake slithers towards the right exit boundary (column 51)
-
+            this.currentDir = 'right';
             if (head.c < this.cols - 1) {
-
                 const nextStep = { r: head.r, c: head.c + 1 };
-
                 this.snake.unshift(nextStep);
-
                 const oldTail = this.snake.pop();
-
                 this.restoreCell(oldTail);
-
                 this.renderSnake();
-
             } else {
-
                 // Exit off board segment by segment
-
                 const oldTail = this.snake.pop();
-
                 this.restoreCell(oldTail);
-
                 if (this.snake.length > 0) {
-
                     this.renderSnake();
-
                 } else {
-
                     // Fully exited! Pause briefly and restart ("puni au tyhare st habo")
-
                     this.phase = 'respawning';
-
                     this.respawnTimer = setTimeout(() => {
-
                         this.resetSnakeAndFoods();
-
                     }, 600);
-
                 }
-
             }
-
         }
-
     }
 
     restoreCell(coord) {
-
         if (!coord) return;
-
         const cell = this.grid[coord.r]?.[coord.c];
-
         if (cell && cell.el) {
-
             const lvl = cell.isEaten ? 0 : cell.originalLevel;
-
             cell.el.className = `matrix-cell lvl-${lvl} snake-trail`;
-
             setTimeout(() => {
-
                 if (cell.el && !this.isCellInSnake(coord.r, coord.c)) {
-
                     cell.el.className = `matrix-cell lvl-${lvl}`;
-
                 }
-
-            }, 180);
-
+            }, 300);
         }
-
     }
 
     isCellInSnake(r, c) {
-
         return this.snake.some(seg => seg.r === r && seg.c === c);
-
     }
 
     renderSnake() {
-
         const segmentClasses = [
-
             'snake-head',
-
             'snake-body-1',
-
             'snake-body-2',
-
             'snake-body-3',
-
             'snake-body-4'
-
         ];
+        const dir = this.currentDir || 'right';
+        const len = this.snake.length;
 
         this.snake.forEach((seg, idx) => {
-
             const cell = this.grid[seg.r]?.[seg.c];
-
             if (cell && cell.el) {
-
-                const sClass = segmentClasses[idx] || 'snake-body-4';
-
+                let sClass = segmentClasses[idx] || 'snake-body-4';
+                if (idx === 0) {
+                    sClass = `snake-head dir-${dir}`;
+                } else if (idx === len - 1 && len > 3) {
+                    sClass += ' snake-tail';
+                }
                 cell.el.className = `matrix-cell ${sClass}`;
-
             }
-
         });
 
     }
