@@ -2349,39 +2349,20 @@ class GitHubSnakeEngine {
     }
 
     setupVisibilityObserver() {
-
         if (!window.IntersectionObserver || !this.wrapperEl) return;
-
         this.observer = new IntersectionObserver((entries) => {
-
             entries.forEach(entry => {
-
-                if (entry.isIntersecting) {
-
-                    if (!document.hidden) {
-
-                        this.start();
-
-                    }
-
-                } else {
-
+                if (entry.isIntersecting && !document.hidden) {
                     const githubPage = document.getElementById('page-github');
-
-                    if (!githubPage || !githubPage.classList.contains('active')) {
-
-                        this.stop();
-
+                    if (githubPage && githubPage.classList.contains('active')) {
+                        this.start();
                     }
-
+                } else {
+                    this.stop();
                 }
-
             });
-
-        }, { threshold: 0.02 });
-
+        }, { threshold: 0.05 });
         this.observer.observe(this.wrapperEl);
-
     }
 
     init(contributionDays = null) {
@@ -2668,179 +2649,131 @@ class GitHubSnakeEngine {
     }
 
     findNextStep(start, target) {
-
         if (!target || (start.r === target.row && start.c === target.col)) return null;
 
         const R = this.rows, C = this.cols;
+        const total = R * C;
+        if (!this.bfsVisited || this.bfsVisited.length !== total) {
+            this.bfsVisited = new Uint8Array(total);
+            this.bfsParent = new Int16Array(total);
+            this.bfsQueue = new Int16Array(total);
+        }
+        this.bfsVisited.fill(0);
+        this.bfsParent.fill(-1);
 
         const targetR = target.row, targetC = target.col;
+        const targetIdx = targetR * C + targetC;
+        const startIdx = start.r * C + start.c;
 
-        const queue = [[start.r, start.c]];
+        let qHead = 0, qTail = 0;
+        this.bfsQueue[qTail++] = startIdx;
+        this.bfsVisited[startIdx] = 1;
 
-        const visited = new Uint8Array(R * C);
-
-        const parent = new Int16Array(R * C).fill(-1);
-
-        visited[start.r * C + start.c] = 1;
-
-        // Avoid snake body segments (excluding tail which moves forward)
-
-        const bodySet = new Set();
-
+        // Fast snake body collision marking (excluding tail which will advance)
         for (let i = 1; i < this.snake.length - 1; i++) {
-
-            bodySet.add(this.snake[i].r * C + this.snake[i].c);
-
+            this.bfsVisited[this.snake[i].r * C + this.snake[i].c] = 2;
         }
 
-        const dirs = [
-
-            { dr: 0, dc: 1 },
-
-            { dr: 1, dc: 0 },
-
-            { dr: 0, dc: -1 },
-
-            { dr: -1, dc: 0 }
-
-        ];
-
         let found = false;
-
-        while (queue.length > 0) {
-
-            const [cr, cc] = queue.shift();
-
-            if (cr === targetR && cc === targetC) {
-
+        while (qHead < qTail) {
+            const curr = this.bfsQueue[qHead++];
+            if (curr === targetIdx) {
                 found = true;
-
                 break;
-
             }
+            const cr = Math.floor(curr / C);
+            const cc = curr % C;
 
-            for (const { dr, dc } of dirs) {
-
-                const nr = cr + dr;
-
-                const nc = cc + dc;
-
-                if (nr >= 0 && nr < R && nc >= 0 && nc < C) {
-
-                    const idx = nr * C + nc;
-
-                    if (!visited[idx] && !bodySet.has(idx)) {
-
-                        visited[idx] = 1;
-
-                        parent[idx] = cr * C + cc;
-
-                        queue.push([nr, nc]);
-
-                    }
-
+            // Directions: right, down, left, up
+            if (cc + 1 < C) {
+                const idx = curr + 1;
+                if (!this.bfsVisited[idx]) {
+                    this.bfsVisited[idx] = 1;
+                    this.bfsParent[idx] = curr;
+                    this.bfsQueue[qTail++] = idx;
                 }
-
             }
-
+            if (cr + 1 < R) {
+                const idx = curr + C;
+                if (!this.bfsVisited[idx]) {
+                    this.bfsVisited[idx] = 1;
+                    this.bfsParent[idx] = curr;
+                    this.bfsQueue[qTail++] = idx;
+                }
+            }
+            if (cc - 1 >= 0) {
+                const idx = curr - 1;
+                if (!this.bfsVisited[idx]) {
+                    this.bfsVisited[idx] = 1;
+                    this.bfsParent[idx] = curr;
+                    this.bfsQueue[qTail++] = idx;
+                }
+            }
+            if (cr - 1 >= 0) {
+                const idx = curr - C;
+                if (!this.bfsVisited[idx]) {
+                    this.bfsVisited[idx] = 1;
+                    this.bfsParent[idx] = curr;
+                    this.bfsQueue[qTail++] = idx;
+                }
+            }
         }
 
         if (!found) {
-
             // Greedy fallback if path blocked by body
-
             let bestStep = null;
-
             let bestDist = Infinity;
-
+            const dirs = [{ dr: 0, dc: 1 }, { dr: 1, dc: 0 }, { dr: 0, dc: -1 }, { dr: -1, dc: 0 }];
             for (const { dr, dc } of dirs) {
-
                 const nr = start.r + dr;
-
                 const nc = start.c + dc;
-
                 if (nr >= 0 && nr < R && nc >= 0 && nc < C) {
-
                     const neck = this.snake[1];
-
                     if (!neck || neck.r !== nr || neck.c !== nc) {
-
                         const dist = Math.abs(nr - targetR) + Math.abs(nc - targetC);
-
                         if (dist < bestDist) {
-
                             bestDist = dist;
-
                             bestStep = { r: nr, c: nc };
-
                         }
-
                     }
-
                 }
-
             }
-
             return bestStep;
-
         }
 
         // Backtrack from target to immediate next step
-
-        let currIdx = targetR * C + targetC;
-
-        const startIdx = start.r * C + start.c;
-
-        while (parent[currIdx] !== startIdx && parent[currIdx] !== -1) {
-
-            currIdx = parent[currIdx];
-
+        let currIdx = targetIdx;
+        while (this.bfsParent[currIdx] !== startIdx && this.bfsParent[currIdx] !== -1) {
+            currIdx = this.bfsParent[currIdx];
         }
-
         return { r: Math.floor(currIdx / C), c: currIdx % C };
-
     }
 
     step() {
-
         if (!this.snake || !this.snake.length) return;
-
         const head = this.snake[0];
 
         if (this.phase === 'hunting') {
+            // Direct zero-allocation loop for nearest uneaten food
+            let nearestFood = null;
+            let minDist = Infinity;
+            let hasUneaten = false;
 
-            // Find all uneaten contribution food cells
-
-            const uneaten = this.foods.filter(f => !f.isEaten);
-
-            if (uneaten.length === 0) {
-
-                // All foods eaten! ("sabu khai sari bapre puni paleijibo")
-
-                this.phase = 'exiting';
-
-            } else {
-
-                // Find nearest uneaten food using Manhattan distance
-
-                let nearestFood = null;
-
-                let minDist = Infinity;
-
-                for (const f of uneaten) {
-
+            for (let i = 0; i < this.foods.length; i++) {
+                const f = this.foods[i];
+                if (!f.isEaten) {
+                    hasUneaten = true;
                     const dist = Math.abs(head.r - f.row) + Math.abs(head.c - f.col);
-
                     if (dist < minDist) {
-
                         minDist = dist;
-
                         nearestFood = f;
-
                     }
-
                 }
+            }
 
+            if (!hasUneaten) {
+                this.phase = 'exiting';
+            } else {
                 const nextStep = this.findNextStep(head, nearestFood);
                 if (!nextStep) return;
 
@@ -2868,7 +2801,7 @@ class GitHubSnakeEngine {
                         cell.el.classList.add('snake-eat-burst');
                         setTimeout(() => {
                             if (cell && cell.el) cell.el.classList.remove('snake-eat-burst');
-                        }, 320);
+                        }, 280);
                     }
                 }
 
@@ -2899,11 +2832,11 @@ class GitHubSnakeEngine {
                 if (this.snake.length > 0) {
                     this.renderSnake();
                 } else {
-                    // Fully exited! Pause briefly and restart ("puni au tyhare st habo")
+                    // Fully exited! Pause briefly and restart
                     this.phase = 'respawning';
                     this.respawnTimer = setTimeout(() => {
                         this.resetSnakeAndFoods();
-                    }, 600);
+                    }, 500);
                 }
             }
         }
@@ -2919,7 +2852,7 @@ class GitHubSnakeEngine {
                 if (cell.el && !this.isCellInSnake(coord.r, coord.c)) {
                     cell.el.className = `matrix-cell lvl-${lvl}`;
                 }
-            }, 300);
+            }, 140);
         }
     }
 

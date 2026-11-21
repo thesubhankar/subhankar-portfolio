@@ -413,21 +413,16 @@ select,
 @media (max-width: 1024px) {
 
     .project-featured-card,
-
     .project-card,
-
     .filter-chip,
-
     .compact-badge-cat,
-
     .btn-project-code,
-
-    .project-carousel-arrow {
-
+    .project-carousel-arrow,
+    .snake-grid-wrapper,
+    .snake-status-pill,
+    .graph-sync-pill {
         backdrop-filter: none !important;
-
         -webkit-backdrop-filter: none !important;
-
     }
 
 }
@@ -6600,27 +6595,24 @@ body[data-theme="light"] .toggle-slider {
     margin-top: 0.5rem;
 }
 
-/* Ambient Back Glow Behind 3D Glass Card */
+/* Ambient Back Glow Behind 3D Glass Card (Hardware Accelerated, Zero Software Blur) */
 .github-graph-section::before {
     content: '';
     position: absolute;
-    top: 35px;
-    left: 4%;
-    right: 4%;
-    bottom: 5px;
-    background: radial-gradient(ellipse at 50% 50%, rgba(0, 242, 254, 0.22) 0%, rgba(255, 45, 149, 0.18) 45%, rgba(139, 92, 246, 0.12) 70%, transparent 100%);
-    filter: blur(55px);
+    top: 25px;
+    left: 2%;
+    right: 2%;
+    bottom: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(0, 242, 254, 0.22) 0%, rgba(0, 242, 254, 0.12) 30%, rgba(255, 45, 149, 0.10) 50%, rgba(139, 92, 246, 0.05) 70%, transparent 85%);
     pointer-events: none;
     z-index: 0;
-    border-radius: 40px;
-    opacity: 0.88;
-    transition: opacity 0.3s ease;
+    border-radius: 30px;
+    transform: translateZ(0);
 }
 
 [data-theme="light"] .github-graph-section::before {
-    background: radial-gradient(ellipse at 50% 50%, rgba(2, 132, 199, 0.18) 0%, rgba(236, 72, 153, 0.14) 45%, rgba(147, 51, 234, 0.1) 70%, transparent 100%);
-    filter: blur(45px);
-    opacity: 0.92;
+    background: radial-gradient(ellipse at 50% 50%, rgba(2, 132, 199, 0.18) 0%, rgba(2, 132, 199, 0.10) 30%, rgba(236, 72, 153, 0.08) 50%, rgba(147, 51, 234, 0.04) 70%, transparent 85%);
+    transform: translateZ(0);
 }
 
 .github-graph-top-row {
@@ -6756,26 +6748,26 @@ body[data-theme="light"] .toggle-slider {
     color: #0369A1;
 }
 
-/* Inner Contribution Grid Frame - Ultra-Premium Liquid Glassmorphic Container */
+/* Inner Contribution Grid Frame - Ultra-Premium Liquid Glassmorphic Container (GPU Optimized) */
 .snake-grid-wrapper {
     position: relative;
     z-index: 1;
     border-radius: 20px;
     padding: 1.6rem 1.4rem 1.35rem;
-    background: rgba(8, 14, 28, 0.44) !important;
-    backdrop-filter: blur(24px) saturate(210%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(210%) !important;
+    background: rgba(8, 14, 28, 0.62) !important;
+    backdrop-filter: blur(10px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
     border: 1.5px solid transparent !important;
     background-clip: padding-box !important;
     box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.65),
-        0 0 50px rgba(0, 242, 254, 0.32),
-        0 0 90px rgba(255, 45, 149, 0.24),
-        0 0 130px rgba(139, 92, 246, 0.16),
-        inset 0 1px 1.5px rgba(255, 255, 255, 0.3),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.4) !important;
+        0 16px 40px rgba(0, 0, 0, 0.6),
+        0 0 25px rgba(0, 242, 254, 0.22),
+        0 0 45px rgba(255, 45, 149, 0.18),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.25) !important;
     overflow: hidden;
-    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+    transform: translateZ(0);
+    contain: layout paint;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Dual-Neon Prismatic Glass Border */
@@ -6802,33 +6794,31 @@ body[data-theme="light"] .toggle-slider {
     right: 8%;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8) 30%, rgba(0, 242, 254, 0.9) 50%, rgba(255, 45, 149, 0.8) 70%, transparent);
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
     pointer-events: none;
     z-index: 2;
 }
 
 .snake-grid-wrapper:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px) translateZ(0);
     box-shadow: 
-        0 26px 65px rgba(0, 0, 0, 0.75),
-        0 0 65px rgba(0, 242, 254, 0.42),
-        0 0 100px rgba(255, 45, 149, 0.32),
-        0 0 140px rgba(139, 92, 246, 0.22),
-        inset 0 1px 2px rgba(255, 255, 255, 0.42) !important;
+        0 22px 55px rgba(0, 0, 0, 0.72),
+        0 0 35px rgba(0, 242, 254, 0.32),
+        0 0 65px rgba(255, 45, 149, 0.26),
+        inset 0 1px 2px rgba(255, 255, 255, 0.35) !important;
 }
 
 /* Daytime (Light Mode) Glassmorphic Optimization */
 [data-theme="light"] .snake-grid-wrapper {
-    background: rgba(255, 255, 255, 0.54) !important;
-    backdrop-filter: blur(24px) saturate(190%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+    background: rgba(255, 255, 255, 0.68) !important;
+    backdrop-filter: blur(10px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
     border-color: transparent !important;
     box-shadow: 
-        0 16px 40px rgba(15, 23, 42, 0.07),
-        0 0 35px rgba(2, 132, 199, 0.22),
-        0 0 70px rgba(236, 72, 153, 0.14),
-        inset 0 1px 2px rgba(255, 255, 255, 0.95),
-        inset 0 -1px 1px rgba(0, 0, 0, 0.04) !important;
+        0 12px 30px rgba(15, 23, 42, 0.05),
+        0 0 22px rgba(2, 132, 199, 0.16),
+        0 0 40px rgba(236, 72, 153, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
 }
 
 [data-theme="light"] .snake-grid-wrapper::before {
@@ -6837,27 +6827,29 @@ body[data-theme="light"] .toggle-slider {
 
 [data-theme="light"] .snake-grid-wrapper::after {
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95) 25%, rgba(2, 132, 199, 0.7) 50%, rgba(236, 72, 153, 0.5) 75%, transparent) !important;
-    filter: drop-shadow(0 0 4px rgba(2, 132, 199, 0.4));
+    filter: drop-shadow(0 0 3px rgba(2, 132, 199, 0.35));
 }
 
 [data-theme="light"] .snake-grid-wrapper:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px) translateZ(0);
     box-shadow: 
-        0 20px 48px rgba(15, 23, 42, 0.1),
-        0 0 45px rgba(2, 132, 199, 0.32),
-        0 0 85px rgba(236, 72, 153, 0.24),
+        0 18px 42px rgba(15, 23, 42, 0.08),
+        0 0 32px rgba(2, 132, 199, 0.25),
+        0 0 55px rgba(236, 72, 153, 0.18),
         inset 0 1px 2px rgba(255, 255, 255, 1) !important;
 }
 
 .snake-calendar-scroll-area {
-
     width: 100%;
-
     overflow-x: auto;
-
     -webkit-overflow-scrolling: touch;
-
     position: relative;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 123, 167, 0.45) rgba(255, 255, 255, 0.05);
+    transform: translateZ(0);
+    contain: layout paint;
+}
 
     padding-bottom: 8px;
 
@@ -7101,16 +7093,14 @@ body[data-theme="light"] .toggle-slider {
 .matrix-cell.snake-head {
     background: radial-gradient(circle at 35% 30%, #FF70B8 0%, #FF2D95 55%, #D81B60 100%) !important;
     box-shadow:
-        0 0 14px #FF2D95,
-        0 0 26px rgba(255, 45, 149, 0.95),
-        0 0 38px rgba(255, 45, 149, 0.5),
+        0 0 10px #FF2D95,
+        0 0 20px rgba(255, 45, 149, 0.7),
         inset 0 1.5px 2px rgba(255, 255, 255, 0.8),
-        inset 0 -1.5px 2px rgba(0, 0, 0, 0.5) !important;
+        inset 0 -1.5px 2px rgba(0, 0, 0, 0.4) !important;
     border: 1px solid rgba(255, 255, 255, 0.85) !important;
     z-index: 15 !important;
-    transform: scale(1.35) !important;
+    transform: scale(1.3) translateZ(0) !important;
     position: relative !important;
-    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
     overflow: visible !important;
 }
 
@@ -7129,7 +7119,7 @@ body[data-theme="light"] .toggle-slider {
     height: 3.5px;
     border-radius: 50%;
     background: #00F2FE;
-    box-shadow: 0 0 4px #00F2FE, 0 0 8px rgba(0, 242, 254, 0.95), 0 0 1px #ffffff;
+    box-shadow: 0 0 3px #00F2FE, 0 0 6px rgba(0, 242, 254, 0.9);
     z-index: 16;
     pointer-events: none;
 }
@@ -7154,87 +7144,75 @@ body[data-theme="light"] .toggle-slider {
 /* Segment 1: Neck (Magenta to Fuchsia) */
 .matrix-cell.snake-body-1 {
     background: radial-gradient(circle at 35% 30%, #FF80BF 0%, #E0247C 60%, #9D174D 100%) !important;
-    box-shadow: 0 0 10px rgba(255, 45, 149, 0.85), 0 0 18px rgba(255, 45, 149, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 0 8px rgba(255, 45, 149, 0.8), inset 0 1px 1.5px rgba(255, 255, 255, 0.75) !important;
     border: 1px solid rgba(255, 255, 255, 0.5) !important;
     border-radius: 5px !important;
     z-index: 14 !important;
-    transform: scale(1.24) !important;
-    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
+    transform: scale(1.2) translateZ(0) !important;
 }
 
 /* Segment 2: Upper Mid-Torso (Electric Purple / Violet) */
 .matrix-cell.snake-body-2 {
     background: radial-gradient(circle at 35% 30%, #C084FC 0%, #A855F7 60%, #7E22CE 100%) !important;
-    box-shadow: 0 0 9px rgba(168, 85, 247, 0.8), 0 0 16px rgba(168, 85, 247, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.7) !important;
+    box-shadow: 0 0 7px rgba(168, 85, 247, 0.75), inset 0 1px 1.5px rgba(255, 255, 255, 0.7) !important;
     border: 1px solid rgba(255, 255, 255, 0.45) !important;
     border-radius: 4.5px !important;
     z-index: 13 !important;
-    transform: scale(1.16) !important;
-    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
+    transform: scale(1.14) translateZ(0) !important;
 }
 
 /* Segment 3: Lower Mid-Torso (Vibrant Indigo) */
 .matrix-cell.snake-body-3 {
     background: radial-gradient(circle at 35% 30%, #818CF8 0%, #6366F1 60%, #4338CA 100%) !important;
-    box-shadow: 0 0 8px rgba(99, 102, 241, 0.75), 0 0 14px rgba(99, 102, 241, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.65) !important;
+    box-shadow: 0 0 6px rgba(99, 102, 241, 0.7), inset 0 1px 1.5px rgba(255, 255, 255, 0.65) !important;
     border: 1px solid rgba(255, 255, 255, 0.4) !important;
     border-radius: 4px !important;
     z-index: 12 !important;
-    transform: scale(1.10) !important;
-    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
+    transform: scale(1.08) translateZ(0) !important;
 }
 
 /* Segment 4: Tail Lead (Electric Cyan / Sky Blue) */
 .matrix-cell.snake-body-4 {
     background: radial-gradient(circle at 35% 30%, #38BDF8 0%, #00F2FE 60%, #0284C7 100%) !important;
-    box-shadow: 0 0 8px rgba(0, 242, 254, 0.8), 0 0 14px rgba(0, 242, 254, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 0 6px rgba(0, 242, 254, 0.75), inset 0 1px 1.5px rgba(255, 255, 255, 0.6) !important;
     border: 1px solid rgba(255, 255, 255, 0.35) !important;
     border-radius: 3.5px !important;
     z-index: 11 !important;
-    transform: scale(1.05) !important;
-    transition: transform 0.11s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.11s ease;
+    transform: scale(1.04) translateZ(0) !important;
 }
 
 /* Tapered Tail Tip */
 .matrix-cell.snake-tail {
     border-radius: 50% !important;
-    transform: scale(0.92) !important;
+    transform: scale(0.92) translateZ(0) !important;
     background: radial-gradient(circle at 35% 30%, #67E8F9 0%, #00F2FE 70%, #0369A1 100%) !important;
-    box-shadow: 0 0 6px rgba(0, 242, 254, 0.75), 0 0 12px rgba(0, 242, 254, 0.4) !important;
+    box-shadow: 0 0 5px rgba(0, 242, 254, 0.75) !important;
     z-index: 10 !important;
 }
 
-/* Phosphorescent Liquid Light Wake / Trail */
+/* Phosphorescent Liquid Light Wake / Trail (Lightweight) */
 .matrix-cell.snake-trail {
-    box-shadow: 
-        0 0 10px rgba(0, 242, 254, 0.8),
-        0 0 20px rgba(255, 45, 149, 0.45),
-        inset 0 0 6px rgba(0, 242, 254, 0.4) !important;
-    border-color: rgba(0, 242, 254, 0.6) !important;
-    filter: brightness(1.35);
-    transition: box-shadow 0.32s ease, filter 0.32s ease, border-color 0.32s ease;
+    box-shadow: 0 0 6px rgba(0, 242, 254, 0.7) !important;
+    border-color: rgba(0, 242, 254, 0.65) !important;
 }
 
 /* Eating Energy Shockwave Pulse */
 @keyframes snakeEatPulse {
     0% {
-        transform: scale(1.6);
-        box-shadow: 0 0 16px #00F2FE, 0 0 28px #10B981, inset 0 0 10px #ffffff !important;
-        filter: brightness(2);
+        transform: scale(1.4) translateZ(0);
+        box-shadow: 0 0 12px #00F2FE, 0 0 20px #10B981 !important;
     }
     50% {
-        transform: scale(1.3);
-        box-shadow: 0 0 22px #FF2D95, 0 0 32px #00F2FE !important;
-        filter: brightness(1.6);
+        transform: scale(1.2) translateZ(0);
+        box-shadow: 0 0 16px #FF2D95, 0 0 22px #00F2FE !important;
     }
     100% {
-        transform: scale(1);
-        filter: brightness(1);
+        transform: scale(1) translateZ(0);
     }
 }
 
 .matrix-cell.snake-eat-burst {
-    animation: snakeEatPulse 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+    animation: snakeEatPulse 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
     z-index: 20 !important;
 }
 
@@ -7244,76 +7222,69 @@ body[data-theme="light"] .toggle-slider {
 [data-theme="light"] .matrix-cell.snake-head {
     background: radial-gradient(circle at 35% 30%, #FF66B2 0%, #FF1493 55%, #C2185B 100%) !important;
     box-shadow: 
-        0 3px 12px rgba(219, 39, 119, 0.65),
-        0 0 20px rgba(255, 45, 149, 0.5),
+        0 2px 10px rgba(219, 39, 119, 0.6),
+        0 0 16px rgba(255, 45, 149, 0.4),
         inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
-        inset 0 -1.5px 2px rgba(136, 19, 55, 0.35) !important;
+        inset 0 -1.5px 2px rgba(136, 19, 55, 0.3) !important;
     border: 1.2px solid rgba(255, 255, 255, 0.95) !important;
 }
 
 [data-theme="light"] .matrix-cell.snake-head::before,
 [data-theme="light"] .matrix-cell.snake-head::after {
     background: #00F2FE;
-    box-shadow: 0 0 3px #00F2FE, 0 0 6px rgba(0, 180, 216, 0.9), 0 0 1px #0A0A0A;
+    box-shadow: 0 0 2px #00F2FE, 0 0 5px rgba(0, 180, 216, 0.85);
     border: 0.5px solid #0369A1;
 }
 
 [data-theme="light"] .matrix-cell.snake-body-1 {
     background: radial-gradient(circle at 35% 30%, #F472B6 0%, #E11D48 60%, #9F1239 100%) !important;
-    box-shadow: 0 3px 10px rgba(225, 29, 72, 0.5), 0 0 14px rgba(244, 114, 182, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 2px 8px rgba(225, 29, 72, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.9) !important;
     border: 1px solid rgba(255, 255, 255, 0.8) !important;
 }
 
 [data-theme="light"] .matrix-cell.snake-body-2 {
     background: radial-gradient(circle at 35% 30%, #C084FC 0%, #9333EA 60%, #6B21A8 100%) !important;
-    box-shadow: 0 3px 10px rgba(147, 51, 234, 0.45), 0 0 12px rgba(192, 132, 252, 0.25), inset 0 1px 1.5px rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 2px 7px rgba(147, 51, 234, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.85) !important;
     border: 1px solid rgba(255, 255, 255, 0.75) !important;
 }
 
 [data-theme="light"] .matrix-cell.snake-body-3 {
     background: radial-gradient(circle at 35% 30%, #818CF8 0%, #4F46E5 60%, #312E81 100%) !important;
-    box-shadow: 0 3px 9px rgba(79, 70, 229, 0.45), 0 0 12px rgba(129, 140, 248, 0.25), inset 0 1px 1.5px rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 2px 6px rgba(79, 70, 229, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.8) !important;
     border: 1px solid rgba(255, 255, 255, 0.7) !important;
 }
 
 [data-theme="light"] .matrix-cell.snake-body-4 {
     background: radial-gradient(circle at 35% 30%, #38BDF8 0%, #0284C7 60%, #075985 100%) !important;
-    box-shadow: 0 3px 9px rgba(2, 132, 199, 0.5), 0 0 12px rgba(56, 189, 248, 0.3), inset 0 1px 1.5px rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.75) !important;
     border: 1px solid rgba(255, 255, 255, 0.65) !important;
 }
 
 [data-theme="light"] .matrix-cell.snake-tail {
     background: radial-gradient(circle at 35% 30%, #67E8F9 0%, #06B6D4 70%, #0E7490 100%) !important;
-    box-shadow: 0 2px 8px rgba(6, 182, 212, 0.55), inset 0 1px 1.2px rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 2px 6px rgba(6, 182, 212, 0.5) !important;
 }
 
 [data-theme="light"] .matrix-cell.snake-trail {
-    box-shadow: 
-        0 0 8px rgba(2, 132, 199, 0.55),
-        0 0 14px rgba(236, 72, 153, 0.35),
-        inset 0 0 4px rgba(2, 132, 199, 0.3) !important;
-    border-color: rgba(2, 132, 199, 0.55) !important;
-    filter: brightness(1.15);
+    box-shadow: 0 0 6px rgba(2, 132, 199, 0.5) !important;
+    border-color: rgba(2, 132, 199, 0.5) !important;
 }
 
 [data-theme="light"] .matrix-cell.snake-eat-burst {
-    animation: snakeEatPulseLight 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+    animation: snakeEatPulseLight 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
 }
 
 @keyframes snakeEatPulseLight {
     0% {
-        transform: scale(1.6);
-        box-shadow: 0 0 14px #0284C7, 0 0 24px #10B981, inset 0 0 6px #ffffff !important;
-        filter: brightness(1.25);
+        transform: scale(1.4) translateZ(0);
+        box-shadow: 0 0 10px #0284C7, 0 0 18px #10B981 !important;
     }
     50% {
-        transform: scale(1.3);
-        box-shadow: 0 0 18px #E11D48, 0 0 26px #0284C7 !important;
-        filter: brightness(1.12);
+        transform: scale(1.2) translateZ(0);
+        box-shadow: 0 0 14px #E11D48, 0 0 20px #0284C7 !important;
     }
     100% {
-        transform: scale(1);
-        filter: brightness(1);
+        transform: scale(1) translateZ(0);
     }
 }
 
@@ -10007,6 +9978,17 @@ body[data-theme="light"] .toggle-slider {
     .snake-grid-wrapper {
         padding: 1rem 0.75rem 0.9rem;
         border-radius: 14px;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(10, 16, 28, 0.88) !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 242, 254, 0.16) !important;
+    }
+
+    [data-theme="light"] .snake-grid-wrapper {
+        background: rgba(255, 255, 255, 0.92) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05), 0 0 14px rgba(2, 132, 199, 0.12) !important;
     }
 
     .snake-grid-wrapper::before {
