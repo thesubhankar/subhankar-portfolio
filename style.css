@@ -2383,56 +2383,112 @@ body[data-theme="light"] .toggle-slider {
 
 }
 
-.btn-secondary {
-
-    background-color: transparent;
-
-    border: 1.5px solid var(--primary-blue);
-
-    color: var(--primary-blue);
-
-    box-shadow: none;
-
+/* ==========================================================================
+   Ultra-Premium Liquid Glass Button (Home Page Resume CTA)
+   - Zero sky-blue border on 4 sides (crystal glass refraction only)
+   - High-end liquid frosted glass substrate with specular light reflection
+   - Day / Night theme balanced clarity
+   ========================================================================== */
+.btn-secondary:not(.btn-resume),
+.btn-liquid-glass,
+.hero-actions .btn-secondary,
+.hero-actions a[data-nav="resume"] {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
+    backdrop-filter: blur(16px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    color: #FFFFFF !important;
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.35),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.45),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.25) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease !important;
 }
 
-.btn-secondary:hover {
-
-    background-color: var(--bg-pill);
-
-    box-shadow: 0 4px 14px var(--primary-blue-glow);
-
+.btn-secondary:not(.btn-resume) svg,
+.btn-liquid-glass svg,
+.hero-actions .btn-secondary svg,
+.hero-actions a[data-nav="resume"] svg {
+    stroke: #FFFFFF !important;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+    transition: stroke 0.2s ease;
 }
 
-[data-theme="dark"] .btn-secondary {
-
-    border-color: #007BA7;
-
-    color: #007BA7;
-
+.btn-secondary:not(.btn-resume):hover,
+.btn-liquid-glass:hover,
+.hero-actions .btn-secondary:hover,
+.hero-actions a[data-nav="resume"]:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.38) !important;
+    color: #FFFFFF !important;
+    box-shadow: 
+        0 12px 30px rgba(0, 0, 0, 0.45),
+        0 0 24px rgba(255, 255, 255, 0.18),
+        inset 0 1px 2px rgba(255, 255, 255, 0.65) !important;
+    transform: translateY(-3px) scale(1.02) !important;
 }
 
-[data-theme="dark"] .btn-secondary:hover {
-
-    background-color: rgba(0, 123, 167, 0.12);
-
-    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.25);
-
+.btn-secondary:not(.btn-resume):hover svg,
+.btn-liquid-glass:hover svg,
+.hero-actions .btn-secondary:hover svg,
+.hero-actions a[data-nav="resume"]:hover svg {
+    stroke: #FFFFFF !important;
 }
 
-[data-theme="light"] .btn-secondary {
-
-    border-color: #007BA7;
-
-    color: #007BA7;
-
+.btn-secondary:not(.btn-resume):active,
+.btn-liquid-glass:active,
+.hero-actions .btn-secondary:active,
+.hero-actions a[data-nav="resume"]:active {
+    transform: translateY(1.5px) scale(0.97) !important;
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
 }
 
-[data-theme="light"] .btn-secondary:hover {
+/* Daytime / Light Mode Liquid Glass Resume Button */
+[data-theme="light"] .btn-secondary:not(.btn-resume),
+[data-theme="light"] .btn-liquid-glass,
+[data-theme="light"] .hero-actions .btn-secondary,
+[data-theme="light"] .hero-actions a[data-nav="resume"] {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(243, 246, 250, 0.52) 100%) !important;
+    backdrop-filter: blur(16px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    color: #0F172A !important;
+    box-shadow: 
+        0 8px 24px rgba(15, 23, 42, 0.07),
+        inset 0 1px 2px rgba(255, 255, 255, 0.95),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.04) !important;
+    text-shadow: none !important;
+}
 
-    background-color: rgba(0, 123, 167, 0.08);
+[data-theme="light"] .btn-secondary:not(.btn-resume) svg,
+[data-theme="light"] .btn-liquid-glass svg,
+[data-theme="light"] .hero-actions .btn-secondary svg,
+[data-theme="light"] .hero-actions a[data-nav="resume"] svg {
+    stroke: #0F172A !important;
+    filter: none !important;
+}
 
-    box-shadow: 0 4px 14px rgba(0, 123, 167, 0.18);
+[data-theme="light"] .btn-secondary:not(.btn-resume):hover,
+[data-theme="light"] .btn-liquid-glass:hover,
+[data-theme="light"] .hero-actions .btn-secondary:hover,
+[data-theme="light"] .hero-actions a[data-nav="resume"]:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 245, 252, 0.75) 100%) !important;
+    border-color: #FFFFFF !important;
+    color: #000000 !important;
+    box-shadow: 
+        0 12px 28px rgba(15, 23, 42, 0.12),
+        inset 0 1px 2px #FFFFFF !important;
+    transform: translateY(-3px) scale(1.02) !important;
+}
 
+[data-theme="light"] .btn-secondary:not(.btn-resume):hover svg,
+[data-theme="light"] .btn-liquid-glass:hover svg,
+[data-theme="light"] .hero-actions .btn-secondary:hover svg,
+[data-theme="light"] .hero-actions a[data-nav="resume"]:hover svg {
+    stroke: #000000 !important;
 }
 
 .btn-outline {
